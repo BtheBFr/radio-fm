@@ -949,7 +949,8 @@
         function updateCurrentTime() {
             if (!currentSchedule || currentTrackIndex === -1) return;
             
-            const now = new Date();
+            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const ekbTime = new Date(utcTime + (5 * 3600000));
             const currentTime = now.getHours() * 60 + now.getMinutes();
             const track = currentSchedule.tracks[currentTrackIndex];
             const [hours, minutes] = track.start.split(':').map(Number);
