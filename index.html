@@ -5,17 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LAP.FM - Радио с расписанием (ЕКБ)</title>
     <style>
-        /* СБРОС */
+        /* СБРОС И БАЗОВЫЕ СТИЛИ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        :root {
+            /* Светлая тема */
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: #ffffff;
+            --bg-card: #f7fafc;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --text-light: #a0aec0;
+            --border-color: #e2e8f0;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            --progress-bg: #edf2f7;
+            --schedule-hover: #f8f9fa;
+            --schedule-active: rgba(102, 126, 234, 0.1);
+            --live-badge-bg: rgba(255, 255, 255, 0.2);
+            --timezone-bg: rgba(255, 255, 255, 0.2);
+        }
+        
+        [data-theme="dark"] {
+            /* Тёмная тема */
+            --bg-primary: linear-gradient(135deg, #4c51bf 0%, #5a67d8 100%);
+            --bg-secondary: #1a202c;
+            --bg-card: #2d3748;
+            --text-primary: #f7fafc;
+            --text-secondary: #cbd5e0;
+            --text-light: #a0aec0;
+            --border-color: #4a5568;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --progress-bg: #2d3748;
+            --schedule-hover: #2d3748;
+            --schedule-active: rgba(102, 126, 234, 0.2);
+            --live-badge-bg: rgba(255, 255, 255, 0.1);
+            --timezone-bg: rgba(0, 0, 0, 0.2);
         }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
@@ -24,18 +59,19 @@
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-secondary);
             border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             overflow: hidden;
         }
         
         /* ШАПКА */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-primary);
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
         }
         
         .logo {
@@ -63,7 +99,7 @@
         }
         
         .timezone-info {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--timezone-bg);
             padding: 8px 20px;
             border-radius: 20px;
             font-size: 0.9rem;
@@ -76,7 +112,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--live-badge-bg);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -107,7 +143,7 @@
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 25px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .track-info {
@@ -117,21 +153,21 @@
         .current-track {
             font-size: 1.6rem;
             font-weight: 600;
-            color: #2d3748;
+            color: var(--text-primary);
             margin-bottom: 5px;
             min-height: 48px;
         }
         
         .current-artist {
             font-size: 1.1rem;
-            color: #718096;
+            color: var(--text-secondary);
             margin-bottom: 10px;
         }
         
         .current-time {
             font-size: 0.9rem;
-            color: #a0aec0;
-            background: #f7fafc;
+            color: var(--text-light);
+            background: var(--bg-card);
             padding: 6px 12px;
             border-radius: 12px;
             display: inline-block;
@@ -174,7 +210,7 @@
         
         .play-text {
             margin-top: 12px;
-            color: #718096;
+            color: var(--text-secondary);
             font-size: 0.85rem;
         }
         
@@ -182,7 +218,7 @@
         .progress-container {
             width: 100%;
             height: 5px;
-            background: #edf2f7;
+            background: var(--progress-bg);
             border-radius: 3px;
             margin: 20px 0 12px;
             overflow: hidden;
@@ -198,7 +234,7 @@
         
         /* СЛЕДУЮЩИЙ ТРЕК */
         .next-track {
-            background: #f7fafc;
+            background: var(--bg-card);
             border-radius: 14px;
             padding: 18px;
             margin: 20px 0;
@@ -209,20 +245,20 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #4a5568;
+            color: var(--text-secondary);
             font-size: 0.85rem;
             margin-bottom: 8px;
         }
         
         .next-track-info {
             font-size: 1rem;
-            color: #2d3748;
+            color: var(--text-primary);
             font-weight: 500;
         }
         
         .next-track-time {
             font-size: 0.8rem;
-            color: #718096;
+            color: var(--text-light);
             margin-top: 4px;
         }
         
@@ -234,7 +270,7 @@
         .section-title {
             font-size: 1.3rem;
             font-weight: 600;
-            color: #2d3748;
+            color: var(--text-primary);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -259,20 +295,21 @@
         }
         
         .schedule-item {
-            background: white;
-            border: 2px solid #e2e8f0;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 16px;
             transition: all 0.2s ease;
         }
         
         .schedule-item:hover {
-            border-color: #cbd5e0;
+            border-color: var(--border-color);
+            background: var(--schedule-hover);
             transform: translateY(-1px);
         }
         
         .schedule-item.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: var(--schedule-active);
             border-color: #667eea;
         }
         
@@ -284,12 +321,12 @@
         }
         
         .time-badge {
-            background: #edf2f7;
+            background: var(--progress-bg);
             padding: 4px 10px;
             border-radius: 16px;
             font-size: 0.85rem;
             font-weight: 600;
-            color: #4a5568;
+            color: var(--text-secondary);
         }
         
         .duration-badge {
@@ -301,16 +338,21 @@
             font-weight: 500;
         }
         
+        [data-theme="dark"] .duration-badge {
+            background: #234e52;
+            color: #e6fffa;
+        }
+        
         .track-title {
             font-size: 1rem;
             font-weight: 600;
-            color: #2d3748;
+            color: var(--text-primary);
             margin-bottom: 3px;
         }
         
         .track-artist {
             font-size: 0.9rem;
-            color: #718096;
+            color: var(--text-secondary);
         }
         
         .now-label {
@@ -339,9 +381,9 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: white;
-            border: 2px solid #e2e8f0;
-            color: #4a5568;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
             padding: 10px 20px;
             border-radius: 12px;
             cursor: pointer;
@@ -362,11 +404,11 @@
             gap: 15px;
             margin-top: 30px;
             padding-top: 25px;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid var(--border-color);
         }
         
         .status-card {
-            background: #f7fafc;
+            background: var(--bg-card);
             padding: 16px;
             border-radius: 14px;
             text-align: center;
@@ -374,7 +416,7 @@
         
         .status-card h3 {
             font-size: 0.85rem;
-            color: #718096;
+            color: var(--text-secondary);
             margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -383,17 +425,58 @@
         .status-value {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #2d3748;
+            color: var(--text-primary);
         }
         
         /* ФУТЕР */
         footer {
             text-align: center;
             padding: 25px;
-            background: #f7fafc;
-            color: #718096;
+            background: var(--bg-card);
+            color: var(--text-secondary);
             font-size: 0.85rem;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ */
+        .theme-switcher {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .theme-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        
+        .theme-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .theme-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        [data-theme="dark"] .theme-btn.active {
+            background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
+            box-shadow: 0 5px 15px rgba(90, 103, 216, 0.3);
         }
         
         /* СКРОЛЛБАР */
@@ -402,7 +485,7 @@
         }
         
         .schedule-list::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: var(--progress-bg);
             border-radius: 3px;
         }
         
@@ -427,6 +510,10 @@
             z-index: 1000;
             max-width: 280px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        [data-theme="dark"] .notification {
+            background: #4a5568;
         }
         
         .notification.show {
@@ -471,6 +558,17 @@
             .control-btn {
                 width: 100%;
                 max-width: 280px;
+                justify-content: center;
+            }
+            
+            .theme-switcher {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .theme-btn {
+                width: 100%;
+                max-width: 200px;
                 justify-content: center;
             }
         }
@@ -590,29 +688,37 @@
             </div>
         </main>
         
-        <!-- ФУТЕР -->
+        <!-- ФУТЕР С ПЕРЕКЛЮЧАТЕЛЕМ ТЕМЫ -->
         <footer>
             <p>LAP.FM © 2026 | Радио с расписанием (Екатеринбург, UTC+5)</p>
             <p>Обновляется ежедневно</p>
+            
+            <div class="theme-switcher">
+                <button class="theme-btn" id="theme-light" onclick="setTheme('light')">
+                    <span>☀️</span>
+                    <span>Светлая</span>
+                </button>
+                <button class="theme-btn" id="theme-dark" onclick="setTheme('dark')">
+                    <span>🌙</span>
+                    <span>Тёмная</span>
+                </button>
+                <button class="theme-btn" id="theme-auto" onclick="setTheme('auto')">
+                    <span>⚙️</span>
+                    <span>Авто</span>
+                </button>
+            </div>
         </footer>
     </div>
     
     <script>
-        // ========== КОНСТАНТЫ ==========
-        const TIMEZONE_OFFSET = 5; // ЕКБ = UTC+5 часов
-        const STREAM_URLS = {
-            morning: 'https://drive.google.com/uc?export=download&id=ТВОЙ_ID_УТРО',
-            day: 'https://drive.google.com/uc?export=download&id=ТВОЙ_ID_ДЕНЬ',
-            evening: 'https://drive.google.com/uc?export=download&id=ТВОЙ_ID_ВЕЧЕР',
-            night: 'https://drive.google.com/uc?export=download&id=ТВОЙ_ID_НОЧЬ'
-        };
-        
-        // ========== ПЕРЕМЕННЫЕ ==========
+        // ========== КОНСТАНТЫ И ПЕРЕМЕННЫЕ ==========
+        const TIMEZONE_OFFSET = 5;
         let currentSchedule = null;
         let currentTrackIndex = -1;
         let isPlaying = false;
         let autoSwitchTimer = null;
         let userHasInteracted = false;
+        let currentTheme = 'auto';
         
         // ЭЛЕМЕНТЫ DOM
         const audioPlayer = document.getElementById('audio-player');
@@ -627,16 +733,57 @@
         const nextTrackTime = document.getElementById('next-track-time');
         const statusText = document.getElementById('status-text');
         
+        // ========== ТЕМНАЯ ТЕМА С ЗАПОМИНАНИЕМ ==========
+        
+        function setTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('radio-theme', theme);
+            
+            let actualTheme = theme;
+            if (theme === 'auto') {
+                actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            
+            document.body.setAttribute('data-theme', actualTheme);
+            
+            // Обновляем активные кнопки
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('theme-' + theme).classList.add('active');
+            
+            showNotification(`Тема: ${getThemeName(theme)}`);
+        }
+        
+        function getThemeName(theme) {
+            const names = {
+                'light': 'Светлая',
+                'dark': 'Тёмная',
+                'auto': 'Авто'
+            };
+            return names[theme] || theme;
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('radio-theme') || 'auto';
+            setTheme(savedTheme);
+            
+            // Слушаем изменения системной темы
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (currentTheme === 'auto') {
+                    setTheme('auto');
+                }
+            });
+        }
+        
         // ========== ФУНКЦИИ ДЛЯ ВРЕМЕНИ ЕКБ ==========
         
-        // Получение текущего времени в ЕКБ
         function getEkbTime() {
             const now = new Date();
             const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
             return new Date(utcTime + (TIMEZONE_OFFSET * 3600000));
         }
         
-        // Форматирование времени
         function formatTime(date) {
             return date.toLocaleTimeString('ru-RU', {
                 hour: '2-digit',
@@ -645,14 +792,12 @@
             });
         }
         
-        // Обновление времени ЕКБ в шапке
         function updateEkbTimeDisplay() {
             const ekbTime = getEkbTime();
             const timeString = formatTime(ekbTime);
             document.getElementById('current-ekb-time').textContent = `ЕКБ: ${timeString}`;
         }
         
-        // Парсинг длительности
         function parseDuration(duration) {
             if (!duration) return 3;
             
@@ -664,7 +809,6 @@
             return parseFloat(duration) || 3;
         }
         
-        // Форматирование длительности
         function formatDuration(minutes) {
             const totalSeconds = Math.round(minutes * 60);
             const mins = Math.floor(totalSeconds / 60);
@@ -672,7 +816,6 @@
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
         
-        // Показ уведомлений
         function showNotification(message, duration = 3000) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
@@ -683,9 +826,82 @@
             }, duration);
         }
         
+        // ========== ИСПРАВЛЕННОЕ ВОСПРОИЗВЕДЕНИЕ ==========
+        
+        async function playAudioFile(url) {
+            if (!url) {
+                showNotification('Нет ссылки на аудиофайл', 3000);
+                return false;
+            }
+            
+            try {
+                // Проверяем доступность файла
+                const response = await fetch(url, { method: 'HEAD' });
+                if (!response.ok) {
+                    throw new Error(`Файл недоступен: ${response.status}`);
+                }
+                
+                // Устанавливаем источник
+                audioSource.src = url;
+                audioPlayer.load();
+                
+                // Пробуем воспроизвести
+                const playPromise = audioPlayer.play();
+                
+                if (playPromise !== undefined) {
+                    await playPromise;
+                    return true;
+                }
+                
+                return false;
+            } catch (error) {
+                console.error('Ошибка воспроизведения:', error);
+                showNotification('Ошибка: ' + error.message, 4000);
+                return false;
+            }
+        }
+        
+        function togglePlayback() {
+            userHasInteracted = true;
+            
+            if (!isPlaying) {
+                const track = currentSchedule?.tracks[currentTrackIndex];
+                
+                if (track?.file) {
+                    playIcon.textContent = '⏸';
+                    playText.textContent = 'Загрузка...';
+                    statusText.textContent = 'Подключение...';
+                    
+                    playAudioFile(track.file).then(success => {
+                        if (success) {
+                            isPlaying = true;
+                            playText.textContent = 'Слушаете в реальном времени';
+                            statusText.textContent = 'В эфире';
+                            showNotification(`Играет: ${track.title}`);
+                            document.getElementById('connection-status').textContent = '🟢';
+                        } else {
+                            playIcon.textContent = '▶';
+                            playText.textContent = 'Нажмите для прослушивания';
+                            statusText.textContent = 'Ошибка';
+                            document.getElementById('connection-status').textContent = '🔴';
+                        }
+                    });
+                } else {
+                    showNotification('Нет файла для воспроизведения', 3000);
+                }
+            } else {
+                // Пауза
+                audioPlayer.pause();
+                isPlaying = false;
+                playIcon.textContent = '▶';
+                playText.textContent = 'Нажмите для прослушивания';
+                statusText.textContent = 'На паузе';
+                showNotification('Воспроизведение приостановлено');
+            }
+        }
+        
         // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
         
-        // Загрузка расписания
         async function loadSchedule() {
             try {
                 const response = await fetch('schedule.json?v=' + new Date().getTime());
@@ -694,7 +910,6 @@
                 const schedule = await response.json();
                 currentSchedule = schedule;
                 
-                // Обновляем информацию
                 const updateDate = new Date(schedule.updated_at);
                 const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
                 document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
@@ -712,13 +927,12 @@
                 document.getElementById('schedule-list').innerHTML = `
                     <div class="schedule-item">
                         <div class="track-title">Ошибка загрузки</div>
-                        <div class="track-artist">Проверь файл schedule.json</div>
+                        <div class="track-artist">Проверьте файл schedule.json</div>
                     </div>
                 `;
             }
         }
         
-        // Поиск текущего трека по времени ЕКБ
         function findCurrentTrack() {
             if (!currentSchedule?.tracks?.length) return;
             
@@ -728,11 +942,8 @@
             for (let i = 0; i < currentSchedule.tracks.length; i++) {
                 const track = currentSchedule.tracks[i];
                 
-                // Время начала трека
                 const [hours, minutes] = track.start.split(':').map(Number);
                 const trackStart = hours * 60 + minutes;
-                
-                // Длительность
                 const trackDuration = parseDuration(track.duration);
                 const trackEnd = trackStart + trackDuration;
                 
@@ -743,31 +954,21 @@
                 }
             }
             
-            // Если не нашли
             currentTrackIndex = 0;
             if (currentSchedule.tracks.length > 0) {
                 updateNowPlaying(currentSchedule.tracks[0], 0);
             }
         }
         
-        // Обновление отображения текущего трека
         function updateNowPlaying(track, index) {
             if (!track) return;
             
             const [startHours, startMinutes] = track.start.split(':').map(Number);
             const duration = parseDuration(track.duration);
             
-            // Вычисляем время окончания
-            const endMinutes = startMinutes + duration;
-            const endHours = startHours + Math.floor(endMinutes / 60);
-            const finalEndMinutes = Math.round((endMinutes % 60) * 100) / 100;
-            const endTime = `${endHours.toString().padStart(2, '0')}:${Math.floor(finalEndMinutes).toString().padStart(2, '0')}`;
-            
-            // Обновляем интерфейс
             currentTrackEl.textContent = track.title || 'Без названия';
             currentArtistEl.textContent = track.artist || 'Неизвестен';
             
-            // Прогресс
             const ekbTime = getEkbTime();
             const currentTime = ekbTime.getHours() * 60 + ekbTime.getMinutes();
             const trackStart = startHours * 60 + startMinutes;
@@ -781,7 +982,6 @@
                 `${elapsedMins.toString().padStart(2, '0')}:${elapsedSecs.toString().padStart(2, '0')} / ${formatDuration(duration)}`;
             progressBar.style.width = `${progressPercent}%`;
             
-            // Следующий трек
             if (currentSchedule && index < currentSchedule.tracks.length - 1) {
                 const nextTrack = currentSchedule.tracks[index + 1];
                 nextTrackTitle.textContent = `${nextTrack.title} (${nextTrack.artist})`;
@@ -794,7 +994,6 @@
             
             updateScheduleDisplay();
             
-            // Автопереключение
             if (autoSwitchTimer) clearTimeout(autoSwitchTimer);
             const timeUntilNext = (trackStart + duration) * 60000 - ekbTime.getTime();
             
@@ -802,28 +1001,12 @@
                 autoSwitchTimer = setTimeout(() => {
                     findCurrentTrack();
                     if (isPlaying && track.file) {
-                        playTrackFile(track.file);
+                        playAudioFile(track.file);
                     }
                 }, timeUntilNext);
             }
         }
         
-        // Воспроизведение файла
-        function playTrackFile(fileUrl) {
-            if (!fileUrl) return;
-            
-            audioSource.src = fileUrl;
-            audioPlayer.load();
-            
-            if (isPlaying && userHasInteracted) {
-                audioPlayer.play().catch(e => {
-                    console.error('Ошибка воспроизведения файла:', e);
-                    showNotification('Не удалось воспроизвести файл', 3000);
-                });
-            }
-        }
-        
-        // Обновление расписания
         function updateScheduleDisplay() {
             if (!currentSchedule?.tracks?.length) return;
             
@@ -859,63 +1042,6 @@
             scheduleList.innerHTML = html;
         }
         
-        // Управление воспроизведением
-        function togglePlayback() {
-    userHasInteracted = true;
-    
-    if (!isPlaying) {
-        // Получаем текущий трек
-        const track = currentSchedule?.tracks[currentTrackIndex];
-        
-        if (track?.file) {
-            // ПРОВЕРЯЕМ ССЫЛКУ ПЕРЕД ВОСПРОИЗВЕДЕНИЕМ
-            console.log('Пробуем воспроизвести:', track.file);
-            
-            // Останавливаем и сбрасываем
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-            
-            // Устанавливаем новый источник
-            audioSource.src = track.file;
-            audioPlayer.load();
-            
-            // Ждём немного перед воспроизведением
-            setTimeout(() => {
-                audioPlayer.play().then(() => {
-                    isPlaying = true;
-                    playIcon.textContent = '⏸';
-                    playText.textContent = 'Слушаете в реальном времени';
-                    statusText.textContent = 'В эфире';
-                    showNotification(`Играет: ${track.title}`);
-                    document.getElementById('connection-status').textContent = '🟢';
-                    console.log('✅ Воспроизведение успешно начато');
-                }).catch(e => {
-                    // ИГНОРИРУЕМ AbortError
-                    if (e.name === 'AbortError') {
-                        console.log('ℹ️ Воспроизведение прервано (нормально)');
-                    } else {
-                        console.error('❌ Ошибка воспроизведения:', e);
-                        showNotification('Ошибка: ' + e.message, 3000);
-                        isPlaying = false;
-                        playIcon.textContent = '▶';
-                    }
-                });
-            }, 100); // Задержка 100ms
-        } else {
-            showNotification('Нет файла для воспроизведения', 3000);
-        }
-    } else {
-        // Пауза
-        audioPlayer.pause();
-        isPlaying = false;
-        playIcon.textContent = '▶';
-        playText.textContent = 'Нажмите для прослушивания';
-        statusText.textContent = 'На паузе';
-        showNotification('Воспроизведение приостановлено');
-    }
-}
-        
-        // Обновление времени
         function updateCurrentTime() {
             if (!currentSchedule || currentTrackIndex === -1) return;
             
@@ -939,13 +1065,11 @@
             }
         }
         
-        // Обновление расписания
         function refreshSchedule() {
             showNotification('Обновление расписания...');
             loadSchedule();
         }
         
-        // Поделиться
         function shareRadio() {
             const url = window.location.href;
             
@@ -963,7 +1087,10 @@
         
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 LAP.FM Radio загружается (ЕКБ время)...');
+            console.log('🚀 LAP.FM Radio загружается...');
+            
+            // Загружаем тему
+            loadTheme();
             
             // Загружаем расписание
             loadSchedule();
@@ -986,11 +1113,11 @@
             
             // События плеера
             audioPlayer.addEventListener('playing', () => {
-                console.log('▶️ Стрим запущен');
+                console.log('▶️ Аудио запущено');
             });
             
             audioPlayer.addEventListener('error', (e) => {
-                console.error('❌ Ошибка плеера:', e);
+                console.error('❌ Ошибка плеера:', audioPlayer.error);
                 document.getElementById('connection-status').textContent = '🔴';
                 showNotification('Ошибка воспроизведения аудио', 3000);
             });
@@ -999,6 +1126,7 @@
         // Глобальные функции
         window.refreshSchedule = refreshSchedule;
         window.shareRadio = shareRadio;
+        window.setTheme = setTheme;
     </script>
 </body>
 </html>
