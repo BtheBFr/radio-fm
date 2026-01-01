@@ -3,11 +3,11 @@
   "updated_at": "2026-01-02T00:00:00Z",
   "tracks": [
     {
-      "start": "00:10",
+      "start": "00:25",
       "title": "Моя первая песня",
       "artist": "Я",
       "duration": "1:20",
-      "file": "https://drive.google.com/uc?export=download&id=1FuQ6xhJzhkMQXDhpvyi2UG1DlDmKLq5x"
+      "file": "https://files.catbox.moe/suf9er.mp3"
     },
     {
       "start": "02:42",
