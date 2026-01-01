@@ -700,10 +700,13 @@
         
         // Поиск текущего трека
         function findCurrentTrack() {
-            if (!currentSchedule || !currentSchedule.tracks) return;
-            
-            const now = new Date();
-            const currentTime = now.getHours() * 60 + now.getMinutes();
+    if (!currentSchedule || !currentSchedule.tracks) return;
+    
+    // Время в Екатеринбурге (UTC+5)
+    const now = new Date();
+    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const ekbTime = new Date(utcTime + (5 * 3600000)); // +5 часов
+    const currentTime = ekbTime.getHours() * 60 + ekbTime.getMinutes();
             
             for (let i = 0; i < currentSchedule.tracks.length; i++) {
                 const track = currentSchedule.tracks[i];
