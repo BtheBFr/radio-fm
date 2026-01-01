@@ -687,7 +687,7 @@
         // Загрузка расписания
         async function loadSchedule() {
             try {
-                const response = await fetch('schedule.json');
+                const response = await fetch('schedule.json?v=' + new Date().getTime());
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 const schedule = await response.json();
