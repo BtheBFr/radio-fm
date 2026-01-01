@@ -1,61 +1,19 @@
 {
   "date": "2026-01-01",
-  "updated_at": "2026-01-16T01:00:00Z",
+  "updated_at": "2026-01-01T02:40:00Z",
   "tracks": [
     {
-      "start": "00:00",
-      "title": "Ночная музыка",
-      "artist": "LAP.FM",
-      "duration": "3:00"
-    },
-    {
-      "start": "03:00",
-      "title": "Спокойной ночи",
-      "artist": "LAP.FM",
-      "duration": "3:00"
-    },
-    {
-      "start": "06:00",
-      "title": "Доброе утро",
-      "artist": "LAP.FM",
-      "duration": "3:00"
-    },
-    {
-      "start": "09:00",
-      "title": "Утренний микс",
-      "artist": "LAP.FM",
-      "duration": "3:00"
-    },
-    {
-      "start": "12:00",
-      "title": "Дневные хиты",
-      "artist": "LAP.FM",
-      "duration": "3:00"
-    },
-    {
-      "start": "15:00",
-      "title": "Послеобеденный сет",
-      "artist": "LAP.FM",
-      "duration": "3:00"
-    },
-    {
-      "start": "18:00",
-      "title": "Вечерний эфир",
-      "artist": "LAP.FM",
-      "duration": "3:00"
-    },
-    {
-      "start": "21:00",
-      "title": "Ночные биты",
-      "artist": "LAP.FM",
-      "duration": "3:00"
-    },
-    {
-      "start": "23:35",
+      "start": "02:40",
       "title": "Моя первая песня",
       "artist": "Я",
       "duration": "1:20",
       "file": "https://drive.google.com/uc?export=download&id=1FuQ6xhJzhkMQXDhpvyi2UG1DlDmKLq5x"
+    },
+    {
+      "start": "02:42",
+      "title": "Следующий трек",
+      "artist": "LAP.FM",
+      "duration": "3:00"
     }
   ]
 }
