@@ -861,43 +861,59 @@
         
         // Управление воспроизведением
         function togglePlayback() {
-            userHasInteracted = true;
+    userHasInteracted = true;
+    
+    if (!isPlaying) {
+        // Получаем текущий трек
+        const track = currentSchedule?.tracks[currentTrackIndex];
+        
+        if (track?.file) {
+            // ПРОВЕРЯЕМ ССЫЛКУ ПЕРЕД ВОСПРОИЗВЕДЕНИЕМ
+            console.log('Пробуем воспроизвести:', track.file);
             
-            if (!isPlaying) {
-                // Получаем текущий трек
-                const track = currentSchedule?.tracks[currentTrackIndex];
-                
-                if (track?.file) {
-                    // Воспроизводим файл из расписания
-                    audioSource.src = track.file;
-                    audioPlayer.load();
-                    
-                    audioPlayer.play().then(() => {
-                        isPlaying = true;
-                        playIcon.textContent = '⏸';
-                        playText.textContent = 'Слушаете в реальном времени';
-                        statusText.textContent = 'В эфире';
-                        showNotification(`Играет: ${track.title}`);
-                        document.getElementById('connection-status').textContent = '🟢';
-                    }).catch(e => {
-                        console.error('Ошибка воспроизведения:', e);
-                        showNotification('Не удалось воспроизвести. Проверь ссылку на файл', 5000);
-                    });
-                    
-                } else {
-                    showNotification('Нет файла для воспроизведения', 3000);
-                }
-                
-            } else {
-                // Пауза
-                audioPlayer.pause();
-                isPlaying = false;
-                playIcon.textContent = '▶';
-                playText.textContent = 'Нажмите для прослушивания';
-                statusText.textContent = 'На паузе';
-                showNotification('Воспроизведение приостановлено');
-            }
+            // Останавливаем и сбрасываем
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            
+            // Устанавливаем новый источник
+            audioSource.src = track.file;
+            audioPlayer.load();
+            
+            // Ждём немного перед воспроизведением
+            setTimeout(() => {
+                audioPlayer.play().then(() => {
+                    isPlaying = true;
+                    playIcon.textContent = '⏸';
+                    playText.textContent = 'Слушаете в реальном времени';
+                    statusText.textContent = 'В эфире';
+                    showNotification(`Играет: ${track.title}`);
+                    document.getElementById('connection-status').textContent = '🟢';
+                    console.log('✅ Воспроизведение успешно начато');
+                }).catch(e => {
+                    // ИГНОРИРУЕМ AbortError
+                    if (e.name === 'AbortError') {
+                        console.log('ℹ️ Воспроизведение прервано (нормально)');
+                    } else {
+                        console.error('❌ Ошибка воспроизведения:', e);
+                        showNotification('Ошибка: ' + e.message, 3000);
+                        isPlaying = false;
+                        playIcon.textContent = '▶';
+                    }
+                });
+            }, 100); // Задержка 100ms
+        } else {
+            showNotification('Нет файла для воспроизведения', 3000);
         }
+    } else {
+        // Пауза
+        audioPlayer.pause();
+        isPlaying = false;
+        playIcon.textContent = '▶';
+        playText.textContent = 'Нажмите для прослушивания';
+        statusText.textContent = 'На паузе';
+        showNotification('Воспроизведение приостановлено');
+    }
+}
         
         // Обновление времени
         function updateCurrentTime() {
