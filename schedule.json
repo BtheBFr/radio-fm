@@ -3,11 +3,11 @@
   "updated_at": "2024-01-15T20:00:00Z",
   "tracks": [
     {
-      "start": "06:00",
-      "title": "Доброе утро",
+      "start": "23:25",
+      "title": "Самый Жирный",
       "artist": "LAP.FM",
-      "duration": 3,
-      "file": "https://drive.google.com/uc?export=download&id=УТРО_ID"
+      "duration": "1,20"
+      "file": "https://drive.google.com/file/d/1FuQ6xhJzhkMQXDhpvyi2UG1DlDmKLq5x"
     },
     {
       "start": "06:03",
