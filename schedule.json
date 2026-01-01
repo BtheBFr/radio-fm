@@ -1,0 +1,50 @@
+{
+  "date": "2024-01-15",
+  "updated_at": "2024-01-15T08:00:00Z",
+  "tracks": [
+    {
+      "start": "06:00",
+      "title": "Доброе утро на LAP.FM",
+      "artist": "Ведущий",
+      "duration": 180,
+      "type": "jingle"
+    },
+    {
+      "start": "06:03",
+      "title": "Radioactive",
+      "artist": "Imagine Dragons",
+      "duration": 187
+    },
+    {
+      "start": "06:06",
+      "title": "Blinding Lights",
+      "artist": "The Weeknd",
+      "duration": 201
+    },
+    {
+      "start": "06:09",
+      "title": "Новости",
+      "artist": "Диктор",
+      "duration": 120,
+      "type": "news"
+    },
+    {
+      "start": "06:11",
+      "title": "Bad Guy",
+      "artist": "Billie Eilish",
+      "duration": 194
+    }
+  ],
+  "specials": [
+    {
+      "time": "12:00",
+      "title": "Полуденные новости",
+      "duration": 300
+    },
+    {
+      "time": "18:00",
+      "title": "Вечерний выпуск",
+      "duration": 300
+    }
+  ]
+}
