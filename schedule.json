@@ -4,47 +4,33 @@
   "tracks": [
     {
       "start": "06:00",
-      "title": "Доброе утро на LAP.FM",
-      "artist": "Ведущий",
-      "duration": 180,
-      "type": "jingle"
+      "title": "Утренний эфир",
+      "artist": "LAP.FM",
+      "duration": 180
     },
     {
       "start": "06:03",
-      "title": "Radioactive",
-      "artist": "Imagine Dragons",
-      "duration": 187
+      "title": "Гарик - Баян",
+      "artist": "Гарик",
+      "duration": 3
     },
     {
       "start": "06:06",
-      "title": "Blinding Lights",
-      "artist": "The Weeknd",
-      "duration": 201
+      "title": "Сига Бой",
+      "artist": "МС",
+      "duration": 4
     },
     {
-      "start": "06:09",
-      "title": "Новости",
+      "start": "06:10",
+      "title": "Новости утра",
       "artist": "Диктор",
-      "duration": 120,
-      "type": "news"
+      "duration": 2
     },
     {
-      "start": "06:11",
-      "title": "Bad Guy",
-      "artist": "Billie Eilish",
-      "duration": 194
-    }
-  ],
-  "specials": [
-    {
-      "time": "12:00",
-      "title": "Полуденные новости",
-      "duration": 300
-    },
-    {
-      "time": "18:00",
-      "title": "Вечерний выпуск",
-      "duration": 300
+      "start": "06:12",
+      "title": "Трек 5",
+      "artist": "Артист",
+      "duration": 4
     }
   ]
 }
