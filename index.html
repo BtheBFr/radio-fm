@@ -627,8 +627,20 @@
         
         // Обновление отображения текущего трека
         function updateNowPlaying(track, index) {
-            const [startHours, startMinutes] = track.start.split(':').map(Number);
-            const duration = track.duration || 3;
+    // ... существующий код ...
+    
+    // Парсим длительность из формата "1:18" или числа
+    let duration = 3; // по умолчанию
+    if (track.duration) {
+        if (typeof track.duration === 'string' && track.duration.includes(':')) {
+            // Формат "1:18" или "1:30"
+            const [minutes, seconds] = track.duration.split(':').map(Number);
+            duration = minutes + (seconds / 60);
+        } else {
+            // Старый формат (число)
+            duration = track.duration;
+        }
+    }
             
             // Вычисляем время окончания
             const endMinutes = startMinutes + duration;
