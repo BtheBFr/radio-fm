@@ -75,7 +75,7 @@
         }
         
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
             background: var(--bg-secondary);
             border-radius: 24px;
@@ -906,113 +906,6 @@
             display: block;
         }
         
-        /* ОТЗЫВЫ ПОЛЬЗОВАТЕЛЕЙ */
-        .reviews-section {
-            margin: 30px 0;
-            padding-top: 25px;
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .reviews-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 8px;
-        }
-        
-        .review-item {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 18px;
-            transition: all 0.2s ease;
-        }
-        
-        .review-item:hover {
-            border-color: var(--border-color);
-            background: var(--schedule-hover);
-            transform: translateY(-1px);
-        }
-        
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .review-date {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-        
-        .review-rating {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-        
-        .review-stars {
-            display: flex;
-            gap: 2px;
-        }
-        
-        .review-star {
-            font-size: 0.9rem;
-            color: var(--star-filled);
-        }
-        
-        .review-comment {
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-top: 10px;
-            padding: 12px;
-            background: var(--bg-card);
-            border-radius: 8px;
-            border-left: 3px solid #667eea;
-        }
-        
-        .review-categories {
-            display: flex;
-            gap: 15px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .review-category {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-        
-        .review-category-value {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .no-reviews {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-        
-        .no-reviews-icon {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-        
         /* АДАПТИВНОСТЬ */
         @media (max-width: 768px) {
             .container {
@@ -1103,22 +996,13 @@
                 margin-left: 0;
                 margin-top: 10px;
             }
-            
-            .review-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .review-categories {
-                justify-content: space-between;
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
     <!-- Конфигурация API -->
     <script>
+        // 🔥 ПРАВИЛЬНЫЙ GIST ID!
         const API_BASE_URL = 'https://radio-fm-sable.vercel.app/api';
         const GIST_ID = 'b056c709d34505ba89050795235b9204';
         const REVIEWS_URL = `https://gist.githubusercontent.com/BtheBFr/${GIST_ID}/raw/reviews.json`;
@@ -1215,18 +1099,18 @@
                 maxlength="500"
             ></textarea>
             
-            <!-- Блок с отзывами пользователей -->
-<div id="reviews-in-modal" style="margin: 25px 0; display: none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600;">💬 Отзывы других слушателей</h3>
-        <span id="reviews-count" style="font-size: 0.85rem; color: var(--text-light);"></span>
-    </div>
-    <div id="modal-reviews-list" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
-    <div id="no-reviews-in-modal" style="text-align: center; padding: 30px 20px; color: var(--text-secondary); font-size: 0.9rem; display: none;">
-        <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
-        <p>Пока нет отзывов. Будьте первым!</p>
-    </div>
-</div>
+            <!-- 🔥 БЛОК С ОТЗЫВАМИ ПОЛЬЗОВАТЕЛЕЙ (ТОЛЬКО В МОДАЛЬНОМ ОКНЕ) -->
+            <div id="reviews-in-modal" style="margin: 25px 0; display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600;">💬 Отзывы других слушателей</h3>
+                    <span id="reviews-count" style="font-size: 0.85rem; color: var(--text-light);"></span>
+                </div>
+                <div id="modal-reviews-list" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
+                <div id="no-reviews-in-modal" style="text-align: center; padding: 30px 20px; color: var(--text-secondary); font-size: 0.9rem; display: none;">
+                    <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
+                    <p>Пока нет отзывов. Будьте первым!</p>
+                </div>
+            </div>
             
             <div class="modal-actions">
                 <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
@@ -1420,7 +1304,7 @@
         let audioStartOffset = 0;
         let allReviews = [];
         
-        // Рейтинговая система - ВЕРНУЛИ 3 ДНЯ!
+        // Рейтинговая система - ВОЗВРАЩАЕМ 3 ДНЯ!
         let userRatings = {
             sound: 0,
             design: 0,
@@ -1540,21 +1424,22 @@
             }, 120000);
         }
         
-        // ========== ОТОБРАЖЕНИЕ ОТЗЫВОВ ==========
+        // ========== ЗАГРУЗКА И ОТОБРАЖЕНИЕ ОТЗЫВОВ ==========
         
         async function loadReviews() {
             try {
-                console.log('📥 Загружаю отзывы...');
+                console.log('📥 Загружаю отзывы из Gist...');
                 const response = await fetch(REVIEWS_URL + '?t=' + Date.now());
                 
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: Не удалось загрузить отзывы`);
+                }
                 
                 const reviewsData = await response.json();
                 allReviews = reviewsData.ratings || [];
                 
                 updateOverallRatingDisplay(reviewsData);
-                displayReviews(allReviews);
-                updateRecentReviewsInModal(allReviews);
+                displayReviewsInModal(allReviews);
                 
                 console.log('✅ Отзывы загружены:', allReviews.length, 'шт.');
                 
@@ -1562,163 +1447,124 @@
                 
             } catch (error) {
                 console.error('Ошибка загрузки отзывов:', error);
-                displayReviews([]);
                 
-                return {
+                // Возвращаем пустые данные
+                const emptyData = {
                     ratings: [],
                     total: 0,
                     average: 0,
                     updated: new Date().toISOString()
                 };
+                
+                updateOverallRatingDisplay(emptyData);
+                displayReviewsInModal([]);
+                
+                return emptyData;
             }
         }
         
+        // 🔥 НОВАЯ ФУНКЦИЯ: Отображение отзывов в модальном окне
         function displayReviewsInModal(reviews) {
-    const modalContainer = document.getElementById('reviews-in-modal');
-    const reviewsList = document.getElementById('modal-reviews-list');
-    const noReviews = document.getElementById('no-reviews-in-modal');
-    const reviewsCount = document.getElementById('reviews-count');
-    
-    if (!reviews || reviews.length === 0) {
-        modalContainer.style.display = 'block';
-        reviewsList.style.display = 'none';
-        noReviews.style.display = 'block';
-        reviewsCount.textContent = '';
-        return;
-    }
-    
-    // Сортируем по дате (новые сверху)
-    const sortedReviews = [...reviews].sort((a, b) => 
-        new Date(b.timestamp || b.date || 0) - new Date(a.timestamp || a.date || 0)
-    );
-    
-    let html = '';
-    
-    sortedReviews.slice(0, 5).forEach((review, index) => {
-        const date = review.timestamp || review.date || 'Неизвестно';
-        const avgRating = (review.sound + review.design + review.remix + review.song) / 4;
-        const displayDate = new Date(date).toLocaleDateString('ru-RU', {
-            day: '2-digit',
-            month: '2-digit'
-        });
-        
-        html += `
-            <div style="
-                margin-bottom: 15px;
-                padding: 15px;
-                background: var(--bg-card);
-                border-radius: 10px;
-                border: 1px solid var(--border-color);
-                transition: all 0.2s ease;
-            ">
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div style="
-                            width: 32px;
-                            height: 32px;
-                            border-radius: 50%;
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            color: white;
-                            font-size: 0.9rem;
-                            font-weight: 600;
-                        ">
-                            ${index + 1}
-                        </div>
-                        <div>
-                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1rem;">
-                                ★ ${avgRating.toFixed(1)}/5
-                            </div>
-                            <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 2px;">
-                                ${displayDate}
-                            </div>
-                        </div>
-                    </div>
-                    <div style="font-size: 0.8rem; color: var(--text-light); text-align: right;">
-                        <div>🔊 ${review.sound}/5</div>
-                        <div>🎨 ${review.design}/5</div>
-                        <div>🎵 ${review.remix}/5</div>
-                        <div>🎶 ${review.song}/5</div>
-                    </div>
-                </div>
-                
-                ${review.comment ? `
-                    <div style="
-                        margin-top: 10px;
-                        padding: 10px 12px;
-                        background: var(--bg-secondary);
-                        border-radius: 8px;
-                        border-left: 3px solid #667eea;
-                        font-size: 0.9rem;
-                        color: var(--text-secondary);
-                        line-height: 1.5;
-                        font-style: italic;
-                    ">
-                        "${escapeHtml(review.comment)}"
-                    </div>
-                ` : ''}
-            </div>
-        `;
-    });
-    
-    reviewsList.innerHTML = html;
-    reviewsList.style.display = 'block';
-    noReviews.style.display = 'none';
-    modalContainer.style.display = 'block';
-    reviewsCount.textContent = `(${reviews.length} ${getRatingWord(reviews.length)})`;
-}
-        
-        function updateRecentReviewsInModal(reviews) {
-            const recentContainer = document.getElementById('recent-reviews');
-            const recentList = document.getElementById('recent-reviews-list');
+            const modalContainer = document.getElementById('reviews-in-modal');
+            const reviewsList = document.getElementById('modal-reviews-list');
+            const noReviews = document.getElementById('no-reviews-in-modal');
+            const reviewsCount = document.getElementById('reviews-count');
             
             if (!reviews || reviews.length === 0) {
-                recentContainer.style.display = 'none';
+                modalContainer.style.display = 'block';
+                reviewsList.style.display = 'none';
+                noReviews.style.display = 'block';
+                reviewsCount.textContent = '';
                 return;
             }
             
-            const recentReviews = [...reviews]
-                .sort((a, b) => new Date(b.timestamp || b.date || 0) - new Date(a.timestamp || a.date || 0))
-                .slice(0, 3);
+            // Сортируем по дате (новые сверху)
+            const sortedReviews = [...reviews].sort((a, b) => 
+                new Date(b.timestamp || b.date || 0) - new Date(a.timestamp || a.date || 0)
+            );
             
             let html = '';
             
-            recentReviews.forEach(review => {
+            sortedReviews.slice(0, 5).forEach((review, index) => {
+                const date = review.timestamp || review.date || 'Неизвестно';
                 const avgRating = (review.sound + review.design + review.remix + review.song) / 4;
-                const hasComment = review.comment && review.comment.trim().length > 0;
+                const displayDate = new Date(date).toLocaleDateString('ru-RU', {
+                    day: '2-digit',
+                    month: '2-digit'
+                });
                 
                 html += `
-                    <div style="margin-bottom: 12px; padding: 10px; background: var(--bg-card); border-radius: 8px; border-left: 3px solid #667eea;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                            <div style="font-weight: 600; color: var(--text-primary);">★ ${avgRating.toFixed(1)}/5</div>
-                            <div style="font-size: 0.8rem; color: var(--text-light);">
-                                ${review.sound}🔊 ${review.design}🎨 ${review.remix}🎵 ${review.song}🎶
+                    <div style="
+                        margin-bottom: 15px;
+                        padding: 15px;
+                        background: var(--bg-card);
+                        border-radius: 10px;
+                        border: 1px solid var(--border-color);
+                        transition: all 0.2s ease;
+                    ">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="
+                                    width: 32px;
+                                    height: 32px;
+                                    border-radius: 50%;
+                                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: white;
+                                    font-size: 0.9rem;
+                                    font-weight: 600;
+                                ">
+                                    ${index + 1}
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary); font-size: 1rem;">
+                                        ★ ${avgRating.toFixed(1)}/5
+                                    </div>
+                                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 2px;">
+                                        ${displayDate}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-light); text-align: right;">
+                                <div>🔊 ${review.sound}/5</div>
+                                <div>🎨 ${review.design}/5</div>
+                                <div>🎵 ${review.remix}/5</div>
+                                <div>🎶 ${review.song}/5</div>
                             </div>
                         </div>
-                        ${hasComment ? `
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">
-                                "${truncateText(review.comment, 80)}"
+                        
+                        ${review.comment ? `
+                            <div style="
+                                margin-top: 10px;
+                                padding: 10px 12px;
+                                background: var(--bg-secondary);
+                                border-radius: 8px;
+                                border-left: 3px solid #667eea;
+                                font-size: 0.9rem;
+                                color: var(--text-secondary);
+                                line-height: 1.5;
+                                font-style: italic;
+                            ">
+                                "${escapeHtml(review.comment)}"
                             </div>
-                        ` : '<div style="font-size: 0.85rem; color: var(--text-light);">(без комментария)</div>'}
+                        ` : ''}
                     </div>
                 `;
             });
             
-            recentList.innerHTML = html;
-            recentContainer.style.display = 'block';
+            reviewsList.innerHTML = html;
+            reviewsList.style.display = 'block';
+            noReviews.style.display = 'none';
+            modalContainer.style.display = 'block';
+            reviewsCount.textContent = `(${reviews.length} ${getRatingWord(reviews.length)})`;
         }
         
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
-        }
-        
-        function truncateText(text, maxLength) {
-            if (text.length <= maxLength) return text;
-            return text.substring(0, maxLength) + '...';
         }
         
         function updateOverallRatingDisplay(reviewsData) {
@@ -1811,7 +1657,7 @@
                         song: data.song || 0,
                         comment: data.comment || '',
                         hasRated: true,
-                        // ВОЗВРАЩАЕМ 3 ДНЯ!
+                        // 🔥 ВОЗВРАЩАЕМ 3 ДНЯ!
                         canEditAfter: data.canEditAfter || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
                         ratingId: data.ratingId || null,
                         timestamp: data.timestamp
@@ -2050,8 +1896,7 @@
             
             try {
                 // Пробуем отправить на сервер
-                const SAVE_REVIEW_URL = 'https://radio-fm-sable.vercel.app/api/save-review?gist=' + GIST_ID;
-                const response = await fetch(SAVE_REVIEW_URL, {
+                const response = await fetch(API_BASE_URL + '/save-review', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(ratingData)
