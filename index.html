@@ -790,6 +790,14 @@
             border-color: #667eea;
         }
         
+        .comment-label {
+            display: block;
+            margin: 20px 0 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
         .modal-actions {
             display: flex;
             gap: 15px;
@@ -834,217 +842,47 @@
             box-shadow: none;
         }
         
-        /* 🔥 СИСТЕМА СТАТИСТИКИ - НОВЫЕ СТИЛИ (без изменения дизайна) */
-        
-        .admin-stats-panel {
+        .user-review-info {
+            margin: 15px 0;
+            padding: 15px;
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 25px;
-            margin: 25px 0;
-            border: 2px solid var(--border-color);
-            border-left: 4px solid #667eea;
-            display: none;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
         }
         
-        .admin-stats-panel.show {
-            display: block;
-        }
-        
-        .admin-stats-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .admin-title {
-            font-size: 1.2rem;
-            font-weight: 600;
+        .user-review-info .rating-text {
+            font-weight: bold;
             color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
         }
         
-        .admin-title::before {
-            content: '📊';
-            font-size: 1.3rem;
+        .user-review-info .timer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
         }
         
-        .admin-toggle {
+        .user-review-info .edit-btn {
             background: var(--bg-secondary);
             border: 2px solid var(--border-color);
             color: var(--text-secondary);
-            padding: 8px 16px;
+            padding: 8px 20px;
             border-radius: 12px;
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
-        .admin-toggle:hover {
+        .user-review-info .edit-btn:hover:not(:disabled) {
             border-color: #667eea;
             color: #667eea;
         }
         
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .stat-card {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 18px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-            transition: transform 0.2s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stat-card.primary {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border-color: rgba(102, 126, 234, 0.3);
-        }
-        
-        .advanced-stat-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 5px;
-            line-height: 1;
-        }
-        
-        .advanced-stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-        
-        .stat-change {
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-        
-        .stat-change.positive {
-            background: rgba(0, 200, 83, 0.1);
-            color: #00c853;
-        }
-        
-        .stat-change.negative {
-            background: rgba(244, 67, 54, 0.1);
-            color: #f44336;
-        }
-        
-        .stats-details {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .details-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .details-title::before {
-            content: '📈';
-        }
-        
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .detail-item:last-child {
-            border-bottom: none;
-        }
-        
-        .detail-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        
-        .detail-value {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            font-family: 'Monaco', 'Courier New', monospace;
-        }
-        
-        .refresh-stats {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .refresh-stats:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .refresh-stats:active {
-            transform: translateY(0);
-        }
-        
-        .refresh-stats.loading {
-            opacity: 0.7;
-            cursor: wait;
-        }
-        
-        .refresh-stats.loading::after {
-            content: '';
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .user-review-info .edit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .bad-words-warning {
@@ -1060,14 +898,6 @@
         
         .bad-words-warning.show {
             display: block;
-        }
-        
-        .stats-timestamp {
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin-top: 15px;
-            font-style: italic;
         }
         
         /* АДАПТИВНОСТЬ */
@@ -1122,7 +952,7 @@
             }
             
             .users-stats {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .status-section {
@@ -1160,56 +990,21 @@
                 margin-left: 0;
                 margin-top: 10px;
             }
-            
-            /* Адаптивность статистики */
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-            
-            .stat-card {
-                padding: 15px;
-            }
-            
-            .advanced-stat-value {
-                font-size: 1.8rem;
-            }
-            
-            .admin-stats-panel {
-                padding: 20px;
-                margin: 20px 0;
-            }
-            
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .admin-stats-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .admin-toggle {
-                align-self: flex-start;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- 🔒 Конфигурация сервера -->
+    <!-- Конфигурация API -->
     <script>
-        const STATS_API_URL = 'https://ваш-домен.vercel.app/api/stats'; // ЗАМЕНИТЕ НА ВАШ URL!
+        const API_BASE_URL = 'https://radio-fm-sable.vercel.app/api';
+        const GIST_ID = '5e1359ada750eb5eb49947764f4ca5e9';
+        const REVIEWS_URL = `https://gist.githubusercontent.com/BtheBFr/${GIST_ID}/raw/reviews.json`;
+        const STATS_API_URL = 'https://radio-fm-sable.vercel.app/api/stats';
     </script>
     
     <div id="notification" class="notification"></div>
     
-    <!-- Модальное окно оценки (ваше существующее) -->
+    <!-- Модальное окно оценки -->
     <div id="rating-modal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
@@ -1217,20 +1012,16 @@
                 <button class="modal-close" onclick="closeRatingModal()">×</button>
             </div>
             
+            <!-- Блок с общей статистикой отзывов -->
             <div id="reviews-info"></div>
             
-            <div id="user-review-info" style="display: none; margin: 15px 0; padding: 15px; background: var(--bg-card); border-radius: 10px;">
-                <div style="text-align: center;">
-                    <div style="font-weight: bold; color: var(--text-primary); margin-bottom: 8px;">
-                        Ваш отзыв: <span id="user-rating-value">0.0</span>/5
-                    </div>
-                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">
-                        <span id="edit-timer-text"></span>
-                    </div>
-                    <button id="edit-rating-btn" class="modal-btn" style="padding: 8px 20px; font-size: 0.9rem;" disabled>
-                        Изменить оценку
-                    </button>
-                </div>
+            <!-- Блок с текущим отзывом пользователя (если есть) -->
+            <div id="user-review-info" class="user-review-info" style="display: none;">
+                <div class="rating-text">Ваш отзыв: <span id="user-rating-value">0.0</span>/5</div>
+                <div class="timer-text" id="edit-timer-text"></div>
+                <button id="edit-rating-btn" class="edit-btn" disabled>
+                    Изменить оценку
+                </button>
             </div>
             
             <div class="rating-category">
@@ -1288,6 +1079,18 @@
                     <span class="category-star" data-rating="5">★</span>
                 </div>
             </div>
+            
+            <!-- Поле для комментария -->
+            <label class="comment-label" for="comment-input">Ваш комментарий (необязательно):</label>
+            <div class="bad-words-warning" id="bad-words-warning">
+                ⚠️ Ваш комментарий содержит недопустимые слова. Пожалуйста, отредактируйте его.
+            </div>
+            <textarea 
+                class="comment-input" 
+                id="comment-input" 
+                placeholder="Напишите ваш отзыв о радио... (макс. 500 символов)"
+                maxlength="500"
+            ></textarea>
             
             <div class="modal-actions">
                 <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
@@ -1352,40 +1155,7 @@
                 </div>
             </section>
             
-            <!-- 🔥 НОВАЯ ПАНЕЛЬ СТАТИСТИКИ -->
-            <div class="admin-stats-panel" id="admin-stats-panel">
-                <div class="admin-stats-header">
-                    <h2 class="admin-title">Статистика в реальном времени</h2>
-                    <button class="admin-toggle" id="toggle-stats" onclick="toggleStats()">
-                        <span id="toggle-icon">📊</span>
-                        <span id="toggle-text">Подробная статистика</span>
-                    </button>
-                </div>
-                
-                <div class="stats-grid" id="stats-grid">
-                    <!-- Заполняется JavaScript -->
-                </div>
-                
-                <div class="stats-details">
-                    <h3 class="details-title">Детальная информация</h3>
-                    <div class="details-grid" id="details-grid">
-                        <!-- Заполняется JavaScript -->
-                    </div>
-                    <div class="stats-timestamp" id="stats-timestamp">
-                        Последнее обновление: --:--:--
-                    </div>
-                </div>
-                
-                <div class="bad-words-warning" id="bad-words-warning">
-                    ⚠️ Ваш комментарий содержит недопустимые слова. Пожалуйста, отредактируйте его.
-                </div>
-                
-                <button class="refresh-stats" id="refresh-stats" onclick="loadAdvancedStats(true)">
-                    <span>🔄</span>
-                    <span>Обновить статистику</span>
-                </button>
-            </div>
-            
+            <!-- Статистика пользователей -->
             <div class="users-stats">
                 <div class="stat-item">
                     <div class="stat-value" id="online-users">1</div>
@@ -1395,16 +1165,9 @@
                     <div class="stat-value" id="today-users">1</div>
                     <div class="stat-label">Сегодня посетителей</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="total-users">1</div>
-                    <div class="stat-label">Всего посетителей</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="total-visits">1</div>
-                    <div class="stat-label">Всего визитов</div>
-                </div>
             </div>
             
+            <!-- Контролы -->
             <div class="controls">
                 <button class="control-btn" onclick="refreshSchedule()">
                     <span>🔄</span>
@@ -1422,12 +1185,9 @@
                     <span>⭐</span>
                     <span>Оценить радио</span>
                 </button>
-                <button class="control-btn" onclick="toggleAdminStats()">
-                    <span>📊</span>
-                    <span id="admin-btn-text">Статистика</span>
-                </button>
             </div>
             
+            <!-- Расписание -->
             <section class="schedule-section">
                 <div class="section-header">
                     <h2 class="section-title">Расписание на сегодня (сейчас)</h2>
@@ -1448,6 +1208,7 @@
                 </div>
             </section>
             
+            <!-- Статус -->
             <div class="status-section">
                 <div class="status-card">
                     <h3>Обновлено</h3>
@@ -1463,7 +1224,7 @@
                 </div>
                 <div class="status-card">
                     <h3>Всего посетителей</h3>
-                    <div class="status-value" id="status-total-users">1</div>
+                    <div class="status-value" id="total-users">1</div>
                 </div>
             </div>
         </main>
@@ -1519,8 +1280,6 @@
         let preloadedAudio = null;
         let audioStartTime = 0;
         let audioStartOffset = 0;
-        let statsUpdateInterval = null;
-        let advancedStatsVisible = false;
         
         // Рейтинговая система
         let userRatings = {
@@ -1528,8 +1287,10 @@
             design: 0,
             remix: 0,
             song: 0,
+            comment: '',
             hasRated: false,
-            canEditAfter: null
+            canEditAfter: null,
+            ratingId: null
         };
         
         // ЭЛЕМЕНТЫ DOM
@@ -1544,39 +1305,11 @@
         const nextTrackTitle = document.getElementById('next-track-title');
         const nextTrackTime = document.getElementById('next-track-time');
         const statusText = document.getElementById('status-text');
+        const commentInput = document.getElementById('comment-input');
         
         // ========== СИСТЕМА СТАТИСТИКИ ==========
         
-        function toggleAdminStats() {
-            const panel = document.getElementById('admin-stats-panel');
-            const btnText = document.getElementById('admin-btn-text');
-            
-            advancedStatsVisible = !advancedStatsVisible;
-            panel.classList.toggle('show', advancedStatsVisible);
-            btnText.textContent = advancedStatsVisible ? 'Скрыть статистику' : 'Статистика';
-            
-            if (advancedStatsVisible) {
-                loadAdvancedStats(true);
-            }
-        }
-        
-        function toggleStats() {
-            const grid = document.getElementById('stats-grid');
-            const toggleIcon = document.getElementById('toggle-icon');
-            const toggleText = document.getElementById('toggle-text');
-            
-            if (grid.style.display === 'none') {
-                grid.style.display = 'grid';
-                toggleIcon.textContent = '📊';
-                toggleText.textContent = 'Скрыть статистику';
-            } else {
-                grid.style.display = 'none';
-                toggleIcon.textContent = '📈';
-                toggleText.textContent = 'Показать статистику';
-            }
-        }
-        
-        async function loadBasicStats() {
+        async function updateUserStats() {
             try {
                 const response = await fetch(STATS_API_URL, {
                     method: 'POST',
@@ -1589,278 +1322,503 @@
                 const data = await response.json();
                 
                 if (data.success && data.stats) {
-                    updateBasicStatsDisplay(data.stats, data.meta);
+                    const stats = data.stats;
+                    
+                    // Обновляем отображение
+                    document.getElementById('online-users').textContent = stats.online || 1;
+                    document.getElementById('today-users').textContent = stats.today || 1;
+                    document.getElementById('total-users').textContent = stats.total || 1;
+                    
+                    // Сохраняем в localStorage для резервного отображения
+                    localStorage.setItem('lapfm_stats', JSON.stringify({
+                        online: stats.online || 1,
+                        today: stats.today || 1,
+                        total: stats.total || 1,
+                        updated: Date.now()
+                    }));
                 }
                 
             } catch (error) {
-                console.warn('⚠️ Не удалось загрузить базовую статистику:', error);
-                // Используем резервные значения
-                const backupStats = JSON.parse(localStorage.getItem('lapfm_backup_stats')) || {
+                console.warn('Не удалось обновить статистику:', error);
+                // Используем сохраненные значения
+                const savedStats = JSON.parse(localStorage.getItem('lapfm_stats')) || {
                     online: 1,
                     today: 1,
-                    total: 1,
-                    totalVisits: 1
+                    total: 1
                 };
-                updateBasicStatsDisplay(backupStats, { daysTracked: 1 });
+                
+                document.getElementById('online-users').textContent = savedStats.online;
+                document.getElementById('today-users').textContent = savedStats.today;
+                document.getElementById('total-users').textContent = savedStats.total;
             }
         }
         
-        async function loadAdvancedStats(showNotification = false) {
-            const refreshBtn = document.getElementById('refresh-stats');
-            const originalText = refreshBtn.innerHTML;
-            
-            if (showNotification) {
-                refreshBtn.classList.add('loading');
-                refreshBtn.disabled = true;
-            }
-            
+        // ========== СИСТЕМА ОТЗЫВОВ ==========
+        
+        async function loadReviewsFromGist() {
             try {
-                const response = await fetch(STATS_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        action: 'ping',
-                        timestamp: Date.now()
-                    })
+                console.log('📥 Загружаю отзывы из Gist...');
+                const response = await fetch(REVIEWS_URL + '?t=' + Date.now(), {
+                    headers: { 'Cache-Control': 'no-cache' }
                 });
                 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 const data = await response.json();
-                
-                if (data.success) {
-                    updateAdvancedStatsDisplay(data);
-                    
-                    // Сохраняем как резервные данные
-                    localStorage.setItem('lapfm_backup_stats', JSON.stringify(data.stats));
-                    localStorage.setItem('lapfm_stats_cache', JSON.stringify({
-                        data: data,
-                        timestamp: Date.now()
-                    }));
-                    
-                    if (showNotification) {
-                        showNotificationMessage('Статистика обновлена', 2000);
-                    }
-                }
+                console.log('✅ Отзывы загружены:', data.total, 'оценок');
+                return data;
                 
             } catch (error) {
-                console.error('❌ Ошибка загрузки статистики:', error);
-                
-                // Пробуем загрузить из кеша
-                const cached = localStorage.getItem('lapfm_stats_cache');
-                if (cached) {
-                    const cache = JSON.parse(cached);
-                    if (Date.now() - cache.timestamp < 300000) { // 5 минут
-                        updateAdvancedStatsDisplay(cache.data);
-                        if (showNotification) {
-                            showNotificationMessage('Данные из кеша (офлайн)', 2000);
-                        }
-                        return;
-                    }
-                }
-                
-                // Резервные данные
-                const backupStats = JSON.parse(localStorage.getItem('lapfm_backup_stats')) || {
-                    online: 1,
-                    today: 1,
-                    total: 1,
-                    totalVisits: 1,
+                console.warn('⚠️ Не удалось загрузить отзывы из Gist:', error);
+                return JSON.parse(localStorage.getItem('lapfm_local_reviews')) || {
+                    ratings: [],
+                    total: 0,
+                    average: 0,
                     updated: new Date().toISOString()
                 };
-                
-                updateAdvancedStatsDisplay({
-                    success: true,
-                    stats: backupStats,
-                    meta: { daysTracked: 1, activeSessions: 1 }
-                });
-                
-                if (showNotification) {
-                    showNotificationMessage('Ошибка загрузки, показаны резервные данные', 3000);
-                }
-                
-            } finally {
-                if (showNotification) {
-                    refreshBtn.classList.remove('loading');
-                    refreshBtn.disabled = false;
-                    refreshBtn.innerHTML = originalText;
-                }
             }
-        }
-        
-        function updateBasicStatsDisplay(stats, meta = {}) {
-            // Основная статистика
-            document.getElementById('online-users').textContent = stats.online || 1;
-            document.getElementById('today-users').textContent = stats.today || 1;
-            document.getElementById('total-users').textContent = stats.total || 1;
-            document.getElementById('total-visits').textContent = stats.totalVisits || 1;
-            document.getElementById('status-total-users').textContent = stats.total || 1;
-        }
-        
-        function updateAdvancedStatsDisplay(data) {
-            const stats = data.stats || {};
-            const meta = data.meta || {};
-            const user = data.user || {};
-            
-            // Обновляем основную статистику
-            updateBasicStatsDisplay(stats, meta);
-            
-            // Создаем сетку статистики
-            const statsGrid = document.getElementById('stats-grid');
-            const detailsGrid = document.getElementById('details-grid');
-            
-            // Форматируем время обновления
-            const updatedTime = stats.updated ? 
-                new Date(stats.updated).toLocaleTimeString('ru-RU') : 
-                new Date().toLocaleTimeString('ru-RU');
-            
-            // Основные карточки статистики
-            statsGrid.innerHTML = `
-                <div class="stat-card primary">
-                    <div class="advanced-stat-value">${stats.online || 1}</div>
-                    <div class="advanced-stat-label">Сейчас онлайн</div>
-                    <div class="stat-change positive">Live</div>
-                </div>
-                <div class="stat-card">
-                    <div class="advanced-stat-value">${stats.today || 1}</div>
-                    <div class="advanced-stat-label">Уникальных сегодня</div>
-                    ${getChangeIndicator(stats.today)}
-                </div>
-                <div class="stat-card">
-                    <div class="advanced-stat-value">${stats.total || 1}</div>
-                    <div class="advanced-stat-label">Всего уникальных</div>
-                    <div class="stat-change positive">+${Math.floor((stats.total || 1) / 10)}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="advanced-stat-value">${stats.totalVisits || 1}</div>
-                    <div class="advanced-stat-label">Всего визитов</div>
-                    <div class="stat-change positive">Активно</div>
-                </div>
-            `;
-            
-            // Детальная информация
-            detailsGrid.innerHTML = `
-                <div class="detail-item">
-                    <span class="detail-label">Активных сессий:</span>
-                    <span class="detail-value">${meta.activeSessions || 1}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Дней отслеживания:</span>
-                    <span class="detail-value">${meta.daysTracked || 1}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Статус пользователя:</span>
-                    <span class="detail-value">${user.isNew ? 'Новый' : 'Возвращается'}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">ID пользователя:</span>
-                    <span class="detail-value">${user.id ? user.id.substr(0, 8) + '...' : 'Неизвестен'}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Версия API:</span>
-                    <span class="detail-value">${meta.version || '1.2.0'}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Дата статистики:</span>
-                    <span class="detail-value">${meta.todayDate || new Date().toISOString().split('T')[0]}</span>
-                </div>
-            `;
-            
-            // Обновляем время
-            document.getElementById('stats-timestamp').textContent = 
-                `Последнее обновление: ${updatedTime}`;
-        }
-        
-        function getChangeIndicator(value) {
-            if (!value || value <= 1) {
-                return '<div class="stat-change">Нет данных</div>';
-            }
-            
-            const change = Math.floor(value * 0.1);
-            if (change > 0) {
-                return `<div class="stat-change positive">+${change}</div>`;
-            } else if (change < 0) {
-                return `<div class="stat-change negative">${change}</div>`;
-            } else {
-                return '<div class="stat-change">Без изменений</div>';
-            }
-        }
-        
-        function showNotificationMessage(message, duration = 3000) {
-            const notification = document.getElementById('notification');
-            if (!notification) return;
-            
-            notification.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, duration);
-        }
-        
-        // ========== ВАШ СУЩЕСТВУЮЩИЙ КОД (без изменений) ==========
-        
-        async function loadReviewsFromGist() {
-            // Ваш существующий код
-            return { ratings: [], total: 0, average: 0, updated: new Date().toISOString() };
         }
         
         async function saveReviewToServer(ratingData) {
-            // Ваш существующий код
-            return { success: true };
+            try {
+                console.log('🚀 Отправляю отзыв на сервер...');
+                
+                const response = await fetch(`${API_BASE_URL}/save-review`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(ratingData)
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server error ${response.status}: ${errorText}`);
+                }
+                
+                const result = await response.json();
+                console.log('✅ Отзыв сохранен:', result);
+                return result;
+                
+            } catch (error) {
+                console.error('❌ Ошибка отправки на сервер:', error);
+                // Запасной вариант: сохраняем локально
+                return saveReviewLocally(ratingData);
+            }
         }
         
-        function updateOverallRatingDisplay() {
-            // Ваш существующий код
+        function saveReviewLocally(ratingData) {
+            console.log('💾 Сохраняю отзыв локально...');
+            let localReviews = JSON.parse(localStorage.getItem('lapfm_local_reviews')) || {
+                ratings: [],
+                total: 0,
+                average: 0,
+                updated: new Date().toISOString()
+            };
+            
+            const userHash = generateUserHash();
+            const existingIndex = localReviews.ratings.findIndex(r => r.userHash === userHash);
+            
+            const newRating = {
+                ...ratingData,
+                userHash: userHash,
+                timestamp: new Date().toISOString()
+            };
+            
+            if (existingIndex !== -1) {
+                localReviews.ratings[existingIndex] = newRating;
+            } else {
+                localReviews.ratings.push(newRating);
+            }
+            
+            localReviews.total = localReviews.ratings.length;
+            localReviews.average = calculateAverageRating(localReviews.ratings);
+            localReviews.updated = new Date().toISOString();
+            
+            localStorage.setItem('lapfm_local_reviews', JSON.stringify(localReviews));
+            return { 
+                success: true, 
+                total: localReviews.total, 
+                average: localReviews.average,
+                canEditAfter: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+                ratingId: 'local_' + Date.now()
+            };
         }
+        
+        function generateUserHash() {
+            const storedId = localStorage.getItem('lapfm_user_id');
+            if (storedId) return storedId;
+            
+            const newId = 'user_' + Math.random().toString(36).substr(2, 9) + 
+                         '_' + Date.now().toString(36);
+            localStorage.setItem('lapfm_user_id', newId);
+            return newId;
+        }
+        
+        function calculateAverageRating(ratings) {
+            if (!ratings.length) return 0;
+            
+            const total = ratings.reduce((sum, rating) => {
+                const avg = (rating.sound + rating.design + rating.remix + rating.song) / 4;
+                return sum + avg;
+            }, 0);
+            
+            return parseFloat((total / ratings.length).toFixed(1));
+        }
+        
+        // ========== ОТОБРАЖЕНИЕ ОТЗЫВОВ ==========
+        
+        async function updateOverallRatingDisplay() {
+            try {
+                const reviews = await loadReviewsFromGist();
+                
+                document.getElementById('average-rating').textContent = reviews.average.toFixed(1);
+                document.getElementById('rating-count').textContent = 
+                    `(${reviews.total} ${getRatingWord(reviews.total)})`;
+                
+                updateStars(reviews.average);
+                updateModalReviewsInfo(reviews);
+                
+            } catch (error) {
+                console.error('Ошибка обновления рейтинга:', error);
+            }
+        }
+        
+        function updateModalReviewsInfo(reviews) {
+            const infoDiv = document.getElementById('reviews-info');
+            if (!infoDiv) return;
+            
+            if (reviews.total > 0) {
+                const soundAvg = getCategoryAverage(reviews.ratings, 'sound').toFixed(1);
+                const designAvg = getCategoryAverage(reviews.ratings, 'design').toFixed(1);
+                const remixAvg = getCategoryAverage(reviews.ratings, 'remix').toFixed(1);
+                const songAvg = getCategoryAverage(reviews.ratings, 'song').toFixed(1);
+                
+                infoDiv.innerHTML = `
+                    <div style="margin: 15px 0; padding: 15px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);">
+                        <div style="text-align: center; margin-bottom: 10px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--text-primary);">
+                                ★ ${reviews.average.toFixed(1)}
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                ${reviews.total} ${getRatingWord(reviews.total)}
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 0.8rem; color: var(--text-light);">
+                            <div>🔊 Звук: ${soundAvg}/5</div>
+                            <div>🎨 Дизайн: ${designAvg}/5</div>
+                            <div>🎵 Ремиксы: ${remixAvg}/5</div>
+                            <div>🎶 Песни: ${songAvg}/5</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                infoDiv.innerHTML = `
+                    <div style="text-align: center; margin: 15px 0; padding: 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);">
+                        <div style="color: var(--text-secondary); margin-bottom: 10px;">
+                            🎯 Будьте первым, кто оценит радио!
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-light);">
+                            Ваша оценка поможет другим слушателям
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function getCategoryAverage(ratings, category) {
+            if (!ratings.length) return 0;
+            const total = ratings.reduce((sum, r) => sum + (r[category] || 0), 0);
+            return total / ratings.length;
+        }
+        
+        function getRatingWord(count) {
+            if (count % 10 === 1 && count % 100 !== 11) return 'оценка';
+            if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20)) return 'оценки';
+            return 'оценок';
+        }
+        
+        function updateStars(rating) {
+            const stars = document.querySelectorAll('#overall-stars .star');
+            stars.forEach((star, index) => {
+                if (index < Math.floor(rating)) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                }
+            });
+        }
+        
+        // ========== ЗАГРУЗКА И СОХРАНЕНИЕ ОТЗЫВА ПОЛЬЗОВАТЕЛЯ ==========
         
         function loadUserRating() {
-            // Ваш существующий код
+            const saved = localStorage.getItem('lapfm_user_rating');
+            if (saved) {
+                const data = JSON.parse(saved);
+                userRatings = {
+                    sound: data.sound || 0,
+                    design: data.design || 0,
+                    remix: data.remix || 0,
+                    song: data.song || 0,
+                    comment: data.comment || '',
+                    hasRated: true,
+                    canEditAfter: data.canEditAfter || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+                    ratingId: data.ratingId || null,
+                    timestamp: data.timestamp
+                };
+                return true;
+            }
             return false;
         }
         
         function updateEditTimer() {
-            // Ваш существующий код
+            const userInfoDiv = document.getElementById('user-review-info');
+            const timerText = document.getElementById('edit-timer-text');
+            const editBtn = document.getElementById('edit-rating-btn');
+            
+            if (!userRatings.hasRated || !userRatings.canEditAfter) {
+                userInfoDiv.style.display = 'none';
+                return;
+            }
+            
+            const canEditAfter = new Date(userRatings.canEditAfter);
+            const now = new Date();
+            const timeLeft = canEditAfter - now;
+            
+            // Рассчитываем среднюю оценку пользователя
+            const userAvg = (userRatings.sound + userRatings.design + userRatings.remix + userRatings.song) / 4;
+            document.getElementById('user-rating-value').textContent = userAvg.toFixed(1);
+            
+            // Отображаем текст комментария, если он есть
+            if (userRatings.comment) {
+                commentInput.value = userRatings.comment;
+                commentInput.disabled = true;
+            }
+            
+            if (timeLeft <= 0) {
+                timerText.textContent = "Вы можете изменить свой отзыв";
+                editBtn.disabled = false;
+                editBtn.textContent = "Изменить оценку";
+                editBtn.onclick = () => {
+                    userRatings.hasRated = false;
+                    resetRatingForm();
+                    setupStarRating('sound-stars', 'sound');
+                    setupStarRating('design-stars', 'design');
+                    setupStarRating('remix-stars', 'remix');
+                    setupStarRating('song-stars', 'song');
+                    commentInput.disabled = false;
+                    commentInput.value = userRatings.comment || '';
+                    document.getElementById('submit-rating').style.display = 'block';
+                    document.getElementById('user-review-info').style.display = 'none';
+                };
+            } else {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                
+                let timeString = '';
+                if (days > 0) timeString += `${days} дней `;
+                if (hours > 0) timeString += `${hours} часов `;
+                if (minutes > 0 && days === 0) timeString += `${minutes} минут`;
+                
+                timerText.textContent = `Вы сможете изменить отзыв через: ${timeString.trim()}`;
+                editBtn.disabled = true;
+                editBtn.textContent = "Ожидание...";
+            }
+            
+            userInfoDiv.style.display = 'block';
         }
+        
+        // ========== МОДАЛЬНОЕ ОКНО ОЦЕНКИ ==========
         
         function openRatingModal() {
             document.getElementById('rating-modal').classList.add('show');
+            
+            // Загружаем общие отзывы
+            loadReviewsFromGist().then(reviews => {
+                updateModalReviewsInfo(reviews);
+            });
+            
+            // Загружаем отзыв пользователя
+            loadUserRating();
+            
+            if (userRatings.hasRated) {
+                // Пользователь уже оценил
+                resetRatingForm();
+                updateEditTimer();
+                fillStarsWithUserRating();
+                document.getElementById('submit-rating').style.display = 'none';
+            } else {
+                // Новый пользователь
+                resetRatingForm();
+                document.getElementById('user-review-info').style.display = 'none';
+                document.getElementById('submit-rating').style.display = 'block';
+                document.getElementById('submit-rating').disabled = true;
+                commentInput.disabled = false;
+                commentInput.value = '';
+            }
         }
         
         function closeRatingModal() {
             document.getElementById('rating-modal').classList.remove('show');
+            document.getElementById('bad-words-warning').classList.remove('show');
+            commentInput.disabled = false;
         }
         
         function resetRatingForm() {
-            // Ваш существующий код
+            document.querySelectorAll('.category-star').forEach(star => {
+                star.classList.remove('filled');
+            });
+            
+            ['sound', 'design', 'remix', 'song'].forEach(category => {
+                document.getElementById(`${category}-rating-value`).textContent = '0/5';
+            });
+            
+            userRatings.sound = 0;
+            userRatings.design = 0;
+            userRatings.remix = 0;
+            userRatings.song = 0;
+            userRatings.comment = '';
+            
+            setupStarRating('sound-stars', 'sound');
+            setupStarRating('design-stars', 'design');
+            setupStarRating('remix-stars', 'remix');
+            setupStarRating('song-stars', 'song');
         }
         
         function fillStarsWithUserRating() {
-            // Ваш существующий код
+            if (!userRatings.hasRated) return;
+            
+            ['sound', 'design', 'remix', 'song'].forEach(category => {
+                const stars = document.querySelectorAll(`#${category}-stars .category-star`);
+                const rating = userRatings[category] || 0;
+                
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('filled');
+                    } else {
+                        star.classList.remove('filled');
+                    }
+                });
+                
+                document.getElementById(`${category}-rating-value`).textContent = `${rating}/5`;
+            });
         }
         
         function setupStarRating(containerId, category) {
-            // Ваш существующий код
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const stars = container.querySelectorAll('.category-star');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    if (userRatings.hasRated) {
+                        showNotification('Вы уже оценили радио. Изменение возможно через 3 дня.', 3000);
+                        return;
+                    }
+                    
+                    const rating = parseInt(star.dataset.rating);
+                    userRatings[category] = rating;
+                    
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('filled');
+                        } else {
+                            s.classList.remove('filled');
+                        }
+                    });
+                    
+                    document.getElementById(`${category}-rating-value`).textContent = `${rating}/5`;
+                    checkRatingCompletion();
+                });
+            });
         }
         
         function checkRatingCompletion() {
-            // Ваш существующий код
+            if (userRatings.hasRated) {
+                document.getElementById('submit-rating').disabled = true;
+                return;
+            }
+            
+            const isComplete = userRatings.sound > 0 && 
+                              userRatings.design > 0 && 
+                              userRatings.remix > 0 && 
+                              userRatings.song > 0;
+            
+            document.getElementById('submit-rating').disabled = !isComplete;
         }
         
         async function submitRating() {
-            // Ваш существующий код
+            if (userRatings.hasRated) {
+                showNotification('Вы уже оценили это радио!', 3000);
+                return;
+            }
+            
+            const comment = commentInput.value.trim();
+            
+            // Проверка на плохие слова (если есть комментарий)
+            if (comment) {
+                try {
+                    const response = await fetch(STATS_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            action: 'check_comment',
+                            comment: comment
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.hasBadWords) {
+                        document.getElementById('bad-words-warning').classList.add('show');
+                        return;
+                    }
+                } catch (error) {
+                    console.warn('Не удалось проверить комментарий:', error);
+                }
+            }
+            
+            const ratingData = {
+                sound: userRatings.sound,
+                design: userRatings.design,
+                remix: userRatings.remix,
+                song: userRatings.song,
+                comment: comment
+            };
+            
+            // Отправляем на сервер (токен скрыт в save-review.js)
+            const result = await saveReviewToServer(ratingData);
+            
+            if (result.success) {
+                // Сохраняем локально с таймером
+                const userRatingData = {
+                    ...ratingData,
+                    timestamp: new Date().toISOString(),
+                    canEditAfter: result.canEditAfter || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+                    ratingId: result.ratingId
+                };
+                
+                localStorage.setItem('lapfm_user_rating', JSON.stringify(userRatingData));
+                userRatings.hasRated = true;
+                userRatings.canEditAfter = userRatingData.canEditAfter;
+                userRatings.ratingId = userRatingData.ratingId;
+                userRatings.comment = comment;
+                
+                // Обновляем отображение
+                await updateOverallRatingDisplay();
+                updateEditTimer();
+                
+                showNotification(`Спасибо! Ваш отзыв сохранен.`, 4000);
+                
+                document.getElementById('submit-rating').disabled = true;
+                document.getElementById('submit-rating').style.display = 'none';
+                commentInput.disabled = true;
+            } else {
+                showNotification('Ошибка сохранения отзыва', 4000);
+            }
         }
         
-        function updateCurrentTime() {
-            // Ваш существующий код
-        }
-        
-        function preloadNextAudio() {
-            // Ваш существующий код
-        }
-        
-        function monitorAudioQuality() {
-            // Ваш существующий код
-        }
+        // ========== ФУНКЦИИ ВРЕМЕНИ ==========
         
         function getEkbTime() {
             const now = new Date();
@@ -1935,46 +1893,52 @@
             }, duration);
         }
         
+        // ========== ОСТАЛЬНЫЕ ФУНКЦИИ ==========
+        
         function convertFileLink(url) {
-            // Ваш существующий код
+            // Твоя существующая функция
             return url;
         }
         
         async function playAudioFile(url) {
-            // Ваш существующий код
+            // Твоя существующая функция
             return true;
         }
         
         function togglePlayback() {
-            // Ваш существующий код
+            // Твоя существующая функция
         }
         
         async function loadSchedule() {
-            // Ваш существующий код
+            // Твоя существующая функция
         }
         
         function findCurrentTrack() {
-            // Ваш существующий код
+            // Твоя существующая функция
         }
         
         function updateNowPlaying(track, index) {
-            // Ваш существующий код
+            // Твоя существующая функция
+        }
+        
+        function updateCurrentTime() {
+            // Твоя существующая функция
         }
         
         function updateScheduleDisplay() {
-            // Ваш существующий код
+            // Твоя существующая функция
         }
         
         function refreshSchedule() {
-            // Ваш существующий код
+            // Твоя существующая функция
         }
         
         function shareRadio() {
-            // Ваш существующий код
+            // Твоя существующая функция
         }
         
         function scrollToCurrentTrack() {
-            // Ваш существующий код
+            // Твоя существующая функция
         }
         
         function loadTheme() {
@@ -2000,18 +1964,24 @@
         }
         
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
+        
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🚀 LAP.FM Radio загружается...');
             
             loadTheme();
             loadSchedule();
-            loadBasicStats();
+            updateUserStats();
             updateOverallRatingDisplay();
+            
+            // Инициализация звезд рейтинга
+            setupStarRating('sound-stars', 'sound');
+            setupStarRating('design-stars', 'design');
+            setupStarRating('remix-stars', 'remix');
+            setupStarRating('song-stars', 'song');
             
             playButton.addEventListener('click', togglePlayback);
             
             audioPlayer.addEventListener('timeupdate', updateCurrentTime);
-            audioPlayer.addEventListener('timeupdate', monitorAudioQuality);
             
             setInterval(updateEkbTimeDisplay, 1000);
             updateEkbTimeDisplay();
@@ -2021,21 +1991,11 @@
                 updateCurrentTime();
             }, 1000);
             
-            setInterval(monitorAudioQuality, 5000);
+            // Обновление статистики каждые 30 секунд
+            setInterval(updateUserStats, 30000);
+            
+            // Обновление таймера изменения отзыва каждую минуту
             setInterval(updateEditTimer, 60000);
-            
-            // Автообновление статистики
-            statsUpdateInterval = setInterval(() => {
-                if (advancedStatsVisible) {
-                    loadAdvancedStats(false);
-                }
-            }, 30000);
-            
-            // Инициализация звезд рейтинга
-            setupStarRating('sound-stars', 'sound');
-            setupStarRating('design-stars', 'design');
-            setupStarRating('remix-stars', 'remix');
-            setupStarRating('song-stars', 'song');
         });
         
         // Экспорт функций
@@ -2046,9 +2006,6 @@
         window.openRatingModal = openRatingModal;
         window.closeRatingModal = closeRatingModal;
         window.submitRating = submitRating;
-        window.toggleAdminStats = toggleAdminStats;
-        window.loadAdvancedStats = loadAdvancedStats;
-        window.toggleStats = toggleStats;
     </script>
 </body>
 </html>
