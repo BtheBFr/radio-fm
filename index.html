@@ -1251,24 +1251,34 @@ function togglePlayback() {
         }
         
         function updateCurrentTime() {
-    if (!currentSchedule || currentTrackIndex === -1) return;
+    if (!currentSchedule || currentTrackIndex === -1) {
+        progressBar.style.width = '0%';
+        document.getElementById('track-progress').textContent = '--:-- / --:--';
+        return;
+    }
     
     const track = currentSchedule.tracks[currentTrackIndex];
     const startSeconds = parseTimeToSeconds(track.start);
-    const duration = parseDuration(track.duration);
+    const duration = parseDuration(track.duration); // Только из расписания!
     
     const ekbTime = getEkbTime();
     const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+    const trackEndSeconds = startSeconds + duration;
     
-    // Проверяем, идёт ли сейчас этот трек
-    if (currentSeconds >= startSeconds && currentSeconds < startSeconds + duration) {
-        const elapsed = currentSeconds - startSeconds;
-        const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+    // Проверяем три состояния:
+    if (currentSeconds < startSeconds) {
+        // Трек ещё не начался
+        progressBar.style.width = '0%';
+        document.getElementById('track-progress').textContent = 
+            `Ожидание... / ${formatDuration(duration)}`;
         
-        // Обновляем прогресс-бар
+    } else if (currentSeconds >= startSeconds && currentSeconds < trackEndSeconds) {
+        // Трек идёт сейчас
+        const elapsed = currentSeconds - startSeconds;
+        const progressPercent = Math.min(100, (elapsed / duration) * 100);
+        
         progressBar.style.width = `${progressPercent}%`;
         
-        // Обновляем время
         const elapsedMins = Math.floor(elapsed / 60);
         const elapsedSecs = Math.floor(elapsed % 60);
         const totalMins = Math.floor(duration / 60);
@@ -1276,10 +1286,12 @@ function togglePlayback() {
         
         document.getElementById('track-progress').textContent = 
             `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
+        
     } else {
-        // Трек не играет сейчас
-        progressBar.style.width = '0%';
-        document.getElementById('track-progress').textContent = '--:-- / --:--';
+        // Трек уже закончился
+        progressBar.style.width = '100%';
+        document.getElementById('track-progress').textContent = 
+            `${formatDuration(duration)} / ${formatDuration(duration)}`;
     }
 }
         
