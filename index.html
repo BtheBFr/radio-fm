@@ -2241,57 +2241,123 @@ function sendUserActivity() {
         
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
 
+// 🔥 Глобальные переменные для статистики
+let statsUpdateInterval = null;
+let lastStatsUpdate = 0;
+
+// 🔥 Простая функция автообновления (без сложной логики)
+function startSimpleStatsUpdate() {
+    console.log('▶️ Запускаю автообновление статистики');
+    
+    // Обновляем сразу при загрузке
+    updateUserStats();
+    
+    // Обновляем каждые 30 секунд
+    if (statsUpdateInterval) clearInterval(statsUpdateInterval);
+    
+    statsUpdateInterval = setInterval(() => {
+        if (!document.hidden) {
+            updateUserStats();
+        }
+    }, 30000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 LAP.FM Radio загружается...');
     
+    // 1. Загружаем тему ПЕРВЫМ делом
     loadTheme();
+    
+    // 2. Загружаем расписание
     loadSchedule();
+    
+    // 3. Обновляем рейтинг
     updateOverallRatingDisplay();
     
-    // Инициализация звезд рейтинга
+    // 4. Инициализация звезд рейтинга
     setupStarRating('sound-stars', 'sound');
     setupStarRating('design-stars', 'design');
     setupStarRating('remix-stars', 'remix');
     setupStarRating('song-stars', 'song');
     
-    playButton.addEventListener('click', togglePlayback);
+    // 5. Инициализация плеера
+    if (playButton) {
+        playButton.addEventListener('click', togglePlayback);
+    }
     
-    audioPlayer.addEventListener('timeupdate', updateCurrentTime);
-    audioPlayer.addEventListener('ended', () => {
-        if (currentTrackIndex < currentSchedule.tracks.length - 1) {
-            currentTrackIndex++;
-            const nextTrack = currentSchedule.tracks[currentTrackIndex];
-            playAudioFile(nextTrack.file);
-            updateNowPlaying(nextTrack, currentTrackIndex);
-        }
-    });
+    if (audioPlayer) {
+        audioPlayer.addEventListener('timeupdate', updateCurrentTime);
+        audioPlayer.addEventListener('ended', () => {
+            if (currentSchedule && currentTrackIndex < currentSchedule.tracks.length - 1) {
+                currentTrackIndex++;
+                const nextTrack = currentSchedule.tracks[currentTrackIndex];
+                if (nextTrack && nextTrack.file) {
+                    playAudioFile(nextTrack.file);
+                    updateNowPlaying(nextTrack, currentTrackIndex);
+                }
+            }
+        });
+    }
     
-    // Обновление времени
-    setInterval(updateEkbTimeDisplay, 1000);
+    // 6. Обновление времени ЕКБ
     updateEkbTimeDisplay();
+    setInterval(updateEkbTimeDisplay, 1000);
     
-    // Обновление текущего трека
+    // 7. Обновление текущего трека
     setInterval(() => {
-        findCurrentTrack();
-        updateCurrentTime();
+        if (currentSchedule) {
+            findCurrentTrack();
+            updateCurrentTime();
+        }
     }, 1000);
     
-    // 🔥 ЗАПУСК АВТООБНОВЛЕНИЯ СТАТИСТИКИ
-    startStatsAutoUpdate();
+    // 8. Запускаем автообновление статистики (ПРОСТОЙ ВАРИАНТ)
+    startSimpleStatsUpdate();
     
-    // Отправка активности пользователя
-    sendUserActivity();
-    
-    // Обновление статистики каждую минуту
-    setInterval(() => {
-        if (!document.hidden) {
-            updateUserStats();
-        }
-    }, 60000); // 1 минута
-    
-    // Обновление таймера изменения отзыва
+    // 9. Обновление таймера отзыва
     setInterval(updateEditTimer, 60000);
+    
+    console.log('✅ LAP.FM успешно загружен');
 });
+
+// 🔥 ОБНОВЛЕННАЯ ФУНКЦИЯ loadTheme() (добавь если нет)
+function loadTheme() {
+    try {
+        const savedTheme = localStorage.getItem('radio-theme') || 'auto';
+        setTheme(savedTheme);
+    } catch (e) {
+        console.warn('Ошибка загрузки темы:', e);
+        document.body.setAttribute('data-theme', 'light');
+    }
+}
+
+// 🔥 ОБНОВЛЕННАЯ ФУНКЦИЯ setTheme() (добавь если нет)
+function setTheme(theme) {
+    try {
+        currentTheme = theme;
+        localStorage.setItem('radio-theme', theme);
+        
+        let actualTheme = theme;
+        if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        
+        document.body.setAttribute('data-theme', actualTheme);
+        
+        // Обновляем кнопки темы
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        const themeBtn = document.getElementById('theme-' + theme);
+        if (themeBtn) {
+            themeBtn.classList.add('active');
+        }
+    } catch (e) {
+        console.warn('Ошибка установки темы:', e);
+        document.body.setAttribute('data-theme', 'light');
+    }
+}
 
 // Экспорт функций
 window.refreshSchedule = refreshSchedule;
