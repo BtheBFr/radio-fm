@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LAP.FM - Радио с расписанием (ЕКБ)</title>
     <style>
+        /* СБРОС И БАЗОВЫЕ СТИЛИ */
         * {
             margin: 0;
             padding: 0;
@@ -13,6 +14,7 @@
         }
         
         :root {
+            /* Светлая тема */
             --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --bg-secondary: #ffffff;
             --bg-card: #f7fafc;
@@ -32,9 +34,13 @@
             --star-empty: #e2e8f0;
             --star-filled: #ffd700;
             --modal-overlay: rgba(0, 0, 0, 0.5);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
         }
         
         [data-theme="dark"] {
+            /* Тёмная тема */
             --bg-primary: linear-gradient(135deg, #4c51bf 0%, #5a67d8 100%);
             --bg-secondary: #1a202c;
             --bg-card: #2d3748;
@@ -54,6 +60,9 @@
             --star-empty: #4a5568;
             --star-filled: #ffd700;
             --modal-overlay: rgba(0, 0, 0, 0.7);
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
         }
         
         body {
@@ -66,7 +75,7 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: var(--bg-secondary);
             border-radius: 24px;
@@ -74,6 +83,7 @@
             overflow: hidden;
         }
         
+        /* ШАПКА */
         header {
             background: var(--bg-primary);
             color: white;
@@ -141,10 +151,12 @@
             100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
         }
         
+        /* ОСНОВНОЙ КОНТЕНТ */
         main {
             padding: 30px;
         }
         
+        /* ПЛЕЕР */
         .player-section {
             text-align: center;
             margin-bottom: 30px;
@@ -179,6 +191,7 @@
             display: inline-block;
         }
         
+        /* ИНДИКАТОР КАЧЕСТВА */
         .quality-indicator {
             display: inline-flex;
             align-items: center;
@@ -205,6 +218,7 @@
             background: var(--quality-poor);
         }
         
+        /* КРУГЛАЯ КНОПКА */
         .play-button-container {
             margin: 25px 0;
         }
@@ -245,6 +259,7 @@
             font-size: 0.85rem;
         }
         
+        /* ПОЛОСА ПРОГРЕССА */
         .progress-container {
             width: 100%;
             height: 5px;
@@ -262,6 +277,7 @@
             transition: width 0.3s ease;
         }
         
+        /* СЛЕДУЮЩИЙ ТРЕК */
         .next-track {
             background: var(--bg-card);
             border-radius: 14px;
@@ -291,6 +307,7 @@
             margin-top: 4px;
         }
         
+        /* РАСПИСАНИЕ */
         .schedule-section {
             margin: 30px 0;
         }
@@ -321,6 +338,7 @@
             border-radius: 3px;
         }
         
+        /* КНОПКА "СЕЙЧАС" */
         .now-button {
             display: flex;
             align-items: center;
@@ -430,6 +448,7 @@
             margin-left: 8px;
         }
         
+        /* КОНТРОЛЫ */
         .controls {
             display: flex;
             gap: 12px;
@@ -458,6 +477,7 @@
             color: #667eea;
         }
         
+        /* СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ */
         .users-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -485,6 +505,7 @@
             color: var(--text-secondary);
         }
         
+        /* СТАТУС */
         .status-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -515,6 +536,7 @@
             color: var(--text-primary);
         }
         
+        /* ФУТЕР */
         footer {
             text-align: center;
             padding: 25px;
@@ -524,6 +546,7 @@
             border-top: 1px solid var(--border-color);
         }
         
+        /* РЕЙТИНГ В ФУТЕРЕ */
         .footer-rating {
             margin: 15px 0;
             display: flex;
@@ -577,6 +600,7 @@
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         
+        /* ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ */
         .theme-switcher {
             margin-top: 20px;
             display: flex;
@@ -617,6 +641,7 @@
             box-shadow: 0 5px 15px rgba(90, 103, 216, 0.3);
         }
         
+        /* СКРОЛЛБАР */
         .schedule-list::-webkit-scrollbar {
             width: 5px;
         }
@@ -631,6 +656,7 @@
             border-radius: 3px;
         }
         
+        /* УВЕДОМЛЕНИЯ */
         .notification {
             position: fixed;
             bottom: 15px;
@@ -657,6 +683,7 @@
             transform: translateY(0);
         }
         
+        /* МОДАЛЬНОЕ ОКНО ОЦЕНКИ */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -879,6 +906,114 @@
             display: block;
         }
         
+        /* ОТЗЫВЫ ПОЛЬЗОВАТЕЛЕЙ */
+        .reviews-section {
+            margin: 30px 0;
+            padding-top: 25px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        
+        .review-item {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            transition: all 0.2s ease;
+        }
+        
+        .review-item:hover {
+            border-color: var(--border-color);
+            background: var(--schedule-hover);
+            transform: translateY(-1px);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .review-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .review-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .review-stars {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .review-star {
+            font-size: 0.9rem;
+            color: var(--star-filled);
+        }
+        
+        .review-comment {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-top: 10px;
+            padding: 12px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .review-categories {
+            display: flex;
+            gap: 15px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .review-category {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .review-category-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .no-reviews {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .no-reviews-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        /* АДАПТИВНОСТЬ */
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -968,10 +1103,21 @@
                 margin-left: 0;
                 margin-top: 10px;
             }
+            
+            .review-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .review-categories {
+                justify-content: space-between;
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Конфигурация API -->
     <script>
         const API_BASE_URL = 'https://radio-fm-sable.vercel.app/api';
         const GIST_ID = '5e1359ada750eb5eb49947764f4ca5e9';
@@ -981,6 +1127,7 @@
     
     <div id="notification" class="notification"></div>
     
+    <!-- Модальное окно оценки -->
     <div id="rating-modal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
@@ -988,8 +1135,10 @@
                 <button class="modal-close" onclick="closeRatingModal()">×</button>
             </div>
             
+            <!-- Блок с общей статистикой отзывов -->
             <div id="reviews-info"></div>
             
+            <!-- Блок с текущим отзывом пользователя (если есть) -->
             <div id="user-review-info" class="user-review-info" style="display: none;">
                 <div class="rating-text">Ваш отзыв: <span id="user-rating-value">0.0</span>/5</div>
                 <div class="timer-text" id="edit-timer-text"></div>
@@ -1054,6 +1203,7 @@
                 </div>
             </div>
             
+            <!-- Поле для комментария -->
             <label class="comment-label" for="comment-input">Ваш комментарий (необязательно):</label>
             <div class="bad-words-warning" id="bad-words-warning">
                 ⚠️ Ваш комментарий содержит недопустимые слова. Пожалуйста, отредактируйте его.
@@ -1064,6 +1214,12 @@
                 placeholder="Напишите ваш отзыв о радио... (макс. 500 символов)"
                 maxlength="500"
             ></textarea>
+            
+            <!-- Блок с последними отзывами -->
+            <div id="recent-reviews" style="margin-top: 20px; display: none;">
+                <h3 style="margin-bottom: 15px; color: var(--text-primary); font-size: 1rem;">Последние отзывы:</h3>
+                <div id="recent-reviews-list" style="max-height: 200px; overflow-y: auto;"></div>
+            </div>
             
             <div class="modal-actions">
                 <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
@@ -1128,6 +1284,7 @@
                 </div>
             </section>
             
+            <!-- Статистика пользователей -->
             <div class="users-stats">
                 <div class="stat-item">
                     <div class="stat-value" id="online-users">1</div>
@@ -1139,6 +1296,7 @@
                 </div>
             </div>
             
+            <!-- Контролы -->
             <div class="controls">
                 <button class="control-btn" onclick="refreshSchedule()">
                     <span>🔄</span>
@@ -1158,6 +1316,7 @@
                 </button>
             </div>
             
+            <!-- Расписание -->
             <section class="schedule-section">
                 <div class="section-header">
                     <h2 class="section-title">Расписание на сегодня (сейчас)</h2>
@@ -1178,6 +1337,24 @@
                 </div>
             </section>
             
+            <!-- Отзывы пользователей -->
+            <section class="reviews-section" id="reviews-section">
+                <div class="section-header">
+                    <h2 class="section-title">Отзывы слушателей</h2>
+                    <button class="now-button" onclick="openRatingModal()">
+                        <span>⭐</span>
+                        <span>Добавить отзыв</span>
+                    </button>
+                </div>
+                <div class="reviews-list" id="reviews-list">
+                    <div class="no-reviews">
+                        <div class="no-reviews-icon">💬</div>
+                        <p>Пока нет отзывов. Будьте первым!</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Статус -->
             <div class="status-section">
                 <div class="status-card">
                     <h3>Обновлено</h3>
@@ -1240,6 +1417,8 @@
     <script>
         // ========== КОНСТАНТЫ И ПЕРЕМЕННЫЕ ==========
         const TIMEZONE_OFFSET = 5;
+        const SCHEDULE_URL = 'https://raw.githubusercontent.com/BtheBFr/radio-fm/main/schedule.json';
+        
         let currentSchedule = null;
         let currentTrackIndex = -1;
         let isPlaying = false;
@@ -1249,11 +1428,9 @@
         let preloadedAudio = null;
         let audioStartTime = 0;
         let audioStartOffset = 0;
+        let allReviews = [];
         
-        // 🔥 ИСПРАВЛЕНИЕ: ТОЛЬКО ОДНА SCHEDULE_URL
-        const SCHEDULE_URL = 'https://raw.githubusercontent.com/BtheBFr/radio-fm/main/schedule.json';
-        
-        // Рейтинговая система
+        // Рейтинговая система - ВЕРНУЛИ 3 ДНЯ!
         let userRatings = {
             sound: 0,
             design: 0,
@@ -1285,8 +1462,6 @@
 
         async function updateUserStats(force = false) {
             try {
-                console.log('📊 Обновляю статистику...');
-                
                 const response = await fetch(STATS_API_URL + '?t=' + Date.now(), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1316,12 +1491,6 @@
                     }));
                     
                     lastStatsUpdate = Date.now();
-                    
-                    console.log('📈 Статистика обновлена:', {
-                        online: stats.online,
-                        today: stats.today,
-                        total: stats.total
-                    });
                 }
                 
             } catch (error) {
@@ -1358,7 +1527,6 @@
             
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden && Date.now() - lastStatsUpdate > 10000) {
-                    console.log('🔄 Возврат на вкладку, обновляю статистику...');
                     updateUserStats(true);
                 }
             });
@@ -1384,38 +1552,176 @@
         
         // ========== ОТОБРАЖЕНИЕ ОТЗЫВОВ ==========
         
-        async function updateOverallRatingDisplay() {
+        async function loadReviews() {
             try {
+                console.log('📥 Загружаю отзывы...');
                 const response = await fetch(REVIEWS_URL + '?t=' + Date.now());
+                
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
-                const reviews = await response.json();
+                const reviewsData = await response.json();
+                allReviews = reviewsData.ratings || [];
                 
-                document.getElementById('average-rating').textContent = reviews.average.toFixed(1);
-                document.getElementById('rating-count').textContent = 
-                    `(${reviews.total} ${getRatingWord(reviews.total)})`;
+                updateOverallRatingDisplay(reviewsData);
+                displayReviews(allReviews);
+                updateRecentReviewsInModal(allReviews);
                 
-                updateStars(reviews.average);
-                updateModalReviewsInfo(reviews);
+                console.log('✅ Отзывы загружены:', allReviews.length, 'шт.');
+                
+                return reviewsData;
                 
             } catch (error) {
-                console.error('Ошибка обновления рейтинга:', error);
+                console.error('Ошибка загрузки отзывов:', error);
+                displayReviews([]);
                 
-                const localReviews = JSON.parse(localStorage.getItem('lapfm_local_reviews')) || {
+                return {
                     ratings: [],
                     total: 0,
                     average: 0,
                     updated: new Date().toISOString()
                 };
-                
-                document.getElementById('average-rating').textContent = localReviews.average.toFixed(1);
-                document.getElementById('rating-count').textContent = 
-                    `(${localReviews.total} ${getRatingWord(localReviews.total)})`;
-                
-                updateStars(localReviews.average);
-                
-                setTimeout(updateOverallRatingDisplay, 30000);
             }
+        }
+        
+        function displayReviews(reviews) {
+            const reviewsList = document.getElementById('reviews-list');
+            const reviewsSection = document.getElementById('reviews-section');
+            
+            if (!reviews || reviews.length === 0) {
+                reviewsList.innerHTML = `
+                    <div class="no-reviews">
+                        <div class="no-reviews-icon">💬</div>
+                        <p>Пока нет отзывов. Будьте первым!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Сортируем по дате (новые сверху)
+            const sortedReviews = [...reviews].sort((a, b) => 
+                new Date(b.timestamp || b.date || 0) - new Date(a.timestamp || a.date || 0)
+            );
+            
+            let html = '';
+            
+            sortedReviews.slice(0, 10).forEach((review, index) => {
+                const date = review.timestamp || review.date || 'Неизвестно';
+                const avgRating = (review.sound + review.design + review.remix + review.song) / 4;
+                const displayDate = new Date(date).toLocaleDateString('ru-RU', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                
+                html += `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="review-date">${displayDate}</div>
+                            <div class="review-rating">
+                                <div class="review-stars">
+                                    ${'★'.repeat(Math.round(avgRating))}
+                                </div>
+                                <span>${avgRating.toFixed(1)}/5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="review-categories">
+                            <div class="review-category">
+                                <span>🔊</span>
+                                <span class="review-category-value">${review.sound}/5</span>
+                            </div>
+                            <div class="review-category">
+                                <span>🎨</span>
+                                <span class="review-category-value">${review.design}/5</span>
+                            </div>
+                            <div class="review-category">
+                                <span>🎵</span>
+                                <span class="review-category-value">${review.remix}/5</span>
+                            </div>
+                            <div class="review-category">
+                                <span>🎶</span>
+                                <span class="review-category-value">${review.song}/5</span>
+                            </div>
+                        </div>
+                        
+                        ${review.comment ? `
+                            <div class="review-comment">
+                                ${escapeHtml(review.comment)}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            reviewsList.innerHTML = html;
+            
+            // Показываем количество отзывов в заголовке
+            const title = reviewsSection.querySelector('.section-title');
+            if (title) {
+                title.innerHTML = `Отзывы слушателей <span style="font-size: 0.9rem; color: var(--text-light); margin-left: 8px;">(${reviews.length})</span>`;
+            }
+        }
+        
+        function updateRecentReviewsInModal(reviews) {
+            const recentContainer = document.getElementById('recent-reviews');
+            const recentList = document.getElementById('recent-reviews-list');
+            
+            if (!reviews || reviews.length === 0) {
+                recentContainer.style.display = 'none';
+                return;
+            }
+            
+            const recentReviews = [...reviews]
+                .sort((a, b) => new Date(b.timestamp || b.date || 0) - new Date(a.timestamp || a.date || 0))
+                .slice(0, 3);
+            
+            let html = '';
+            
+            recentReviews.forEach(review => {
+                const avgRating = (review.sound + review.design + review.remix + review.song) / 4;
+                const hasComment = review.comment && review.comment.trim().length > 0;
+                
+                html += `
+                    <div style="margin-bottom: 12px; padding: 10px; background: var(--bg-card); border-radius: 8px; border-left: 3px solid #667eea;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <div style="font-weight: 600; color: var(--text-primary);">★ ${avgRating.toFixed(1)}/5</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">
+                                ${review.sound}🔊 ${review.design}🎨 ${review.remix}🎵 ${review.song}🎶
+                            </div>
+                        </div>
+                        ${hasComment ? `
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">
+                                "${truncateText(review.comment, 80)}"
+                            </div>
+                        ` : '<div style="font-size: 0.85rem; color: var(--text-light);">(без комментария)</div>'}
+                    </div>
+                `;
+            });
+            
+            recentList.innerHTML = html;
+            recentContainer.style.display = 'block';
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function truncateText(text, maxLength) {
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+        
+        function updateOverallRatingDisplay(reviewsData) {
+            const reviews = reviewsData || { total: 0, average: 0 };
+            
+            document.getElementById('average-rating').textContent = reviews.average.toFixed(1);
+            document.getElementById('rating-count').textContent = 
+                `(${reviews.total} ${getRatingWord(reviews.total)})`;
+            
+            updateStars(reviews.average);
+            updateModalReviewsInfo(reviews);
         }
         
         function updateModalReviewsInfo(reviews) {
@@ -1461,7 +1767,7 @@
         }
         
         function getCategoryAverage(ratings, category) {
-            if (!ratings.length) return 0;
+            if (!ratings || !ratings.length) return 0;
             const total = ratings.reduce((sum, r) => sum + (r[category] || 0), 0);
             return total / ratings.length;
         }
@@ -1488,19 +1794,25 @@
         function loadUserRating() {
             const saved = localStorage.getItem('lapfm_user_rating');
             if (saved) {
-                const data = JSON.parse(saved);
-                userRatings = {
-                    sound: data.sound || 0,
-                    design: data.design || 0,
-                    remix: data.remix || 0,
-                    song: data.song || 0,
-                    comment: data.comment || '',
-                    hasRated: true,
-                    canEditAfter: data.canEditAfter || new Date(Date.now() + 10 * 1000).toISOString(),
-                    ratingId: data.ratingId || null,
-                    timestamp: data.timestamp
-                };
-                return true;
+                try {
+                    const data = JSON.parse(saved);
+                    userRatings = {
+                        sound: data.sound || 0,
+                        design: data.design || 0,
+                        remix: data.remix || 0,
+                        song: data.song || 0,
+                        comment: data.comment || '',
+                        hasRated: true,
+                        // ВОЗВРАЩАЕМ 3 ДНЯ!
+                        canEditAfter: data.canEditAfter || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+                        ratingId: data.ratingId || null,
+                        timestamp: data.timestamp
+                    };
+                    return true;
+                } catch (e) {
+                    console.error('Ошибка парсинга отзыва:', e);
+                    return false;
+                }
             }
             return false;
         }
@@ -1549,9 +1861,9 @@
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 
                 let timeString = '';
-                if (days > 0) timeString += `${days} дней `;
-                if (hours > 0) timeString += `${hours} часов `;
-                if (minutes > 0 && days === 0) timeString += `${minutes} минут`;
+                if (days > 0) timeString += `${days} ${days === 1 ? 'день' : days < 5 ? 'дня' : 'дней'} `;
+                if (hours > 0) timeString += `${hours} ${hours === 1 ? 'час' : hours < 5 ? 'часа' : 'часов'} `;
+                if (minutes > 0 && days === 0) timeString += `${minutes} ${minutes === 1 ? 'минуту' : minutes < 5 ? 'минуты' : 'минут'}`;
                 
                 timerText.textContent = `Вы сможете изменить отзыв через: ${timeString.trim()}`;
                 editBtn.disabled = true;
@@ -1563,21 +1875,24 @@
         
         // ========== МОДАЛЬНОЕ ОКНО ОЦЕНКИ ==========
         
-        function openRatingModal() {
+        async function openRatingModal() {
             document.getElementById('rating-modal').classList.add('show');
             
-            updateOverallRatingDisplay().then(() => {
-                console.log('Рейтинг обновлен');
-            });
+            // Загружаем свежие отзывы
+            const reviewsData = await loadReviews();
+            updateModalReviewsInfo(reviewsData);
             
+            // Загружаем отзыв пользователя
             loadUserRating();
             
             if (userRatings.hasRated) {
+                // Пользователь уже оценил
                 resetRatingForm();
                 updateEditTimer();
                 fillStarsWithUserRating();
                 document.getElementById('submit-rating').style.display = 'none';
             } else {
+                // Новый пользователь
                 resetRatingForm();
                 document.getElementById('user-review-info').style.display = 'none';
                 document.getElementById('submit-rating').style.display = 'block';
@@ -1585,6 +1900,9 @@
                 commentInput.disabled = false;
                 commentInput.value = '';
             }
+            
+            // Показываем последние отзывы
+            updateRecentReviewsInModal(allReviews);
         }
         
         function closeRatingModal() {
@@ -1685,6 +2003,7 @@
             
             const comment = commentInput.value.trim();
             
+            // Проверка на плохие слова (если есть комментарий)
             if (comment) {
                 try {
                     const response = await fetch(STATS_API_URL, {
@@ -1722,6 +2041,7 @@
             };
             
             try {
+                // Пробуем отправить на сервер
                 const response = await fetch(API_BASE_URL + '/save-review', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1731,10 +2051,11 @@
                 const result = await response.json();
                 
                 if (result.success) {
+                    // Сохраняем локально с таймером 3 ДНЯ!
                     const userRatingData = {
                         ...ratingData,
                         timestamp: new Date().toISOString(),
-                        canEditAfter: result.canEditAfter || new Date(Date.now() + 10 * 1000).toISOString(), // 10 секунд
+                        canEditAfter: result.canEditAfter || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
                         ratingId: result.ratingId
                     };
                     
@@ -1744,10 +2065,11 @@
                     userRatings.ratingId = userRatingData.ratingId;
                     userRatings.comment = comment;
                     
-                    await updateOverallRatingDisplay();
+                    // Обновляем отображение
+                    await loadReviews(); // Загружаем свежие отзывы
                     updateEditTimer();
                     
-                    showNotification(`Спасибо! Ваш отзыв сохранен.`, 4000);
+                    showNotification(`Спасибо! Ваш отзыв сохранён.`, 4000);
                     
                     document.getElementById('submit-rating').disabled = true;
                     document.getElementById('submit-rating').style.display = 'none';
@@ -1759,16 +2081,25 @@
                 console.error('Ошибка отправки отзыва:', error);
                 showNotification('Сеть недоступна. Отзыв сохранён локально.', 4000);
                 
+                // Сохраняем локально с таймером 3 ДНЯ!
                 const userRatingData = {
                     ...ratingData,
                     timestamp: new Date().toISOString(),
-                    canEditAfter: new Date(Date.now() + 10 * 1000).toISOString(), // 10 секунд
+                    canEditAfter: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
                     ratingId: 'local_' + Date.now()
                 };
                 
                 localStorage.setItem('lapfm_user_rating', JSON.stringify(userRatingData));
                 userRatings.hasRated = true;
                 userRatings.canEditAfter = userRatingData.canEditAfter;
+                userRatings.ratingId = userRatingData.ratingId;
+                userRatings.comment = comment;
+                
+                // Обновляем UI
+                updateEditTimer();
+                document.getElementById('submit-rating').disabled = true;
+                document.getElementById('submit-rating').style.display = 'none';
+                commentInput.disabled = true;
             }
         }
         
@@ -1813,7 +2144,6 @@
             }
             
             const directUrl = convertFileLink(url);
-            console.log('🎵 Пробуем воспроизвести:', directUrl);
             
             try {
                 audioSource.src = directUrl;
@@ -1948,16 +2278,10 @@
         
         async function loadSchedule() {
             try {
-                console.log('🔄 Загружаю расписание из:', SCHEDULE_URL);
-                
-                const response = await fetch(SCHEDULE_URL + '?t=' + new Date().getTime());
-                
-                console.log('📄 Ответ сервера:', response.status, response.statusText);
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                const response = await fetch(SCHEDULE_URL + '?v=' + new Date().getTime());
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 currentSchedule = await response.json();
-                console.log('✅ Расписание загружено:', currentSchedule);
                 
                 const updateDate = new Date(currentSchedule.updated_at);
                 const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
@@ -1970,18 +2294,15 @@
                 showNotification(`Расписание ${currentSchedule.date} загружено`);
                 
             } catch (error) {
-                console.error('❌ Ошибка загрузки расписания:', error);
-                showNotification('Ошибка загрузки расписания. Проверьте консоль.', 5000);
+                console.error('Ошибка загрузки расписания:', error);
+                showNotification('Ошибка загрузки расписания', 5000);
                 
                 document.getElementById('schedule-list').innerHTML = `
                     <div class="schedule-item">
-                        <div class="track-title">Ошибка загрузки расписания</div>
-                        <div class="track-artist">Проверьте консоль (F12)</div>
+                        <div class="track-title">Ошибка загрузки</div>
+                        <div class="track-artist">Проверьте файл schedule.json</div>
                     </div>
                 `;
-                
-                currentTrackEl.textContent = "Ошибка загрузки";
-                currentArtistEl.textContent = "Проверьте schedule.json";
             }
         }
         
@@ -2224,15 +2545,25 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🚀 LAP.FM Radio загружается...');
             
+            // 1. Загружаем тему
             loadTheme();
+            
+            // 2. Загружаем расписание
             loadSchedule();
+            
+            // 3. Загружаем отзывы
+            loadReviews();
+            
+            // 4. Обновляем рейтинг
             updateOverallRatingDisplay();
             
+            // 5. Инициализация звезд рейтинга
             setupStarRating('sound-stars', 'sound');
             setupStarRating('design-stars', 'design');
             setupStarRating('remix-stars', 'remix');
             setupStarRating('song-stars', 'song');
             
+            // 6. Инициализация плеера
             if (playButton) {
                 playButton.addEventListener('click', togglePlayback);
             }
@@ -2251,9 +2582,11 @@
                 });
             }
             
+            // 7. Обновление времени ЕКБ
             updateEkbTimeDisplay();
             setInterval(updateEkbTimeDisplay, 1000);
             
+            // 8. Обновление текущего трека
             setInterval(() => {
                 if (currentSchedule) {
                     findCurrentTrack();
@@ -2261,13 +2594,19 @@
                 }
             }, 1000);
             
+            // 9. Запускаем статистику
             startStatsAutoUpdate();
             
+            // 10. Обновление таймера отзыва
             setInterval(updateEditTimer, 60000);
+            
+            // 11. Автообновление отзывов
+            setInterval(loadReviews, 300000); // Каждые 5 минут
             
             console.log('✅ LAP.FM успешно загружен');
         });
 
+        // Экспорт функций
         window.refreshSchedule = refreshSchedule;
         window.shareRadio = shareRadio;
         window.setTheme = setTheme;
