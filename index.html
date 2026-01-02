@@ -28,6 +28,12 @@
             --schedule-active: rgba(102, 126, 234, 0.1);
             --live-badge-bg: rgba(255, 255, 255, 0.2);
             --timezone-bg: rgba(255, 255, 255, 0.2);
+            --quality-good: #00c853;
+            --quality-medium: #ff9800;
+            --quality-poor: #f44336;
+            --star-empty: #e2e8f0;
+            --star-filled: #ffd700;
+            --modal-overlay: rgba(0, 0, 0, 0.5);
         }
         
         [data-theme="dark"] {
@@ -45,6 +51,12 @@
             --schedule-active: rgba(102, 126, 234, 0.2);
             --live-badge-bg: rgba(255, 255, 255, 0.1);
             --timezone-bg: rgba(0, 0, 0, 0.2);
+            --quality-good: #00e676;
+            --quality-medium: #ffb74d;
+            --quality-poor: #ef5350;
+            --star-empty: #4a5568;
+            --star-filled: #ffd700;
+            --modal-overlay: rgba(0, 0, 0, 0.7);
         }
         
         body {
@@ -171,6 +183,33 @@
             padding: 6px 12px;
             border-radius: 12px;
             display: inline-block;
+        }
+        
+        /* ИНДИКАТОР КАЧЕСТВА */
+        .quality-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            padding: 6px 12px;
+            border-radius: 12px;
+            margin-left: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .quality-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--quality-good);
+        }
+        
+        .quality-dot.medium {
+            background: var(--quality-medium);
+        }
+        
+        .quality-dot.poor {
+            background: var(--quality-poor);
         }
         
         /* КРУГЛАЯ КНОПКА */
@@ -501,6 +540,60 @@
             border-top: 1px solid var(--border-color);
         }
         
+        /* РЕЙТИНГ В ФУТЕРЕ */
+        .footer-rating {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 3px;
+        }
+        
+        .star {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--star-empty);
+            transition: color 0.2s ease;
+        }
+        
+        .star.filled {
+            color: var(--star-filled);
+        }
+        
+        .rating-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .rating-count {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .rate-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .rate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
         /* ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ */
         .theme-switcher {
             margin-top: 20px;
@@ -584,6 +677,163 @@
             transform: translateY(0);
         }
         
+        /* МОДАЛЬНОЕ ОКНО ОЦЕНКИ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--modal-overlay);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.show .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        
+        .rating-category {
+            margin-bottom: 25px;
+        }
+        
+        .category-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        .category-stars {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .category-star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--star-empty);
+            transition: color 0.2s ease;
+        }
+        
+        .category-star.filled {
+            color: var(--star-filled);
+        }
+        
+        .comment-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 100px;
+            margin-top: 10px;
+        }
+        
+        .comment-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: flex-end;
+        }
+        
+        .modal-btn {
+            padding: 12px 25px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-btn.cancel {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+        
+        .modal-btn.cancel:hover {
+            border-color: var(--text-secondary);
+        }
+        
+        .modal-btn.submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .modal-btn.submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .modal-btn.submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
         /* АДАПТИВНОСТЬ */
         @media (max-width: 768px) {
             .container {
@@ -651,11 +901,110 @@
             .now-button {
                 align-self: flex-start;
             }
+            
+            .modal {
+                padding: 20px;
+                width: 95%;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+            
+            .footer-rating {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .rate-button {
+                margin-left: 0;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div id="notification" class="notification"></div>
+    
+    <!-- Модальное окно оценки -->
+    <div id="rating-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Оцените LAP.FM</h2>
+                <button class="modal-close" onclick="closeRatingModal()">×</button>
+            </div>
+            
+            <div class="rating-category">
+                <div class="category-title">
+                    <span>Качество звука</span>
+                    <span id="sound-rating-value">0/5</span>
+                </div>
+                <div class="category-stars" id="sound-stars">
+                    <span class="category-star" data-rating="1">★</span>
+                    <span class="category-star" data-rating="2">★</span>
+                    <span class="category-star" data-rating="3">★</span>
+                    <span class="category-star" data-rating="4">★</span>
+                    <span class="category-star" data-rating="5">★</span>
+                </div>
+            </div>
+            
+            <div class="rating-category">
+                <div class="category-title">
+                    <span>Дизайн сайта</span>
+                    <span id="design-rating-value">0/5</span>
+                </div>
+                <div class="category-stars" id="design-stars">
+                    <span class="category-star" data-rating="1">★</span>
+                    <span class="category-star" data-rating="2">★</span>
+                    <span class="category-star" data-rating="3">★</span>
+                    <span class="category-star" data-rating="4">★</span>
+                    <span class="category-star" data-rating="5">★</span>
+                </div>
+            </div>
+            
+            <div class="rating-category">
+                <div class="category-title">
+                    <span>Качество ремиксов</span>
+                    <span id="remix-rating-value">0/5</span>
+                </div>
+                <div class="category-stars" id="remix-stars">
+                    <span class="category-star" data-rating="1">★</span>
+                    <span class="category-star" data-rating="2">★</span>
+                    <span class="category-star" data-rating="3">★</span>
+                    <span class="category-star" data-rating="4">★</span>
+                    <span class="category-star" data-rating="5">★</span>
+                </div>
+            </div>
+            
+            <div class="rating-category">
+                <div class="category-title">
+                    <span>Качество песен</span>
+                    <span id="song-rating-value">0/5</span>
+                </div>
+                <div class="category-stars" id="song-stars">
+                    <span class="category-star" data-rating="1">★</span>
+                    <span class="category-star" data-rating="2">★</span>
+                    <span class="category-star" data-rating="3">★</span>
+                    <span class="category-star" data-rating="4">★</span>
+                    <span class="category-star" data-rating="5">★</span>
+                </div>
+            </div>
+            
+            <div>
+                <label for="comment">Комментарий (необязательно):</label>
+                <textarea id="comment" class="comment-input" placeholder="Ваш отзыв о радио..."></textarea>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
+                <button class="modal-btn submit" id="submit-rating" onclick="submitRating()" disabled>Отправить оценку</button>
+            </div>
+        </div>
+    </div>
     
     <div class="container">
         <header>
@@ -670,6 +1019,10 @@
             <div class="live-badge">
                 <div class="live-dot"></div>
                 <span id="status-text">В эфире 24/7</span>
+                <div class="quality-indicator">
+                    <div class="quality-dot" id="quality-dot"></div>
+                    <span id="quality-text">Качество: Хорошее</span>
+                </div>
             </div>
         </header>
         
@@ -733,6 +1086,10 @@
                     <span>🎯</span>
                     <span>Трек сейчас</span>
                 </button>
+                <button class="control-btn" onclick="openRatingModal()">
+                    <span>⭐</span>
+                    <span>Оценить радио</span>
+                </button>
             </div>
             
             <section class="schedule-section">
@@ -776,6 +1133,24 @@
         </main>
         
         <footer>
+            <div class="footer-rating">
+                <div class="rating-stars" id="overall-stars">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                </div>
+                <div>
+                    <span class="rating-value" id="average-rating">0.0</span>
+                    <span class="rating-count" id="rating-count">(0 оценок)</span>
+                </div>
+                <button class="rate-button" onclick="openRatingModal()">
+                    <span>⭐</span>
+                    <span>Оценить радио</span>
+                </button>
+            </div>
+            
             <p>LAP.FM © 2026 | Радио с расписанием (Екатеринбург, UTC+5)</p>
             <p>Обновляется ежедневно</p>
             
@@ -805,6 +1180,18 @@
         let autoSwitchTimer = null;
         let userHasInteracted = false;
         let currentTheme = 'auto';
+        let preloadedAudio = null;
+        let audioStartTime = 0;
+        let audioStartOffset = 0;
+        
+        // Рейтинговая система
+        let userRatings = {
+            sound: 0,
+            design: 0,
+            remix: 0,
+            song: 0,
+            hasRated: false
+        };
         
         // ЭЛЕМЕНТЫ DOM
         const audioPlayer = document.getElementById('audio-player');
@@ -819,95 +1206,275 @@
         const nextTrackTime = document.getElementById('next-track-time');
         const statusText = document.getElementById('status-text');
         
-        // ========== ФУНКЦИЯ ПРОКРУТКИ К ТЕКУЩЕМУ ТРЕКУ ==========
-        function scrollToCurrentTrack() {
-            if (currentTrackIndex === -1) {
-                showNotification('Текущий трек не найден');
+        // ========== СИНХРОНИЗАЦИЯ ПРОГРЕСС-БАРА ==========
+        function updateCurrentTime() {
+            if (!isPlaying || !audioPlayer.currentTime) return;
+            
+            const track = currentSchedule?.tracks[currentTrackIndex];
+            if (!track) return;
+            
+            // Рассчитываем реальное время проигрывания
+            const elapsed = audioPlayer.currentTime;
+            const duration = parseDuration(track.duration);
+            
+            // Обновляем прогресс-бар
+            const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+            progressBar.style.width = `${progressPercent}%`;
+            
+            // Обновляем время
+            const elapsedMins = Math.floor(elapsed / 60);
+            const elapsedSecs = Math.floor(elapsed % 60);
+            const totalMins = Math.floor(duration / 60);
+            const totalSecs = Math.floor(duration % 60);
+            
+            document.getElementById('track-progress').textContent = 
+                `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
+        }
+        
+        // ========== КЕШИРОВАНИЕ АУДИО ==========
+        function preloadNextAudio() {
+            if (!currentSchedule || currentTrackIndex === -1) return;
+            
+            const nextIndex = currentTrackIndex + 1;
+            if (nextIndex >= currentSchedule.tracks.length) return;
+            
+            const nextTrack = currentSchedule.tracks[nextIndex];
+            if (!nextTrack.file) return;
+            
+            // Освобождаем предыдущий прелоад
+            if (preloadedAudio) {
+                preloadedAudio.src = '';
+                preloadedAudio = null;
+            }
+            
+            // Создаем новый аудио элемент для предзагрузки
+            preloadedAudio = new Audio();
+            preloadedAudio.preload = 'auto';
+            preloadedAudio.src = convertFileLink(nextTrack.file);
+            
+            console.log('🎵 Предзагружен следующий трек:', nextTrack.title);
+        }
+        
+        // ========== МОНИТОРИНГ КАЧЕСТВА ==========
+        function monitorAudioQuality() {
+            if (!isPlaying) return;
+            
+            const audio = audioPlayer;
+            let quality = 'good';
+            let qualityText = 'Хорошее';
+            
+            // Проверяем буферизацию
+            if (audio.buffered.length > 0) {
+                const bufferedEnd = audio.buffered.end(audio.buffered.length - 1);
+                const currentTime = audio.currentTime;
+                const bufferAhead = bufferedEnd - currentTime;
+                
+                if (bufferAhead < 2) {
+                    quality = 'poor';
+                    qualityText = 'Низкое (буферизация)';
+                } else if (bufferAhead < 5) {
+                    quality = 'medium';
+                    qualityText = 'Среднее';
+                }
+            }
+            
+            // Проверяем наличие ошибок
+            if (audio.error) {
+                quality = 'poor';
+                qualityText = 'Ошибка воспроизведения';
+            }
+            
+            // Обновляем индикатор
+            const qualityDot = document.getElementById('quality-dot');
+            const qualityTextEl = document.getElementById('quality-text');
+            
+            qualityDot.className = 'quality-dot ' + quality;
+            qualityTextEl.textContent = `Качество: ${qualityText}`;
+            
+            // Уведомление при плохом качестве
+            if (quality === 'poor' && Math.random() < 0.1) { // 10% шанс показать уведомление
+                showNotification('Проблемы с качеством звука. Проверьте соединение.', 3000);
+            }
+        }
+        
+        // ========== РЕЙТИНГОВАЯ СИСТЕМА ==========
+        function loadRatings() {
+            const savedRatings = localStorage.getItem('lapfm_ratings');
+            if (savedRatings) {
+                const data = JSON.parse(savedRatings);
+                updateOverallRating(data);
+            }
+            
+            // Проверяем, оценивал ли пользователь уже
+            const userRating = localStorage.getItem('lapfm_user_rating');
+            if (userRating) {
+                userRatings = JSON.parse(userRating);
+                userRatings.hasRated = true;
+            }
+        }
+        
+        function updateOverallRating(ratingsData) {
+            if (!ratingsData || !ratingsData.ratings || ratingsData.ratings.length === 0) {
+                document.getElementById('average-rating').textContent = '0.0';
+                document.getElementById('rating-count').textContent = '(0 оценок)';
+                updateStars(0);
                 return;
             }
             
-            const scheduleList = document.getElementById('schedule-list');
-            const activeItem = scheduleList.querySelector('.schedule-item.active');
+            const total = ratingsData.ratings.reduce((sum, rating) => {
+                const avg = (rating.sound + rating.design + rating.remix + rating.song) / 4;
+                return sum + avg;
+            }, 0);
             
-            if (activeItem) {
-                activeItem.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
-                });
-                showNotification('Прокручено к текущему треку');
-            }
+            const average = total / ratingsData.ratings.length;
+            const count = ratingsData.ratings.length;
+            
+            document.getElementById('average-rating').textContent = average.toFixed(1);
+            document.getElementById('rating-count').textContent = `(${count} ${getRatingWord(count)})`;
+            updateStars(average);
         }
         
-        // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ ==========
-        function updateUserStats() {
-            let stats = JSON.parse(localStorage.getItem('lapfm_real_stats')) || {
-                online: 1,
-                today: 1,
-                total: 1,
-                lastUpdate: Date.now(),
-                sessions: {}
-            };
-            
-            const now = Date.now();
-            const todayKey = new Date().toDateString();
-            
-            if (!stats.sessions[todayKey]) {
-                stats.sessions[todayKey] = 1;
-                stats.today = 1;
-            }
-            
-            stats.total = Object.keys(stats.sessions).length;
-            stats.lastUpdate = now;
-            
-            localStorage.setItem('lapfm_real_stats', JSON.stringify(stats));
-            
-            document.getElementById('online-users').textContent = '1';
-            document.getElementById('today-users').textContent = stats.today;
-            document.getElementById('total-users').textContent = stats.total;
+        function getRatingWord(count) {
+            if (count % 10 === 1 && count % 100 !== 11) return 'оценка';
+            if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20)) return 'оценки';
+            return 'оценок';
         }
         
-        function loadUserStats() {
-            updateUserStats();
-        }
-        
-        // ========== ТЕМНАЯ ТЕМА ==========
-        function setTheme(theme) {
-            currentTheme = theme;
-            localStorage.setItem('radio-theme', theme);
-            
-            let actualTheme = theme;
-            if (theme === 'auto') {
-                actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            
-            document.body.setAttribute('data-theme', actualTheme);
-            
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById('theme-' + theme).classList.add('active');
-            
-            showNotification(`Тема: ${getThemeName(theme)}`);
-        }
-        
-        function getThemeName(theme) {
-            const names = {
-                'light': 'Светлая',
-                'dark': 'Тёмная',
-                'auto': 'Авто'
-            };
-            return names[theme] || theme;
-        }
-        
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('radio-theme') || 'auto';
-            setTheme(savedTheme);
-            
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (currentTheme === 'auto') {
-                    setTheme('auto');
+        function updateStars(rating) {
+            const stars = document.querySelectorAll('#overall-stars .star');
+            stars.forEach((star, index) => {
+                if (index < Math.floor(rating)) {
+                    star.classList.add('filled');
+                } else if (index < rating) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
                 }
             });
+        }
+        
+        function openRatingModal() {
+            if (userRatings.hasRated) {
+                showNotification('Вы уже оценили это радио!', 3000);
+                return;
+            }
+            
+            document.getElementById('rating-modal').classList.add('show');
+            resetRatingForm();
+        }
+        
+        function closeRatingModal() {
+            document.getElementById('rating-modal').classList.remove('show');
+        }
+        
+        function resetRatingForm() {
+            // Сброс звезд
+            document.querySelectorAll('.category-star').forEach(star => {
+                star.classList.remove('filled');
+            });
+            
+            // Сброс значений
+            ['sound', 'design', 'remix', 'song'].forEach(category => {
+                document.getElementById(`${category}-rating-value`).textContent = '0/5';
+            });
+            
+            // Сброс комментария
+            document.getElementById('comment').value = '';
+            
+            // Сброс кнопки
+            document.getElementById('submit-rating').disabled = true;
+            
+            // Сброс оценок пользователя
+            userRatings = { sound: 0, design: 0, remix: 0, song: 0, hasRated: false };
+            
+            // Назначение обработчиков звезд
+            setupStarRating('sound-stars', 'sound');
+            setupStarRating('design-stars', 'design');
+            setupStarRating('remix-stars', 'remix');
+            setupStarRating('song-stars', 'song');
+        }
+        
+        function setupStarRating(containerId, category) {
+            const container = document.getElementById(containerId);
+            const stars = container.querySelectorAll('.category-star');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    userRatings[category] = rating;
+                    
+                    // Обновляем отображение звезд
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('filled');
+                        } else {
+                            s.classList.remove('filled');
+                        }
+                    });
+                    
+                    // Обновляем значение
+                    document.getElementById(`${category}-rating-value`).textContent = `${rating}/5`;
+                    
+                    // Проверяем, можно ли активировать кнопку отправки
+                    checkRatingCompletion();
+                });
+            });
+        }
+        
+        function checkRatingCompletion() {
+            const isComplete = userRatings.sound > 0 && 
+                              userRatings.design > 0 && 
+                              userRatings.remix > 0 && 
+                              userRatings.song > 0;
+            
+            document.getElementById('submit-rating').disabled = !isComplete;
+        }
+        
+        function submitRating() {
+            if (userRatings.hasRated) {
+                showNotification('Вы уже оценили это радио!', 3000);
+                return;
+            }
+            
+            // Получаем существующие оценки
+            const savedRatings = localStorage.getItem('lapfm_ratings');
+            let ratingsData = savedRatings ? JSON.parse(savedRatings) : {
+                ratings: [],
+                updated: new Date().toISOString()
+            };
+            
+            // Добавляем новую оценку
+            const newRating = {
+                sound: userRatings.sound,
+                design: userRatings.design,
+                remix: userRatings.remix,
+                song: userRatings.song,
+                comment: document.getElementById('comment').value.trim(),
+                timestamp: new Date().toISOString(),
+                ip: 'anonymous' // В реальном приложении можно получить IP
+            };
+            
+            ratingsData.ratings.push(newRating);
+            ratingsData.updated = new Date().toISOString();
+            
+            // Сохраняем
+            localStorage.setItem('lapfm_ratings', JSON.stringify(ratingsData));
+            localStorage.setItem('lapfm_user_rating', JSON.stringify({
+                ...userRatings,
+                hasRated: true,
+                ratedAt: new Date().toISOString()
+            }));
+            
+            // Обновляем интерфейс
+            updateOverallRating(ratingsData);
+            userRatings.hasRated = true;
+            
+            // Закрываем модальное окно
+            closeRatingModal();
+            
+            // Показываем уведомление
+            const average = (userRatings.sound + userRatings.design + userRatings.remix + userRatings.song) / 4;
+            showNotification(`Спасибо за оценку ${average.toFixed(1)}/5!`, 3000);
         }
         
         // ========== ФУНКЦИИ ВРЕМЕНИ ==========
@@ -1026,12 +1593,28 @@
                 audioSource.src = directUrl;
                 audioPlayer.load();
                 
+                // Рассчитываем правильное время начала
+                const track = currentSchedule?.tracks[currentTrackIndex];
+                if (track) {
+                    const startSeconds = parseTimeToSeconds(track.start);
+                    const ekbTime = getEkbTime();
+                    const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+                    const elapsed = Math.max(0, currentSeconds - startSeconds);
+                    
+                    if (elapsed > 0) {
+                        audioPlayer.currentTime = elapsed;
+                        audioStartOffset = elapsed;
+                    }
+                }
+                
                 const timeoutPromise = new Promise((_, reject) => {
                     setTimeout(() => reject(new Error('Таймаут загрузки')), 10000);
                 });
                 
                 const playPromise = audioPlayer.play();
                 await Promise.race([playPromise, timeoutPromise]);
+                
+                audioStartTime = Date.now() - (audioStartOffset * 1000);
                 return true;
                 
             } catch (error) {
@@ -1049,6 +1632,7 @@
                     });
                     
                     audioPlayer.play();
+                    audioStartTime = Date.now();
                     return true;
                 } catch (secondError) {
                     console.error('Вторичная проверка не удалась:', secondError);
@@ -1070,6 +1654,7 @@
                         }
                         
                         audioPlayer.play();
+                        audioStartTime = Date.now();
                         return true;
                     } catch (fetchError) {
                         console.error('Проверка через fetch не удалась:', fetchError);
@@ -1110,6 +1695,9 @@
                             statusText.textContent = 'В эфире';
                             showNotification(`Играет: ${track.title}`);
                             document.getElementById('connection-status').textContent = '🟢';
+                            
+                            // Предзагружаем следующий трек
+                            preloadNextAudio();
                         } else {
                             playIcon.textContent = originalIcon;
                             playText.textContent = originalText;
@@ -1292,31 +1880,6 @@
             scheduleList.innerHTML = html;
         }
         
-        function updateCurrentTime() {
-            if (!currentSchedule || currentTrackIndex === -1) return;
-            
-            const track = currentSchedule.tracks[currentTrackIndex];
-            const startSeconds = parseTimeToSeconds(track.start);
-            const duration = parseDuration(track.duration);
-            
-            const ekbTime = getEkbTime();
-            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
-            
-            if (currentSeconds >= startSeconds && currentSeconds < startSeconds + duration) {
-                const elapsed = currentSeconds - startSeconds;
-                const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
-                progressBar.style.width = `${progressPercent}%`;
-                
-                const elapsedMins = Math.floor(elapsed / 60);
-                const elapsedSecs = Math.floor(elapsed % 60);
-                const totalMins = Math.floor(duration / 60);
-                const totalSecs = Math.floor(duration % 60);
-                
-                document.getElementById('track-progress').textContent = 
-                    `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
-            }
-        }
-        
         function refreshSchedule() {
             showNotification('Обновление расписания...');
             loadSchedule();
@@ -1337,25 +1900,129 @@
             }
         }
         
+        // ========== ФУНКЦИЯ ПРОКРУТКИ К ТЕКУЩЕМУ ТРЕКУ ==========
+        function scrollToCurrentTrack() {
+            if (currentTrackIndex === -1) {
+                showNotification('Текущий трек не найден');
+                return;
+            }
+            
+            const scheduleList = document.getElementById('schedule-list');
+            const activeItem = scheduleList.querySelector('.schedule-item.active');
+            
+            if (activeItem) {
+                activeItem.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                showNotification('Прокручено к текущему треку');
+            }
+        }
+        
+        // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ ==========
+        function updateUserStats() {
+            let stats = JSON.parse(localStorage.getItem('lapfm_real_stats')) || {
+                online: 1,
+                today: 1,
+                total: 1,
+                lastUpdate: Date.now(),
+                sessions: {}
+            };
+            
+            const now = Date.now();
+            const todayKey = new Date().toDateString();
+            
+            if (!stats.sessions[todayKey]) {
+                stats.sessions[todayKey] = 1;
+                stats.today = 1;
+            }
+            
+            stats.total = Object.keys(stats.sessions).length;
+            stats.lastUpdate = now;
+            
+            localStorage.setItem('lapfm_real_stats', JSON.stringify(stats));
+            
+            document.getElementById('online-users').textContent = '1';
+            document.getElementById('today-users').textContent = stats.today;
+            document.getElementById('total-users').textContent = stats.total;
+        }
+        
+        function loadUserStats() {
+            updateUserStats();
+        }
+        
+        // ========== ТЕМНАЯ ТЕМА ==========
+        function setTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('radio-theme', theme);
+            
+            let actualTheme = theme;
+            if (theme === 'auto') {
+                actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            
+            document.body.setAttribute('data-theme', actualTheme);
+            
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('theme-' + theme).classList.add('active');
+            
+            showNotification(`Тема: ${getThemeName(theme)}`);
+        }
+        
+        function getThemeName(theme) {
+            const names = {
+                'light': 'Светлая',
+                'dark': 'Тёмная',
+                'auto': 'Авто'
+            };
+            return names[theme] || theme;
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('radio-theme') || 'auto';
+            setTheme(savedTheme);
+            
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (currentTheme === 'auto') {
+                    setTheme('auto');
+                }
+            });
+        }
+        
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🚀 LAP.FM Radio загружается...');
             
             loadTheme();
             loadUserStats();
+            loadRatings();
             loadSchedule();
             
             playButton.addEventListener('click', togglePlayback);
+            
+            // Обработчики для аудио
+            audioPlayer.addEventListener('timeupdate', updateCurrentTime);
+            audioPlayer.addEventListener('timeupdate', monitorAudioQuality);
+            audioPlayer.addEventListener('ended', () => {
+                if (currentTrackIndex < currentSchedule.tracks.length - 1) {
+                    currentTrackIndex++;
+                    const nextTrack = currentSchedule.tracks[currentTrackIndex];
+                    playAudioFile(nextTrack.file);
+                    updateNowPlaying(nextTrack, currentTrackIndex);
+                }
+            });
             
             setInterval(updateEkbTimeDisplay, 1000);
             updateEkbTimeDisplay();
             
             setInterval(() => {
                 findCurrentTrack();
-                updateCurrentTime();
             }, 1000);
             
             setInterval(updateUserStats, 60000);
+            setInterval(monitorAudioQuality, 5000);
             
             audioPlayer.addEventListener('playing', () => {
                 console.log('▶️ Аудио запущено');
@@ -1368,10 +2035,14 @@
             });
         });
         
+        // Экспорт функций в глобальную область видимости
         window.refreshSchedule = refreshSchedule;
         window.shareRadio = shareRadio;
         window.setTheme = setTheme;
         window.scrollToCurrentTrack = scrollToCurrentTrack;
+        window.openRatingModal = openRatingModal;
+        window.closeRatingModal = closeRatingModal;
+        window.submitRating = submitRating;
     </script>
 </body>
 </html>
