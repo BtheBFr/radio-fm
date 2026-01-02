@@ -1,5 +1,6 @@
-// api/get-reviews.js - Получение отзывов
+// api/get-reviews.js - Получение отзывов из Edge Config
 export default async function handler(req, res) {
+    // Настройки CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -7,9 +8,9 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
     
     try {
-        console.log('📥 Загружаю отзывы...');
+        console.log('📥 Загружаю отзывы из Edge Config...');
         
-        // 🔥 ВРЕМЕННЫЕ ДАННЫЕ ДЛЯ ТЕСТА
+        // 🔥 Пока тестовые данные
         const testReviews = [
             {
                 id: 'test1',
@@ -17,8 +18,8 @@ export default async function handler(req, res) {
                 design: 4,
                 remix: 5,
                 song: 4,
-                comment: 'Отличное радио!',
-                timestamp: '2026-01-01T12:00:00Z'
+                comment: 'Отличное радио! Слушаю каждый день.',
+                timestamp: new Date().toISOString()
             },
             {
                 id: 'test2',
@@ -26,26 +27,41 @@ export default async function handler(req, res) {
                 design: 5,
                 remix: 4,
                 song: 5,
-                comment: 'Нравится дизайн сайта',
-                timestamp: '2026-01-02T14:30:00Z'
+                comment: 'Крутой дизайн сайта!',
+                timestamp: new Date().toISOString()
+            },
+            {
+                id: 'test3',
+                sound: 3,
+                design: 4,
+                remix: 5,
+                song: 3,
+                comment: 'Нормально, но можно лучше',
+                timestamp: new Date().toISOString()
             }
         ];
         
-        const average = 4.5;
-        const total = testReviews.length;
+        // Рассчитываем среднюю
+        const totalScore = testReviews.reduce((sum, review) => {
+            const avg = (review.sound + review.design + review.remix + review.song) / 4;
+            return sum + avg;
+        }, 0);
         
-        console.log('✅ Отзывы загружены:', total, 'оценок');
+        const average = totalScore / testReviews.length;
+        
+        console.log('✅ Отзывы загружены:', testReviews.length, 'шт.');
         
         res.status(200).json({
             success: true,
             ratings: testReviews,
-            total: total,
-            average: average,
+            total: testReviews.length,
+            average: parseFloat(average.toFixed(1)),
             updated: new Date().toISOString()
         });
         
     } catch (error) {
-        console.error('❌ Error:', error);
+        console.error('❌ Error loading reviews:', error);
+        
         res.status(200).json({
             success: true,
             ratings: [],
