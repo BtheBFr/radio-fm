@@ -267,11 +267,19 @@
             margin: 30px 0;
         }
         
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
         .section-title {
             font-size: 1.3rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -283,6 +291,32 @@
             height: 22px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 3px;
+        }
+        
+        /* КНОПКА "СЕЙЧАС" */
+        .now-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .now-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+        
+        .now-button:active {
+            transform: translateY(0);
         }
         
         .schedule-list {
@@ -300,6 +334,7 @@
             border-radius: 12px;
             padding: 16px;
             transition: all 0.2s ease;
+            scroll-margin-top: 20px; /* Для плавной прокрутки */
         }
         
         .schedule-item:hover {
@@ -311,6 +346,13 @@
         .schedule-item.active {
             background: var(--schedule-active);
             border-color: #667eea;
+            animation: pulse-border 2s infinite;
+        }
+        
+        @keyframes pulse-border {
+            0% { border-color: #667eea; }
+            50% { border-color: #764ba2; }
+            100% { border-color: #667eea; }
         }
         
         .schedule-header {
@@ -607,6 +649,15 @@
             .status-section {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .now-button {
+                align-self: flex-start;
+            }
         }
     </style>
 </head>
@@ -702,11 +753,21 @@
                     <span>📢</span>
                     <span>Поделиться</span>
                 </button>
+                <button class="control-btn" onclick="scrollToCurrentTrack()">
+                    <span>🎯</span>
+                    <span>Трек сейчас</span>
+                </button>
             </div>
             
             <!-- РАСПИСАНИЕ -->
             <section class="schedule-section">
-                <h2 class="section-title">Расписание на сегодня</h2>
+                <div class="section-header">
+                    <h2 class="section-title">Расписание на сегодня (сейчас)</h2>
+                    <button class="now-button" onclick="scrollToCurrentTrack()">
+                        <span>🎯</span>
+                        <span>Показать текущий трек</span>
+                    </button>
+                </div>
                 <div class="schedule-list" id="schedule-list">
                     <div class="schedule-item">
                         <div class="schedule-header">
@@ -785,10 +846,39 @@
         const nextTrackTime = document.getElementById('next-track-time');
         const statusText = document.getElementById('status-text');
         
+        // ========== ФУНКЦИЯ ПРОКРУТКИ К ТЕКУЩЕМУ ТРЕКУ ==========
+        
+        function scrollToCurrentTrack() {
+            if (currentTrackIndex === -1) {
+                showNotification('Текущий трек не найден');
+                return;
+            }
+            
+            const scheduleList = document.getElementById('schedule-list');
+            const activeItem = scheduleList.querySelector('.schedule-item.active');
+            
+            if (activeItem) {
+                // Плавная прокрутка к активному элементу
+                activeItem.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                
+                // Добавляем анимацию выделения
+                activeItem.style.animation = 'none';
+                setTimeout(() => {
+                    activeItem.style.animation = 'pulse-border 2s infinite';
+                }, 10);
+                
+                showNotification('Прокручено к текущему треку');
+            } else {
+                showNotification('Активный трек не найден в списке');
+            }
+        }
+        
         // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ (РЕАЛЬНАЯ) ==========
         
         function updateUserStats() {
-            // Получаем или создаём статистику
             let stats = JSON.parse(localStorage.getItem('lapfm_real_stats')) || {
                 online: 1,
                 today: 1,
@@ -800,20 +890,16 @@
             const now = Date.now();
             const todayKey = new Date().toDateString();
             
-            // Обновляем сессии
             if (!stats.sessions[todayKey]) {
                 stats.sessions[todayKey] = 1;
                 stats.today = 1;
             }
             
-            // Общее количество уникальных дней посещений
             stats.total = Object.keys(stats.sessions).length;
             stats.lastUpdate = now;
             
-            // Сохраняем
             localStorage.setItem('lapfm_real_stats', JSON.stringify(stats));
             
-            // Показываем реальные числа
             document.getElementById('online-users').textContent = '1';
             document.getElementById('today-users').textContent = stats.today;
             document.getElementById('total-users').textContent = stats.total;
@@ -836,7 +922,6 @@
             
             document.body.setAttribute('data-theme', actualTheme);
             
-            // Обновляем активные кнопки
             document.querySelectorAll('.theme-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -887,7 +972,6 @@
             document.getElementById('current-ekb-time').textContent = `ЕКБ: ${timeString}`;
         }
         
-        // Парсинг времени с секундами (для внутренних расчетов)
         function parseTimeToSeconds(timeStr) {
             const parts = timeStr.split(':').map(Number);
             if (parts.length === 3) {
@@ -898,7 +982,6 @@
             return 0;
         }
         
-        // Парсинг длительности
         function parseDuration(duration) {
             if (!duration) return 180;
             
@@ -920,7 +1003,6 @@
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
         
-        // Форматирование времени для отображения (без секунд)
         function formatTimeForDisplay(seconds) {
             const totalSeconds = Math.floor(seconds);
             const hours = Math.floor(totalSeconds / 3600) % 24;
@@ -929,178 +1011,177 @@
         }
         
         function showNotification(message, duration = 3000) {
-    const notification = document.getElementById('notification');
-    notification.textContent = message;
-    notification.classList.add('show');
-    
-    setTimeout(() => {
-        notification.classList.remove('show');
-    }, duration);
-}
-
-// ========== ФУНКЦИЯ ПРЕОБРАЗОВАНИЯ ССЫЛОК ==========
-
-function convertFileLink(url) {
-    if (!url || typeof url !== 'string') return url;
-    
-    // 1. GITHUB BLOB → RAW (ваш случай!)
-    if (url.includes('github.com') && url.includes('/blob/')) {
-        const rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-        console.log('🔗 Преобразовано GitHub blob → raw');
-        return rawUrl;
-    }
-    
-    // 2. Уже raw ссылка
-    if (url.includes('raw.githubusercontent.com')) {
-        console.log('🔗 GitHub Raw ссылка (уже готова)');
-        return url;
-    }
-    
-    // 3. GOOGLE DRIVE
-    if (url.includes('drive.google.com')) {
-        const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        if (idMatch && idMatch[1]) {
-            return `https://drive.google.com/uc?export=download&id=${idMatch[1]}`;
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, duration);
         }
-    }
-    
-    // 4. DROPBOX
-    if (url.includes('dropbox.com')) {
-        return url
-            .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
-            .replace('?dl=0', '')
-            .split('?')[0];
-    }
-    
-    return url; // Оставляем как есть
-}
-// ========== ИСПРАВЛЕННОЕ ВОСПРОИЗВЕДЕНИЕ ==========
-
-async function playAudioFile(url) {
-    if (!url) {
-        showNotification('Нет ссылки на аудиофайл', 3000);
-        return false;
-    }
-    
-    const directUrl = convertFileLink(url);
-    console.log('🎵 Пробуем воспроизвести:', directUrl);
-    
-    try {
-        audioSource.src = directUrl;
-        audioPlayer.load();
         
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('Таймаут загрузки')), 10000);
-        });
+        // ========== ФУНКЦИЯ ПРЕОБРАЗОВАНИЯ ССЫЛОК ==========
         
-        const playPromise = audioPlayer.play();
-        await Promise.race([playPromise, timeoutPromise]);
-        return true;
-        
-    } catch (error) {
-        console.error('Ошибка воспроизведения:', error);
-        
-        try {
-            const testAudio = new Audio();
-            testAudio.src = directUrl;
-            testAudio.preload = 'metadata';
+        function convertFileLink(url) {
+            if (!url || typeof url !== 'string') return url;
             
-            await new Promise((resolve, reject) => {
-                testAudio.onloadedmetadata = resolve;
-                testAudio.onerror = reject;
-                setTimeout(() => reject(new Error('Таймаут метаданных')), 5000);
-            });
+            // GOOGLE DRIVE
+            if (url.includes('drive.google.com')) {
+                const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (idMatch && idMatch[1]) {
+                    const fileId = idMatch[1];
+                    return `https://drive.google.com/uc?export=download&id=${fileId}`;
+                }
+            }
             
-            audioPlayer.play();
-            return true;
-        } catch (secondError) {
-            console.error('Вторичная проверка не удалась:', secondError);
-            
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3000);
+            // DROPBOX
+            if (url.includes('dropbox.com')) {
+                let converted = url
+                    .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
+                    .replace('?dl=0', '')
+                    .split('?')[0];
                 
-                const response = await fetch(directUrl, { 
-                    method: 'GET',
-                    signal: controller.signal,
-                    headers: { 'Range': 'bytes=0-100' }
-                });
-                
-                clearTimeout(timeoutId);
-                
-                if (!response.ok) {
-                    throw new Error(`Файл недоступен: ${response.status}`);
+                if (!converted.includes('dl.dropboxusercontent.com')) {
+                    converted = converted.replace('dropbox.com', 'dl.dropboxusercontent.com');
                 }
                 
-                audioPlayer.play();
-                return true;
-            } catch (fetchError) {
-                console.error('Проверка через fetch не удалась:', fetchError);
-                
-                let errorMessage = 'Не удалось воспроизвести файл';
-                if (fetchError.name === 'AbortError') {
-                    errorMessage = 'Файл не отвечает (таймаут)';
-                } else if (fetchError.message.includes('404') || fetchError.message.includes('403')) {
-                    errorMessage = 'Файл не найден или доступ запрещен';
-                }
-                
-                showNotification(`${errorMessage}`, 5000);
+                return converted;
+            }
+            
+            // GITHUB BLOB → RAW
+            if (url.includes('github.com') && url.includes('/blob/')) {
+                const rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+                return rawUrl;
+            }
+            
+            return url;
+        }
+        
+        // ========== ИСПРАВЛЕННОЕ ВОСПРОИЗВЕДЕНИЕ ==========
+        
+        async function playAudioFile(url) {
+            if (!url) {
+                showNotification('Нет ссылки на аудиофайл', 3000);
                 return false;
             }
-        }
-    }
-}
-
-// ========== ФУНКЦИЯ TOGGLEPLAYBACK ==========
-
-function togglePlayback() {
-    userHasInteracted = true;
-    
-    if (!isPlaying) {
-        const track = currentSchedule?.tracks[currentTrackIndex];
-        
-        if (track?.file) {
-            const originalIcon = playIcon.textContent;
-            const originalText = playText.textContent;
             
-            playIcon.textContent = '⏳';
-            playText.textContent = 'Подключение...';
-            statusText.textContent = 'Подключение...';
+            const directUrl = convertFileLink(url);
+            console.log('🎵 Пробуем воспроизвести:', directUrl);
             
-            playAudioFile(track.file).then(success => {
-                if (success) {
-                    isPlaying = true;
-                    playIcon.textContent = '⏸';
-                    playText.textContent = 'Слушаете в реальном времени';
-                    statusText.textContent = 'В эфире';
-                    showNotification(`Играет: ${track.title}`);
-                    document.getElementById('connection-status').textContent = '🟢';
-                } else {
-                    playIcon.textContent = originalIcon;
-                    playText.textContent = originalText;
-                    statusText.textContent = 'Ошибка';
-                    document.getElementById('connection-status').textContent = '🔴';
+            try {
+                audioSource.src = directUrl;
+                audioPlayer.load();
+                
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('Таймаут загрузки')), 10000);
+                });
+                
+                const playPromise = audioPlayer.play();
+                await Promise.race([playPromise, timeoutPromise]);
+                return true;
+                
+            } catch (error) {
+                console.error('Ошибка воспроизведения:', error);
+                
+                try {
+                    const testAudio = new Audio();
+                    testAudio.src = directUrl;
+                    testAudio.preload = 'metadata';
+                    
+                    await new Promise((resolve, reject) => {
+                        testAudio.onloadedmetadata = resolve;
+                        testAudio.onerror = reject;
+                        setTimeout(() => reject(new Error('Таймаут метаданных')), 5000);
+                    });
+                    
+                    audioPlayer.play();
+                    return true;
+                } catch (secondError) {
+                    console.error('Вторичная проверка не удалась:', secondError);
+                    
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 3000);
+                        
+                        const response = await fetch(directUrl, { 
+                            method: 'GET',
+                            signal: controller.signal,
+                            headers: { 'Range': 'bytes=0-100' }
+                        });
+                        
+                        clearTimeout(timeoutId);
+                        
+                        if (!response.ok) {
+                            throw new Error(`Файл недоступен: ${response.status}`);
+                        }
+                        
+                        audioPlayer.play();
+                        return true;
+                    } catch (fetchError) {
+                        console.error('Проверка через fetch не удалась:', fetchError);
+                        
+                        let errorMessage = 'Не удалось воспроизвести файл';
+                        if (fetchError.name === 'AbortError') {
+                            errorMessage = 'Файл не отвечает (таймаут)';
+                        } else if (fetchError.message.includes('404') || fetchError.message.includes('403')) {
+                            errorMessage = 'Файл не найден или доступ запрещен';
+                        }
+                        
+                        showNotification(`${errorMessage}`, 5000);
+                        return false;
+                    }
                 }
-            }).catch(error => {
-                console.error('Ошибка в togglePlayback:', error);
-                playIcon.textContent = originalIcon;
-                playText.textContent = originalText;
-                statusText.textContent = 'Ошибка';
-                document.getElementById('connection-status').textContent = '🔴';
-                showNotification('Ошибка подключения', 3000);
-            });
-        } else {
-            showNotification('Нет файла для воспроизведения', 3000);
+            }
         }
-    } else {
-        audioPlayer.pause();
-        isPlaying = false;
-        playIcon.textContent = '▶';
-        playText.textContent = 'Нажмите для прослушивания';
-        statusText.textContent = 'На паузе';
-        showNotification('Воспроизведение приостановлено');
-    }
-}
+        
+        function togglePlayback() {
+            userHasInteracted = true;
+            
+            if (!isPlaying) {
+                const track = currentSchedule?.tracks[currentTrackIndex];
+                
+                if (track?.file) {
+                    const originalIcon = playIcon.textContent;
+                    const originalText = playText.textContent;
+                    
+                    playIcon.textContent = '⏳';
+                    playText.textContent = 'Подключение...';
+                    statusText.textContent = 'Подключение...';
+                    
+                    playAudioFile(track.file).then(success => {
+                        if (success) {
+                            isPlaying = true;
+                            playIcon.textContent = '⏸';
+                            playText.textContent = 'Слушаете в реальном времени';
+                            statusText.textContent = 'В эфире';
+                            showNotification(`Играет: ${track.title}`);
+                            document.getElementById('connection-status').textContent = '🟢';
+                        } else {
+                            playIcon.textContent = originalIcon;
+                            playText.textContent = originalText;
+                            statusText.textContent = 'Ошибка';
+                            document.getElementById('connection-status').textContent = '🔴';
+                        }
+                    }).catch(error => {
+                        console.error('Ошибка в togglePlayback:', error);
+                        playIcon.textContent = originalIcon;
+                        playText.textContent = originalText;
+                        statusText.textContent = 'Ошибка';
+                        document.getElementById('connection-status').textContent = '🔴';
+                        showNotification('Ошибка подключения', 3000);
+                    });
+                } else {
+                    showNotification('Нет файла для воспроизведения', 3000);
+                }
+            } else {
+                audioPlayer.pause();
+                isPlaying = false;
+                playIcon.textContent = '▶';
+                playText.textContent = 'Нажмите для прослушивания';
+                statusText.textContent = 'На паузе';
+                showNotification('Воспроизведение приостановлено');
+            }
+        }
         
         // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
         
@@ -1119,6 +1200,11 @@ function togglePlayback() {
                 
                 updateScheduleDisplay();
                 findCurrentTrack();
+                
+                // Автоматически прокручиваем к текущему треку при загрузке
+                setTimeout(() => {
+                    scrollToCurrentTrack();
+                }, 500);
                 
                 showNotification(`Расписание ${schedule.date} загружено`);
                 
@@ -1176,13 +1262,14 @@ function togglePlayback() {
             
             const elapsedMins = Math.floor(elapsed / 60);
             const elapsedSecs = Math.floor(elapsed % 60);
+            const totalMins = Math.floor(duration / 60);
+            const totalSecs = Math.floor(duration % 60);
             const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
             
             document.getElementById('track-progress').textContent = 
-                `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${formatDuration(duration)}`;
+                `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
             progressBar.style.width = `${progressPercent}%`;
             
-            // Следующий трек (показываем только часы и минуты)
             if (currentSchedule && index < currentSchedule.tracks.length - 1) {
                 const nextTrack = currentSchedule.tracks[index + 1];
                 const nextTimeParts = nextTrack.start.split(':');
@@ -1200,6 +1287,11 @@ function togglePlayback() {
             }
             
             updateScheduleDisplay();
+            
+            // Автоматически прокручиваем к текущему треку при смене
+            setTimeout(() => {
+                scrollToCurrentTrack();
+            }, 100);
             
             if (autoSwitchTimer) clearTimeout(autoSwitchTimer);
             const timeUntilNext = (startSeconds + duration) * 1000 - ekbTime.getTime();
@@ -1228,7 +1320,6 @@ function togglePlayback() {
                 const startSeconds = parseTimeToSeconds(track.start);
                 const endSeconds = startSeconds + duration;
                 
-                // Форматируем время для отображения (без секунд)
                 const startTimeStr = formatTimeForDisplay(startSeconds);
                 const endTimeStr = formatTimeForDisplay(endSeconds);
                 
@@ -1251,49 +1342,29 @@ function togglePlayback() {
         }
         
         function updateCurrentTime() {
-    if (!currentSchedule || currentTrackIndex === -1) {
-        progressBar.style.width = '0%';
-        document.getElementById('track-progress').textContent = '--:-- / --:--';
-        return;
-    }
-    
-    const track = currentSchedule.tracks[currentTrackIndex];
-    const startSeconds = parseTimeToSeconds(track.start);
-    const duration = parseDuration(track.duration); // Только из расписания!
-    
-    const ekbTime = getEkbTime();
-    const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
-    const trackEndSeconds = startSeconds + duration;
-    
-    // Проверяем три состояния:
-    if (currentSeconds < startSeconds) {
-        // Трек ещё не начался
-        progressBar.style.width = '0%';
-        document.getElementById('track-progress').textContent = 
-            `Ожидание... / ${formatDuration(duration)}`;
-        
-    } else if (currentSeconds >= startSeconds && currentSeconds < trackEndSeconds) {
-        // Трек идёт сейчас
-        const elapsed = currentSeconds - startSeconds;
-        const progressPercent = Math.min(100, (elapsed / duration) * 100);
-        
-        progressBar.style.width = `${progressPercent}%`;
-        
-        const elapsedMins = Math.floor(elapsed / 60);
-        const elapsedSecs = Math.floor(elapsed % 60);
-        const totalMins = Math.floor(duration / 60);
-        const totalSecs = Math.floor(duration % 60);
-        
-        document.getElementById('track-progress').textContent = 
-            `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
-        
-    } else {
-        // Трек уже закончился
-        progressBar.style.width = '100%';
-        document.getElementById('track-progress').textContent = 
-            `${formatDuration(duration)} / ${formatDuration(duration)}`;
-    }
-}
+            if (!currentSchedule || currentTrackIndex === -1) return;
+            
+            const track = currentSchedule.tracks[currentTrackIndex];
+            const startSeconds = parseTimeToSeconds(track.start);
+            const duration = parseDuration(track.duration);
+            
+            const ekbTime = getEkbTime();
+            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+            
+            if (currentSeconds >= startSeconds && currentSeconds < startSeconds + duration) {
+                const elapsed = currentSeconds - startSeconds;
+                const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+                progressBar.style.width = `${progressPercent}%`;
+                
+                const elapsedMins = Math.floor(elapsed / 60);
+                const elapsedSecs = Math.floor(elapsed % 60);
+                const totalMins = Math.floor(duration / 60);
+                const totalSecs = Math.floor(duration % 60);
+                
+                document.getElementById('track-progress').textContent = 
+                    `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
+            }
+        }
         
         function refreshSchedule() {
             showNotification('Обновление расписания...');
@@ -1349,7 +1420,7 @@ function togglePlayback() {
         window.refreshSchedule = refreshSchedule;
         window.shareRadio = shareRadio;
         window.setTheme = setTheme;
-        window.togglePlayback = togglePlayback;
+        window.scrollToCurrentTrack = scrollToCurrentTrack;
     </script>
 </body>
 </html>
