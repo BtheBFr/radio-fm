@@ -7,35 +7,35 @@
       "title": "Утренний эфир",
       "artist": "LAP.FM",
       "duration": "0:28",
-      "file": "https://disk.yandex.ru/d/Ess_-VNhF-7I0g"
+      "file": "https://www.dropbox.com/scl/fi/93d5vav7lfq6toow9ypu6/FACT.mp3?rlkey=bons1f5zdxxny2urrt8ciawae&st=kkxbm7ih&dl=0"
     },
     {
       "start": "17:52:29",
       "title": "Электронные волны",
       "artist": "DJ Pulse",
       "duration": "2:15",
-      "file": "https://example.com/track2.mp3"
+      "file": "https://dl.dropboxusercontent.com/s/xxx/track2.mp3"
     },
     {
       "start": "17:54:44",
       "title": "Ритмы города",
       "artist": "Urban Beats",
       "duration": "3:42",
-      "file": "https://example.com/track3.mp3"
+      "file": "https://dl.dropboxusercontent.com/s/xxx/track3.mp3"
     },
     {
-      "start": "00:33:28",
+      "start": "17:58:26",
       "title": "Тихая ночь",
       "artist": "Мелодия",
       "duration": "1:50",
-      "file": "https://example.com/track4.mp3"
+      "file": "https://dl.dropboxusercontent.com/s/xxx/track4.mp3"
     },
     {
-      "start": "00:35:19",
+      "start": "18:00:16",
       "title": "Рассвет",
       "artist": "Sunrise Project",
       "duration": "4:10",
-      "file": "https://example.com/track5.mp3"
+      "file": "https://dl.dropboxusercontent.com/s/xxx/track5.mp3"
     }
   ]
 }
