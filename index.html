@@ -938,11 +938,24 @@
     }, duration);
 }
 
-// ========== ФУНКЦИЯ ПРЕОБРАЗОВАНИЯ DROPBOX ССЫЛОК ==========
+// ========== ФУНКЦИЯ ПРЕОБРАЗОВАНИЯ ССЫЛОК ==========
 
-function convertDropboxLink(url) {
+function convertFileLink(url) {
     if (!url || typeof url !== 'string') return url;
     
+    // 1. GOOGLE DRIVE
+    if (url.includes('drive.google.com')) {
+        // Ищем ID файла
+        const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (idMatch && idMatch[1]) {
+            const fileId = idMatch[1];
+            const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            console.log('🔗 Преобразовано Google Drive:', url, '→', directUrl);
+            return directUrl;
+        }
+    }
+    
+    // 2. DROPBOX
     if (url.includes('dropbox.com')) {
         let converted = url
             .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
@@ -953,8 +966,13 @@ function convertDropboxLink(url) {
             converted = converted.replace('dropbox.com', 'dl.dropboxusercontent.com');
         }
         
-        console.log('🔗 Преобразовано Dropbox ссылка');
+        console.log('🔗 Преобразовано Dropbox');
         return converted;
+    }
+    
+    // 3. YANDEX.DISK (если нужно)
+    if (url.includes('disk.yandex.ru') || url.includes('yadi.sk')) {
+        console.log('⚠️ Яндекс.Диск может требовать CORS');
     }
     
     return url;
