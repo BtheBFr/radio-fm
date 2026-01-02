@@ -1215,11 +1215,18 @@
                 maxlength="500"
             ></textarea>
             
-            <!-- Блок с последними отзывами -->
-            <div id="recent-reviews" style="margin-top: 20px; display: none;">
-                <h3 style="margin-bottom: 15px; color: var(--text-primary); font-size: 1rem;">Последние отзывы:</h3>
-                <div id="recent-reviews-list" style="max-height: 200px; overflow-y: auto;"></div>
-            </div>
+            <!-- Блок с отзывами пользователей -->
+<div id="reviews-in-modal" style="margin: 25px 0; display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600;">💬 Отзывы других слушателей</h3>
+        <span id="reviews-count" style="font-size: 0.85rem; color: var(--text-light);"></span>
+    </div>
+    <div id="modal-reviews-list" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
+    <div id="no-reviews-in-modal" style="text-align: center; padding: 30px 20px; color: var(--text-secondary); font-size: 0.9rem; display: none;">
+        <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
+        <p>Пока нет отзывов. Будьте первым!</p>
+    </div>
+</div>
             
             <div class="modal-actions">
                 <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
