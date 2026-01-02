@@ -2042,7 +2042,8 @@
             
             try {
                 // Пробуем отправить на сервер
-                const response = await fetch(API_BASE_URL + '/save-review', {
+                const SAVE_REVIEW_URL = 'https://radio-fm-sable.vercel.app/api/save-review?gist=' + GIST_ID;
+                const response = await fetch(SAVE_REVIEW_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(ratingData)
