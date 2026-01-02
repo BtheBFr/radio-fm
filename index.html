@@ -1222,29 +1222,41 @@
         }
         
         function findCurrentTrack() {
-            if (!currentSchedule?.tracks?.length) return;
-            
-            const ekbTime = getEkbTime();
-            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
-            
-            for (let i = 0; i < currentSchedule.tracks.length; i++) {
-                const track = currentSchedule.tracks[i];
-                
-                const trackStartSeconds = parseTimeToSeconds(track.start);
-                const trackDuration = parseDuration(track.duration);
-                const trackEndSeconds = trackStartSeconds + trackDuration;
-                
-                if (currentSeconds >= trackStartSeconds && currentSeconds < trackEndSeconds) {
-                    currentTrackIndex = i;
-                    updateNowPlaying(track, i);
-                    return;
-                }
-            }
-            
-            currentTrackIndex = 0;
-            if (currentSchedule.tracks.length > 0) {
-                updateNowPlaying(currentSchedule.tracks[0], 0);
-            }
+    if (!currentSchedule?.tracks?.length) return;
+    
+    const ekbTime = getEkbTime();
+    const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+    
+    let foundIndex = -1;
+    
+    for (let i = 0; i < currentSchedule.tracks.length; i++) {
+        const track = currentSchedule.tracks[i];
+        
+        const trackStartSeconds = parseTimeToSeconds(track.start);
+        const trackDuration = parseDuration(track.duration);
+        const trackEndSeconds = trackStartSeconds + trackDuration;
+        
+        if (currentSeconds >= trackStartSeconds && currentSeconds < trackEndSeconds) {
+            foundIndex = i;
+            break;
+        }
+    }
+    
+    // Если не нашли текущий трек, используем первый
+    if (foundIndex === -1) {
+        foundIndex = 0;
+    }
+    
+    // Обновляем только если трек изменился
+    if (currentTrackIndex !== foundIndex) {
+        currentTrackIndex = foundIndex;
+        const track = currentSchedule.tracks[currentTrackIndex];
+        updateNowPlaying(track, currentTrackIndex);
+        
+        // НЕ прокручиваем автоматически при смене трека!
+        // Только обновляем отображение
+    }
+}
         }
         
         function updateNowPlaying(track, index) {
