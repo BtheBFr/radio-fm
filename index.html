@@ -1251,27 +1251,37 @@ function togglePlayback() {
         }
         
         function updateCurrentTime() {
-            if (!currentSchedule || currentTrackIndex === -1) return;
-            
-            const track = currentSchedule.tracks[currentTrackIndex];
-            const startSeconds = parseTimeToSeconds(track.start);
-            const duration = parseDuration(track.duration);
-            
-            const ekbTime = getEkbTime();
-            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
-            
-            if (currentSeconds >= startSeconds && currentSeconds < startSeconds + duration) {
-                const elapsed = currentSeconds - startSeconds;
-                const progressPercent = (elapsed / duration) * 100;
-                progressBar.style.width = `${progressPercent}%`;
-                
-                const elapsedMins = Math.floor(elapsed / 60);
-                const elapsedSecs = Math.floor(elapsed % 60);
-                
-                document.getElementById('track-progress').textContent = 
-                    `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${formatDuration(duration)}`;
-            }
-        }
+    if (!currentSchedule || currentTrackIndex === -1) return;
+    
+    const track = currentSchedule.tracks[currentTrackIndex];
+    const startSeconds = parseTimeToSeconds(track.start);
+    const duration = parseDuration(track.duration);
+    
+    const ekbTime = getEkbTime();
+    const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+    
+    // Проверяем, идёт ли сейчас этот трек
+    if (currentSeconds >= startSeconds && currentSeconds < startSeconds + duration) {
+        const elapsed = currentSeconds - startSeconds;
+        const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+        
+        // Обновляем прогресс-бар
+        progressBar.style.width = `${progressPercent}%`;
+        
+        // Обновляем время
+        const elapsedMins = Math.floor(elapsed / 60);
+        const elapsedSecs = Math.floor(elapsed % 60);
+        const totalMins = Math.floor(duration / 60);
+        const totalSecs = Math.floor(duration % 60);
+        
+        document.getElementById('track-progress').textContent = 
+            `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
+    } else {
+        // Трек не играет сейчас
+        progressBar.style.width = '0%';
+        document.getElementById('track-progress').textContent = '--:-- / --:--';
+    }
+}
         
         function refreshSchedule() {
             showNotification('Обновление расписания...');
