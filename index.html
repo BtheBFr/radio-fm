@@ -943,41 +943,37 @@
 function convertFileLink(url) {
     if (!url || typeof url !== 'string') return url;
     
-    // 1. GOOGLE DRIVE
+    // 1. GITHUB BLOB → RAW (ваш случай!)
+    if (url.includes('github.com') && url.includes('/blob/')) {
+        const rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+        console.log('🔗 Преобразовано GitHub blob → raw');
+        return rawUrl;
+    }
+    
+    // 2. Уже raw ссылка
+    if (url.includes('raw.githubusercontent.com')) {
+        console.log('🔗 GitHub Raw ссылка (уже готова)');
+        return url;
+    }
+    
+    // 3. GOOGLE DRIVE
     if (url.includes('drive.google.com')) {
-        // Ищем ID файла
         const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
         if (idMatch && idMatch[1]) {
-            const fileId = idMatch[1];
-            const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-            console.log('🔗 Преобразовано Google Drive:', url, '→', directUrl);
-            return directUrl;
+            return `https://drive.google.com/uc?export=download&id=${idMatch[1]}`;
         }
     }
     
-    // 2. DROPBOX
+    // 4. DROPBOX
     if (url.includes('dropbox.com')) {
-        let converted = url
+        return url
             .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
             .replace('?dl=0', '')
             .split('?')[0];
-        
-        if (!converted.includes('dl.dropboxusercontent.com')) {
-            converted = converted.replace('dropbox.com', 'dl.dropboxusercontent.com');
-        }
-        
-        console.log('🔗 Преобразовано Dropbox');
-        return converted;
     }
     
-    // 3. YANDEX.DISK (если нужно)
-    if (url.includes('disk.yandex.ru') || url.includes('yadi.sk')) {
-        console.log('⚠️ Яндекс.Диск может требовать CORS');
-    }
-    
-    return url;
+    return url; // Оставляем как есть
 }
-
 // ========== ИСПРАВЛЕННОЕ ВОСПРОИЗВЕДЕНИЕ ==========
 
 async function playAudioFile(url) {
