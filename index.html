@@ -2237,52 +2237,64 @@ function sendUserActivity() {
         }
         
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 LAP.FM Radio загружается...');
-            
-            loadTheme();
-            loadSchedule();
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 LAP.FM Radio загружается...');
+    
+    loadTheme();
+    loadSchedule();
+    updateOverallRatingDisplay();
+    
+    // Инициализация звезд рейтинга
+    setupStarRating('sound-stars', 'sound');
+    setupStarRating('design-stars', 'design');
+    setupStarRating('remix-stars', 'remix');
+    setupStarRating('song-stars', 'song');
+    
+    playButton.addEventListener('click', togglePlayback);
+    
+    audioPlayer.addEventListener('timeupdate', updateCurrentTime);
+    audioPlayer.addEventListener('ended', () => {
+        if (currentTrackIndex < currentSchedule.tracks.length - 1) {
+            currentTrackIndex++;
+            const nextTrack = currentSchedule.tracks[currentTrackIndex];
+            playAudioFile(nextTrack.file);
+            updateNowPlaying(nextTrack, currentTrackIndex);
+        }
+    });
+    
+    // Обновление времени
+    setInterval(updateEkbTimeDisplay, 1000);
+    updateEkbTimeDisplay();
+    
+    // Обновление текущего трека
+    setInterval(() => {
+        findCurrentTrack();
+        updateCurrentTime();
+    }, 1000);
+    
+    // 🔥 ЗАПУСК АВТООБНОВЛЕНИЯ СТАТИСТИКИ
+    startStatsAutoUpdate();
+    
+    // Отправка активности пользователя
+    sendUserActivity();
+    
+    // Обновление статистики каждую минуту
+    setInterval(() => {
+        if (!document.hidden) {
             updateUserStats();
-            updateOverallRatingDisplay();
-            
-            playButton.addEventListener('click', togglePlayback);
-            
-            audioPlayer.addEventListener('timeupdate', updateCurrentTime);
-            audioPlayer.addEventListener('ended', () => {
-                if (currentTrackIndex < currentSchedule.tracks.length - 1) {
-                    currentTrackIndex++;
-                    const nextTrack = currentSchedule.tracks[currentTrackIndex];
-                    playAudioFile(nextTrack.file);
-                    updateNowPlaying(nextTrack, currentTrackIndex);
-                }
-            });
-            
-            setInterval(updateEkbTimeDisplay, 1000);
-            updateEkbTimeDisplay();
-            
-            setInterval(() => {
-                findCurrentTrack();
-                updateCurrentTime();
-            }, 1000);
-            
-            setInterval(updateUserStats, 30000);
-            setInterval(updateEditTimer, 60000);
-            
-            setupStarRating('sound-stars', 'sound');
-            setupStarRating('design-stars', 'design');
-            setupStarRating('remix-stars', 'remix');
-            setupStarRating('song-stars', 'song');
-        });
-        
-        // Экспорт функций
-        window.refreshSchedule = refreshSchedule;
-        window.shareRadio = shareRadio;
-        window.setTheme = setTheme;
-        window.scrollToCurrentTrack = scrollToCurrentTrack;
-        window.openRatingModal = openRatingModal;
-        window.closeRatingModal = closeRatingModal;
-        window.submitRating = submitRating;
-    </script>
-</body>
-</html>
+        }
+    }, 60000); // 1 минута
+    
+    // Обновление таймера изменения отзыва
+    setInterval(updateEditTimer, 60000);
+});
+
+// Экспорт функций
+window.refreshSchedule = refreshSchedule;
+window.shareRadio = shareRadio;
+window.setTheme = setTheme;
+window.scrollToCurrentTrack = scrollToCurrentTrack;
+window.openRatingModal = openRatingModal;
+window.closeRatingModal = closeRatingModal;
+window.submitRating = submitRating;
