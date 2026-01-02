@@ -334,7 +334,7 @@
             border-radius: 12px;
             padding: 16px;
             transition: all 0.2s ease;
-            scroll-margin-top: 20px; /* Для плавной прокрутки */
+            scroll-margin-top: 20px;
         }
         
         .schedule-item:hover {
@@ -346,13 +346,6 @@
         .schedule-item.active {
             background: var(--schedule-active);
             border-color: #667eea;
-            animation: pulse-border 2s infinite;
-        }
-        
-        @keyframes pulse-border {
-            0% { border-color: #667eea; }
-            50% { border-color: #764ba2; }
-            100% { border-color: #667eea; }
         }
         
         .schedule-header {
@@ -662,12 +655,9 @@
     </style>
 </head>
 <body>
-    <!-- УВЕДОМЛЕНИЯ -->
     <div id="notification" class="notification"></div>
     
-    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
     <div class="container">
-        <!-- ШАПКА -->
         <header>
             <div class="logo">
                 <div class="logo-icon">🎵</div>
@@ -683,44 +673,32 @@
             </div>
         </header>
         
-        <!-- ОСНОВНОЙ КОНТЕНТ -->
         <main>
-            <!-- ПЛЕЕР -->
             <section class="player-section">
                 <div class="track-info">
-                    <div class="current-track" id="current-track">
-                        Загрузка...
-                    </div>
-                    <div class="current-artist" id="current-artist">
-                        LAP.FM
-                    </div>
+                    <div class="current-track" id="current-track">Загрузка...</div>
+                    <div class="current-artist" id="current-artist">LAP.FM</div>
                     <div class="current-time">
                         <span id="track-progress">--:-- / --:--</span>
                     </div>
                 </div>
                 
-                <!-- КРУГЛАЯ КНОПКА -->
                 <div class="play-button-container">
                     <button class="play-button" id="play-button">
                         <div class="play-icon" id="play-icon">▶</div>
                     </button>
-                    <div class="play-text" id="play-text">
-                        Нажмите для прослушивания
-                    </div>
+                    <div class="play-text" id="play-text">Нажмите для прослушивания</div>
                 </div>
                 
-                <!-- ПОЛОСА ПРОГРЕССА -->
                 <div class="progress-container">
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
                 
-                <!-- СКРЫТЫЙ АУДИО ПЛЕЕР -->
                 <audio id="audio-player" preload="metadata">
                     <source src="" type="audio/mpeg" id="audio-source">
                     Ваш браузер не поддерживает аудио.
                 </audio>
                 
-                <!-- СЛЕДУЮЩИЙ ТРЕК -->
                 <div class="next-track" id="next-track">
                     <div class="next-label">
                         <span>⏭️</span>
@@ -731,7 +709,6 @@
                 </div>
             </section>
             
-            <!-- СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ -->
             <div class="users-stats">
                 <div class="stat-item">
                     <div class="stat-value" id="online-users">1</div>
@@ -743,7 +720,6 @@
                 </div>
             </div>
             
-            <!-- КОНТРОЛЫ -->
             <div class="controls">
                 <button class="control-btn" onclick="refreshSchedule()">
                     <span>🔄</span>
@@ -759,7 +735,6 @@
                 </button>
             </div>
             
-            <!-- РАСПИСАНИЕ -->
             <section class="schedule-section">
                 <div class="section-header">
                     <h2 class="section-title">Расписание на сегодня (сейчас)</h2>
@@ -780,7 +755,6 @@
                 </div>
             </section>
             
-            <!-- СТАТУС -->
             <div class="status-section">
                 <div class="status-card">
                     <h3>Обновлено</h3>
@@ -801,7 +775,6 @@
             </div>
         </main>
         
-        <!-- ФУТЕР С ПЕРЕКЛЮЧАТЕЛЕМ ТЕМЫ -->
         <footer>
             <p>LAP.FM © 2026 | Радио с расписанием (Екатеринбург, UTC+5)</p>
             <p>Обновляется ежедневно</p>
@@ -847,7 +820,6 @@
         const statusText = document.getElementById('status-text');
         
         // ========== ФУНКЦИЯ ПРОКРУТКИ К ТЕКУЩЕМУ ТРЕКУ ==========
-        
         function scrollToCurrentTrack() {
             if (currentTrackIndex === -1) {
                 showNotification('Текущий трек не найден');
@@ -858,26 +830,15 @@
             const activeItem = scheduleList.querySelector('.schedule-item.active');
             
             if (activeItem) {
-                // Плавная прокрутка к активному элементу
                 activeItem.scrollIntoView({ 
                     behavior: 'smooth', 
                     block: 'center' 
                 });
-                
-                // Добавляем анимацию выделения
-                activeItem.style.animation = 'none';
-                setTimeout(() => {
-                    activeItem.style.animation = 'pulse-border 2s infinite';
-                }, 10);
-                
                 showNotification('Прокручено к текущему треку');
-            } else {
-                showNotification('Активный трек не найден в списке');
             }
         }
         
-        // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ (РЕАЛЬНАЯ) ==========
-        
+        // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ ==========
         function updateUserStats() {
             let stats = JSON.parse(localStorage.getItem('lapfm_real_stats')) || {
                 online: 1,
@@ -909,8 +870,7 @@
             updateUserStats();
         }
         
-        // ========== ТЕМНАЯ ТЕМА С ЗАПОМИНАНИЕМ ==========
-        
+        // ========== ТЕМНАЯ ТЕМА ==========
         function setTheme(theme) {
             currentTheme = theme;
             localStorage.setItem('radio-theme', theme);
@@ -950,8 +910,7 @@
             });
         }
         
-        // ========== ФУНКЦИИ ДЛЯ ВРЕМЕНИ ЕКБ ==========
-        
+        // ========== ФУНКЦИИ ВРЕМЕНИ ==========
         function getEkbTime() {
             const now = new Date();
             const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
@@ -1020,12 +979,10 @@
             }, duration);
         }
         
-        // ========== ФУНКЦИЯ ПРЕОБРАЗОВАНИЯ ССЫЛОК ==========
-        
+        // ========== ПРЕОБРАЗОВАНИЕ ССЫЛОК ==========
         function convertFileLink(url) {
             if (!url || typeof url !== 'string') return url;
             
-            // GOOGLE DRIVE
             if (url.includes('drive.google.com')) {
                 const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
                 if (idMatch && idMatch[1]) {
@@ -1034,7 +991,6 @@
                 }
             }
             
-            // DROPBOX
             if (url.includes('dropbox.com')) {
                 let converted = url
                     .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
@@ -1048,7 +1004,6 @@
                 return converted;
             }
             
-            // GITHUB BLOB → RAW
             if (url.includes('github.com') && url.includes('/blob/')) {
                 const rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
                 return rawUrl;
@@ -1057,8 +1012,7 @@
             return url;
         }
         
-        // ========== ИСПРАВЛЕННОЕ ВОСПРОИЗВЕДЕНИЕ ==========
-        
+        // ========== ВОСПРОИЗВЕДЕНИЕ ==========
         async function playAudioFile(url) {
             if (!url) {
                 showNotification('Нет ссылки на аудиофайл', 3000);
@@ -1184,7 +1138,6 @@
         }
         
         // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
-        
         async function loadSchedule() {
             try {
                 const response = await fetch('schedule.json?v=' + new Date().getTime());
@@ -1201,7 +1154,7 @@
                 updateScheduleDisplay();
                 findCurrentTrack();
                 
-                // Автоматически прокручиваем к текущему треку при загрузке
+                // Автоскролл только при первой загрузке
                 setTimeout(() => {
                     scrollToCurrentTrack();
                 }, 500);
@@ -1222,79 +1175,91 @@
         }
         
         function findCurrentTrack() {
-    if (!currentSchedule?.tracks?.length) return;
-    
-    const ekbTime = getEkbTime();
-    const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
-    
-    let foundIndex = -1;
-    
-    for (let i = 0; i < currentSchedule.tracks.length; i++) {
-        const track = currentSchedule.tracks[i];
-        
-        const trackStartSeconds = parseTimeToSeconds(track.start);
-        const trackDuration = parseDuration(track.duration);
-        const trackEndSeconds = trackStartSeconds + trackDuration;
-        
-        if (currentSeconds >= trackStartSeconds && currentSeconds < trackEndSeconds) {
-            foundIndex = i;
-            break;
-        }
-    }
-    
-    // Если не нашли текущий трек, используем первый
-    if (foundIndex === -1) {
-        foundIndex = 0;
-    }
-    
-    // Обновляем только если трек изменился
-    if (currentTrackIndex !== foundIndex) {
-        currentTrackIndex = foundIndex;
-        const track = currentSchedule.tracks[currentTrackIndex];
-        updateNowPlaying(track, currentTrackIndex);
-        
-        // НЕ прокручиваем автоматически при смене трека!
-        // Только обновляем отображение
-    }
-}
+            if (!currentSchedule?.tracks?.length) return;
+            
+            const ekbTime = getEkbTime();
+            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+            
+            let foundIndex = -1;
+            
+            for (let i = 0; i < currentSchedule.tracks.length; i++) {
+                const track = currentSchedule.tracks[i];
+                
+                const trackStartSeconds = parseTimeToSeconds(track.start);
+                const trackDuration = parseDuration(track.duration);
+                const trackEndSeconds = trackStartSeconds + trackDuration;
+                
+                if (currentSeconds >= trackStartSeconds && currentSeconds < trackEndSeconds) {
+                    foundIndex = i;
+                    break;
+                }
+            }
+            
+            if (foundIndex === -1) {
+                foundIndex = 0;
+            }
+            
+            // Обновляем только если трек изменился
+            if (currentTrackIndex !== foundIndex) {
+                currentTrackIndex = foundIndex;
+                const track = currentSchedule.tracks[currentTrackIndex];
+                updateNowPlaying(track, currentTrackIndex);
+            }
         }
         
-        function findCurrentTrack() {
-    if (!currentSchedule?.tracks?.length) return;
-    
-    const ekbTime = getEkbTime();
-    const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
-    
-    let foundIndex = -1;
-    
-    for (let i = 0; i < currentSchedule.tracks.length; i++) {
-        const track = currentSchedule.tracks[i];
-        
-        const trackStartSeconds = parseTimeToSeconds(track.start);
-        const trackDuration = parseDuration(track.duration);
-        const trackEndSeconds = trackStartSeconds + trackDuration;
-        
-        if (currentSeconds >= trackStartSeconds && currentSeconds < trackEndSeconds) {
-            foundIndex = i;
-            break;
+        function updateNowPlaying(track, index) {
+            if (!track) return;
+            
+            const startSeconds = parseTimeToSeconds(track.start);
+            const duration = parseDuration(track.duration);
+            
+            currentTrackEl.textContent = track.title || 'Без названия';
+            currentArtistEl.textContent = track.artist || 'Неизвестен';
+            
+            const ekbTime = getEkbTime();
+            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+            const elapsed = Math.max(0, currentSeconds - startSeconds);
+            
+            const elapsedMins = Math.floor(elapsed / 60);
+            const elapsedSecs = Math.floor(elapsed % 60);
+            const totalMins = Math.floor(duration / 60);
+            const totalSecs = Math.floor(duration % 60);
+            const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+            
+            document.getElementById('track-progress').textContent = 
+                `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
+            progressBar.style.width = `${progressPercent}%`;
+            
+            if (currentSchedule && index < currentSchedule.tracks.length - 1) {
+                const nextTrack = currentSchedule.tracks[index + 1];
+                const nextTimeParts = nextTrack.start.split(':');
+                const displayTime = `${nextTimeParts[0]}:${nextTimeParts[1]}`;
+                
+                nextTrackTitle.textContent = `${nextTrack.title} (${nextTrack.artist})`;
+                nextTrackTime.textContent = `Начинается в ${displayTime}`;
+            } else if (currentSchedule?.tracks?.length > 0) {
+                const firstTrack = currentSchedule.tracks[0];
+                const firstTimeParts = firstTrack.start.split(':');
+                const displayTime = `${firstTimeParts[0]}:${firstTimeParts[1]}`;
+                
+                nextTrackTitle.textContent = `${firstTrack.title} (${firstTrack.artist})`;
+                nextTrackTime.textContent = `Начинается в ${displayTime}`;
+            }
+            
+            updateScheduleDisplay();
+            
+            if (autoSwitchTimer) clearTimeout(autoSwitchTimer);
+            const timeUntilNext = (startSeconds + duration) * 1000 - ekbTime.getTime();
+            
+            if (timeUntilNext > 0) {
+                autoSwitchTimer = setTimeout(() => {
+                    findCurrentTrack();
+                    if (isPlaying && track.file) {
+                        playAudioFile(track.file);
+                    }
+                }, timeUntilNext);
+            }
         }
-    }
-    
-    // Если не нашли текущий трек, используем первый
-    if (foundIndex === -1) {
-        foundIndex = 0;
-    }
-    
-    // Обновляем только если трек изменился
-    if (currentTrackIndex !== foundIndex) {
-        currentTrackIndex = foundIndex;
-        const track = currentSchedule.tracks[currentTrackIndex];
-        updateNowPlaying(track, currentTrackIndex);
-        
-        // НЕ прокручиваем автоматически при смене трека!
-        // Только обновляем отображение
-    }
-}
         
         function updateScheduleDisplay() {
             if (!currentSchedule?.tracks?.length) return;
