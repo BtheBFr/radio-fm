@@ -929,137 +929,118 @@
         }
         
         function showNotification(message, duration = 3000) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, duration);
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.classList.add('show');
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, duration);
+}
+
+// ========== ФУНКЦИЯ ПРЕОБРАЗОВАНИЯ DROPBOX ССЫЛОК ==========
+
+function convertDropboxLink(url) {
+    if (!url || typeof url !== 'string') return url;
+    
+    // Если это ссылка Dropbox
+    if (url.includes('dropbox.com')) {
+        let converted = url
+            .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
+            .replace('?dl=0', '')
+            .split('?')[0];
+        
+        if (!converted.includes('dl.dropboxusercontent.com')) {
+            converted = converted.replace('dropbox.com', 'dl.dropboxusercontent.com');
         }
         
-        // ========== ИСПРАВЛЕННОЕ ВОСПРОИЗВЕДЕНИЕ ==========
+        console.log('🔗 Преобразовано Dropbox ссылка');
+        return converted;
+    }
+    
+    return url;
+}
+
+// ========== ИСПРАВЛЕННОЕ ВОСПРОИЗВЕДЕНИЕ ==========
+
+async function playAudioFile(url) {
+    if (!url) {
+        showNotification('Нет ссылки на аудиофайл', 3000);
+        return false;
+    }
+    
+    // Преобразуем Dropbox ссылку
+    const directUrl = convertDropboxLink(url);
+    console.log('🎵 Пробуем воспроизвести:', directUrl);
+    
+    // ПРОБЛЕМА: используем оригинальный url вместо directUrl
+    // Исправляем ВЕЗДЕ в функции:
+    
+    try {
+        audioSource.src = directUrl; // ← ИЗМЕНИТЬ
+        audioPlayer.load();
         
-        async function playAudioFile(url) {
-            if (!url) {
-                showNotification('Нет ссылки на аудиофайл', 3000);
-                return false;
-            }
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Таймаут загрузки')), 10000);
+        });
+        
+        const playPromise = audioPlayer.play();
+        await Promise.race([playPromise, timeoutPromise]);
+        return true;
+        
+    } catch (error) {
+        console.error('Ошибка воспроизведения:', error);
+        
+        try {
+            const testAudio = new Audio();
+            testAudio.src = directUrl; // ← ИЗМЕНИТЬ
+            testAudio.preload = 'metadata';
+            
+            await new Promise((resolve, reject) => {
+                testAudio.onloadedmetadata = resolve;
+                testAudio.onerror = reject;
+                setTimeout(() => reject(new Error('Таймаут метаданных')), 5000);
+            });
+            
+            audioPlayer.play();
+            return true;
+        } catch (secondError) {
+            console.error('Вторичная проверка не удалась:', secondError);
             
             try {
-                audioSource.src = url;
-                audioPlayer.load();
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
                 
-                const timeoutPromise = new Promise((_, reject) => {
-                    setTimeout(() => reject(new Error('Таймаут загрузки')), 10000);
+                const response = await fetch(directUrl, { // ← ИЗМЕНИТЬ
+                    method: 'GET',
+                    signal: controller.signal,
+                    headers: { 'Range': 'bytes=0-100' }
                 });
                 
-                const playPromise = audioPlayer.play();
-                await Promise.race([playPromise, timeoutPromise]);
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`Файл недоступен: ${response.status}`);
+                }
+                
+                audioPlayer.play();
                 return true;
+            } catch (fetchError) {
+                console.error('Проверка через fetch не удалась:', fetchError);
                 
-            } catch (error) {
-                console.error('Ошибка воспроизведения:', error);
-                
-                try {
-                    const testAudio = new Audio();
-                    testAudio.src = url;
-                    testAudio.preload = 'metadata';
-                    
-                    await new Promise((resolve, reject) => {
-                        testAudio.onloadedmetadata = resolve;
-                        testAudio.onerror = reject;
-                        setTimeout(() => reject(new Error('Таймаут метаданных')), 5000);
-                    });
-                    
-                    audioPlayer.play();
-                    return true;
-                } catch (secondError) {
-                    console.error('Вторичная проверка не удалась:', secondError);
-                    
-                    try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 3000);
-                        
-                        const response = await fetch(url, { 
-                            method: 'GET',
-                            signal: controller.signal,
-                            headers: { 'Range': 'bytes=0-100' }
-                        });
-                        
-                        clearTimeout(timeoutId);
-                        
-                        if (!response.ok) {
-                            throw new Error(`Файл недоступен: ${response.status}`);
-                        }
-                        
-                        audioPlayer.play();
-                        return true;
-                    } catch (fetchError) {
-                        console.error('Проверка через fetch не удалась:', fetchError);
-                        
-                        let errorMessage = 'Не удалось воспроизвести файл';
-                        if (fetchError.name === 'AbortError') {
-                            errorMessage = 'Файл не отвечает (таймаут)';
-                        } else if (fetchError.message.includes('404') || fetchError.message.includes('403')) {
-                            errorMessage = 'Файл не найден или доступ запрещен';
-                        }
-                        
-                        showNotification(`${errorMessage}`, 5000);
-                        return false;
-                    }
+                let errorMessage = 'Не удалось воспроизвести файл';
+                if (fetchError.name === 'AbortError') {
+                    errorMessage = 'Файл не отвечает (таймаут)';
+                } else if (fetchError.message.includes('404') || fetchError.message.includes('403')) {
+                    errorMessage = 'Файл не найден или доступ запрещен';
                 }
+                
+                showNotification(`${errorMessage}`, 5000);
+                return false;
             }
         }
-        
-        function togglePlayback() {
-            userHasInteracted = true;
-            
-            if (!isPlaying) {
-                const track = currentSchedule?.tracks[currentTrackIndex];
-                
-                if (track?.file) {
-                    const originalIcon = playIcon.textContent;
-                    const originalText = playText.textContent;
-                    
-                    playIcon.textContent = '⏳';
-                    playText.textContent = 'Подключение...';
-                    statusText.textContent = 'Подключение...';
-                    
-                    playAudioFile(track.file).then(success => {
-                        if (success) {
-                            isPlaying = true;
-                            playIcon.textContent = '⏸';
-                            playText.textContent = 'Слушаете в реальном времени';
-                            statusText.textContent = 'В эфире';
-                            showNotification(`Играет: ${track.title}`);
-                            document.getElementById('connection-status').textContent = '🟢';
-                        } else {
-                            playIcon.textContent = originalIcon;
-                            playText.textContent = originalText;
-                            statusText.textContent = 'Ошибка';
-                            document.getElementById('connection-status').textContent = '🔴';
-                        }
-                    }).catch(error => {
-                        console.error('Ошибка в togglePlayback:', error);
-                        playIcon.textContent = originalIcon;
-                        playText.textContent = originalText;
-                        statusText.textContent = 'Ошибка';
-                        document.getElementById('connection-status').textContent = '🔴';
-                        showNotification('Ошибка подключения', 3000);
-                    });
-                } else {
-                    showNotification('Нет файла для воспроизведения', 3000);
-                }
-            } else {
-                audioPlayer.pause();
-                isPlaying = false;
-                playIcon.textContent = '▶';
-                playText.textContent = 'Нажмите для прослушивания';
-                statusText.textContent = 'На паузе';
-                showNotification('Воспроизведение приостановлено');
-            }
-        }
+    }
+}
         
         // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
         
