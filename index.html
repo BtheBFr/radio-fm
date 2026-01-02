@@ -1573,84 +1573,102 @@
             }
         }
         
-        function displayReviews(reviews) {
-            const reviewsList = document.getElementById('reviews-list');
-            const reviewsSection = document.getElementById('reviews-section');
-            
-            if (!reviews || reviews.length === 0) {
-                reviewsList.innerHTML = `
-                    <div class="no-reviews">
-                        <div class="no-reviews-icon">💬</div>
-                        <p>Пока нет отзывов. Будьте первым!</p>
+        function displayReviewsInModal(reviews) {
+    const modalContainer = document.getElementById('reviews-in-modal');
+    const reviewsList = document.getElementById('modal-reviews-list');
+    const noReviews = document.getElementById('no-reviews-in-modal');
+    const reviewsCount = document.getElementById('reviews-count');
+    
+    if (!reviews || reviews.length === 0) {
+        modalContainer.style.display = 'block';
+        reviewsList.style.display = 'none';
+        noReviews.style.display = 'block';
+        reviewsCount.textContent = '';
+        return;
+    }
+    
+    // Сортируем по дате (новые сверху)
+    const sortedReviews = [...reviews].sort((a, b) => 
+        new Date(b.timestamp || b.date || 0) - new Date(a.timestamp || a.date || 0)
+    );
+    
+    let html = '';
+    
+    sortedReviews.slice(0, 5).forEach((review, index) => {
+        const date = review.timestamp || review.date || 'Неизвестно';
+        const avgRating = (review.sound + review.design + review.remix + review.song) / 4;
+        const displayDate = new Date(date).toLocaleDateString('ru-RU', {
+            day: '2-digit',
+            month: '2-digit'
+        });
+        
+        html += `
+            <div style="
+                margin-bottom: 15px;
+                padding: 15px;
+                background: var(--bg-card);
+                border-radius: 10px;
+                border: 1px solid var(--border-color);
+                transition: all 0.2s ease;
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-size: 0.9rem;
+                            font-weight: 600;
+                        ">
+                            ${index + 1}
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1rem;">
+                                ★ ${avgRating.toFixed(1)}/5
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 2px;">
+                                ${displayDate}
+                            </div>
+                        </div>
                     </div>
-                `;
-                return;
-            }
-            
-            // Сортируем по дате (новые сверху)
-            const sortedReviews = [...reviews].sort((a, b) => 
-                new Date(b.timestamp || b.date || 0) - new Date(a.timestamp || a.date || 0)
-            );
-            
-            let html = '';
-            
-            sortedReviews.slice(0, 10).forEach((review, index) => {
-                const date = review.timestamp || review.date || 'Неизвестно';
-                const avgRating = (review.sound + review.design + review.remix + review.song) / 4;
-                const displayDate = new Date(date).toLocaleDateString('ru-RU', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                });
+                    <div style="font-size: 0.8rem; color: var(--text-light); text-align: right;">
+                        <div>🔊 ${review.sound}/5</div>
+                        <div>🎨 ${review.design}/5</div>
+                        <div>🎵 ${review.remix}/5</div>
+                        <div>🎶 ${review.song}/5</div>
+                    </div>
+                </div>
                 
-                html += `
-                    <div class="review-item">
-                        <div class="review-header">
-                            <div class="review-date">${displayDate}</div>
-                            <div class="review-rating">
-                                <div class="review-stars">
-                                    ${'★'.repeat(Math.round(avgRating))}
-                                </div>
-                                <span>${avgRating.toFixed(1)}/5</span>
-                            </div>
-                        </div>
-                        
-                        <div class="review-categories">
-                            <div class="review-category">
-                                <span>🔊</span>
-                                <span class="review-category-value">${review.sound}/5</span>
-                            </div>
-                            <div class="review-category">
-                                <span>🎨</span>
-                                <span class="review-category-value">${review.design}/5</span>
-                            </div>
-                            <div class="review-category">
-                                <span>🎵</span>
-                                <span class="review-category-value">${review.remix}/5</span>
-                            </div>
-                            <div class="review-category">
-                                <span>🎶</span>
-                                <span class="review-category-value">${review.song}/5</span>
-                            </div>
-                        </div>
-                        
-                        ${review.comment ? `
-                            <div class="review-comment">
-                                ${escapeHtml(review.comment)}
-                            </div>
-                        ` : ''}
+                ${review.comment ? `
+                    <div style="
+                        margin-top: 10px;
+                        padding: 10px 12px;
+                        background: var(--bg-secondary);
+                        border-radius: 8px;
+                        border-left: 3px solid #667eea;
+                        font-size: 0.9rem;
+                        color: var(--text-secondary);
+                        line-height: 1.5;
+                        font-style: italic;
+                    ">
+                        "${escapeHtml(review.comment)}"
                     </div>
-                `;
-            });
-            
-            reviewsList.innerHTML = html;
-            
-            // Показываем количество отзывов в заголовке
-            const title = reviewsSection.querySelector('.section-title');
-            if (title) {
-                title.innerHTML = `Отзывы слушателей <span style="font-size: 0.9rem; color: var(--text-light); margin-left: 8px;">(${reviews.length})</span>`;
-            }
-        }
+                ` : ''}
+            </div>
+        `;
+    });
+    
+    reviewsList.innerHTML = html;
+    reviewsList.style.display = 'block';
+    noReviews.style.display = 'none';
+    modalContainer.style.display = 'block';
+    reviewsCount.textContent = `(${reviews.length} ${getRatingWord(reviews.length)})`;
+}
         
         function updateRecentReviewsInModal(reviews) {
             const recentContainer = document.getElementById('recent-reviews');
