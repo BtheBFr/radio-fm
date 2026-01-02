@@ -790,48 +790,58 @@
         const nextTrackTime = document.getElementById('next-track-time');
         const statusText = document.getElementById('status-text');
         
-        // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ ==========
-        
-        function updateUserStats() {
-            // Генерируем случайные данные для демонстрации
-            onlineUsers = Math.floor(Math.random() * 50) + 5;
-            todayUsers = Math.floor(Math.random() * 200) + 50;
-            totalUsers = Math.floor(Math.random() * 1000) + 500;
-            
-            // Обновляем отображение
-            document.getElementById('online-users').textContent = onlineUsers;
-            document.getElementById('today-users').textContent = todayUsers;
-            document.getElementById('total-users').textContent = totalUsers;
-            
-            // Сохраняем в localStorage
-            localStorage.setItem('lapfm_stats', JSON.stringify({
-                online: onlineUsers,
-                today: todayUsers,
-                total: totalUsers,
-                lastUpdate: new Date().getTime()
-            }));
-        }
-        
-        function loadUserStats() {
-            const saved = localStorage.getItem('lapfm_stats');
-            if (saved) {
-                const stats = JSON.parse(saved);
-                const now = new Date().getTime();
-                const hoursSinceUpdate = (now - stats.lastUpdate) / (1000 * 60 * 60);
-                
-                // Если прошло больше 24 часов, сбрасываем сегодняшних пользователей
-                if (hoursSinceUpdate > 24) {
-                    todayUsers = 0;
-                } else {
-                    todayUsers = stats.today;
-                }
-                
-                onlineUsers = stats.online;
-                totalUsers = stats.total;
-            }
-            
-            updateUserStats();
-        }
+        // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ (РЕАЛЬНАЯ) ==========
+
+function updateUserStats() {
+    // Получаем или создаём статистику
+    let stats = JSON.parse(localStorage.getItem('lapfm_real_stats')) || {
+        online: 1,
+        today: 1,
+        total: 1,
+        lastUpdate: new Date().getTime(),
+        sessions: {}
+    };
+    
+    const now = Date.now();
+    const todayKey = new Date().toDateString();
+    
+    // Если прошло больше 5 минут с последнего обновления, считаем новую сессию
+    const isNewSession = (now - stats.lastUpdate) > 5 * 60 * 1000;
+    
+    // Обновляем статистику
+    if (isNewSession) {
+        stats.online = Math.max(1, stats.online - 1); // Уменьшаем онлайн если долго не было активности
+    } else {
+        stats.online = 1; // Вы онлайн
+    }
+    
+    // Увеличиваем сегодняшних только если это новый день
+    if (!stats.sessions[todayKey]) {
+        stats.sessions[todayKey] = 1;
+        stats.today = 1;
+    } else {
+        stats.today = Object.keys(stats.sessions).length;
+    }
+    
+    // Общее количество уникальных дней посещений
+    stats.total = Object.keys(stats.sessions).length;
+    stats.lastUpdate = now;
+    
+    // Сохраняем
+    localStorage.setItem('lapfm_real_stats', JSON.stringify(stats));
+    
+    // Показываем реалистичные числа (не случайные!)
+    document.getElementById('online-users').textContent = stats.online;
+    document.getElementById('today-users').textContent = stats.today;
+    document.getElementById('total-users').textContent = stats.total;
+}
+
+function loadUserStats() {
+    updateUserStats();
+    
+    // Обновляем статистику каждую минуту
+    setInterval(updateUserStats, 60000);
+}
         
         // ========== ТЕМНАЯ ТЕМА С ЗАПОМИНАНИЕМ ==========
         
