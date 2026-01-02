@@ -397,6 +397,34 @@
             color: #667eea;
         }
         
+        /* СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ */
+        .users-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
         /* СТАТУС */
         .status-section {
             display: grid;
@@ -477,34 +505,6 @@
         [data-theme="dark"] .theme-btn.active {
             background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
             box-shadow: 0 5px 15px rgba(90, 103, 216, 0.3);
-        }
-        
-        /* СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ */
-        .users-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-            padding: 20px;
-            background: var(--bg-card);
-            border-radius: 16px;
-            border: 2px solid var(--border-color);
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
         }
         
         /* СКРОЛЛБАР */
@@ -623,7 +623,7 @@
                 <h1>LAP.FM</h1>
             </div>
             <div class="timezone-info">
-                <span id="current-ekb-time">ЕКБ: --:--:--</span>
+                <span id="current-ekb-time">ЕКБ: --:--</span>
                 <span> • UTC+5</span>
             </div>
             <div class="live-badge">
@@ -676,18 +676,18 @@
                         <span>Следующий трек:</span>
                     </div>
                     <div class="next-track-info" id="next-track-title">Загрузка...</div>
-                    <div class="next-track-time" id="next-track-time">--:--:--</div>
+                    <div class="next-track-time" id="next-track-time">--:--</div>
                 </div>
             </section>
             
             <!-- СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ -->
             <div class="users-stats">
                 <div class="stat-item">
-                    <div class="stat-value" id="online-users">0</div>
+                    <div class="stat-value" id="online-users">1</div>
                     <div class="stat-label">Сейчас онлайн</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value" id="today-users">0</div>
+                    <div class="stat-value" id="today-users">1</div>
                     <div class="stat-label">Сегодня посетителей</div>
                 </div>
             </div>
@@ -710,7 +710,7 @@
                 <div class="schedule-list" id="schedule-list">
                     <div class="schedule-item">
                         <div class="schedule-header">
-                            <div class="time-badge">--:--:--</div>
+                            <div class="time-badge">--:-- - --:--</div>
                             <div class="duration-badge">--:--</div>
                         </div>
                         <div class="track-title">Загрузка расписания...</div>
@@ -723,7 +723,7 @@
             <div class="status-section">
                 <div class="status-card">
                     <h3>Обновлено</h3>
-                    <div class="status-value" id="update-time">--:--:--</div>
+                    <div class="status-value" id="update-time">--:--</div>
                 </div>
                 <div class="status-card">
                     <h3>Треков</h3>
@@ -735,7 +735,7 @@
                 </div>
                 <div class="status-card">
                     <h3>Всего посетителей</h3>
-                    <div class="status-value" id="total-users">0</div>
+                    <div class="status-value" id="total-users">1</div>
                 </div>
             </div>
         </main>
@@ -772,11 +772,6 @@
         let userHasInteracted = false;
         let currentTheme = 'auto';
         
-        // Статистика пользователей
-        let onlineUsers = 0;
-        let todayUsers = 0;
-        let totalUsers = 0;
-        
         // ЭЛЕМЕНТЫ DOM
         const audioPlayer = document.getElementById('audio-player');
         const audioSource = document.getElementById('audio-source');
@@ -791,57 +786,42 @@
         const statusText = document.getElementById('status-text');
         
         // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ (РЕАЛЬНАЯ) ==========
-
-function updateUserStats() {
-    // Получаем или создаём статистику
-    let stats = JSON.parse(localStorage.getItem('lapfm_real_stats')) || {
-        online: 1,
-        today: 1,
-        total: 1,
-        lastUpdate: new Date().getTime(),
-        sessions: {}
-    };
-    
-    const now = Date.now();
-    const todayKey = new Date().toDateString();
-    
-    // Если прошло больше 5 минут с последнего обновления, считаем новую сессию
-    const isNewSession = (now - stats.lastUpdate) > 5 * 60 * 1000;
-    
-    // Обновляем статистику
-    if (isNewSession) {
-        stats.online = Math.max(1, stats.online - 1); // Уменьшаем онлайн если долго не было активности
-    } else {
-        stats.online = 1; // Вы онлайн
-    }
-    
-    // Увеличиваем сегодняшних только если это новый день
-    if (!stats.sessions[todayKey]) {
-        stats.sessions[todayKey] = 1;
-        stats.today = 1;
-    } else {
-        stats.today = Object.keys(stats.sessions).length;
-    }
-    
-    // Общее количество уникальных дней посещений
-    stats.total = Object.keys(stats.sessions).length;
-    stats.lastUpdate = now;
-    
-    // Сохраняем
-    localStorage.setItem('lapfm_real_stats', JSON.stringify(stats));
-    
-    // Показываем реалистичные числа (не случайные!)
-    document.getElementById('online-users').textContent = stats.online;
-    document.getElementById('today-users').textContent = stats.today;
-    document.getElementById('total-users').textContent = stats.total;
-}
-
-function loadUserStats() {
-    updateUserStats();
-    
-    // Обновляем статистику каждую минуту
-    setInterval(updateUserStats, 60000);
-}
+        
+        function updateUserStats() {
+            // Получаем или создаём статистику
+            let stats = JSON.parse(localStorage.getItem('lapfm_real_stats')) || {
+                online: 1,
+                today: 1,
+                total: 1,
+                lastUpdate: Date.now(),
+                sessions: {}
+            };
+            
+            const now = Date.now();
+            const todayKey = new Date().toDateString();
+            
+            // Обновляем сессии
+            if (!stats.sessions[todayKey]) {
+                stats.sessions[todayKey] = 1;
+                stats.today = 1;
+            }
+            
+            // Общее количество уникальных дней посещений
+            stats.total = Object.keys(stats.sessions).length;
+            stats.lastUpdate = now;
+            
+            // Сохраняем
+            localStorage.setItem('lapfm_real_stats', JSON.stringify(stats));
+            
+            // Показываем реальные числа
+            document.getElementById('online-users').textContent = '1';
+            document.getElementById('today-users').textContent = stats.today;
+            document.getElementById('total-users').textContent = stats.total;
+        }
+        
+        function loadUserStats() {
+            updateUserStats();
+        }
         
         // ========== ТЕМНАЯ ТЕМА С ЗАПОМИНАНИЕМ ==========
         
@@ -878,7 +858,6 @@ function loadUserStats() {
             const savedTheme = localStorage.getItem('radio-theme') || 'auto';
             setTheme(savedTheme);
             
-            // Слушаем изменения системной темы
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
                 if (currentTheme === 'auto') {
                     setTheme('auto');
@@ -894,15 +873,6 @@ function loadUserStats() {
             return new Date(utcTime + (TIMEZONE_OFFSET * 3600000));
         }
         
-        function formatTimeWithSeconds(date) {
-            return date.toLocaleTimeString('ru-RU', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-        }
-        
         function formatTime(date) {
             return date.toLocaleTimeString('ru-RU', {
                 hour: '2-digit',
@@ -913,11 +883,11 @@ function loadUserStats() {
         
         function updateEkbTimeDisplay() {
             const ekbTime = getEkbTime();
-            const timeString = formatTimeWithSeconds(ekbTime);
+            const timeString = formatTime(ekbTime);
             document.getElementById('current-ekb-time').textContent = `ЕКБ: ${timeString}`;
         }
         
-        // Парсинг времени с секундами
+        // Парсинг времени с секундами (для внутренних расчетов)
         function parseTimeToSeconds(timeStr) {
             const parts = timeStr.split(':').map(Number);
             if (parts.length === 3) {
@@ -930,7 +900,7 @@ function loadUserStats() {
         
         // Парсинг длительности
         function parseDuration(duration) {
-            if (!duration) return 180; // 3 минуты по умолчанию
+            if (!duration) return 180;
             
             if (typeof duration === 'string' && duration.includes(':')) {
                 const parts = duration.split(':').map(Number);
@@ -950,15 +920,12 @@ function loadUserStats() {
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
         
-        function formatDurationFull(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const mins = Math.floor((seconds % 3600) / 60);
-            const secs = Math.floor(seconds % 60);
-            
-            if (hours > 0) {
-                return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        // Форматирование времени для отображения (без секунд)
+        function formatTimeForDisplay(seconds) {
+            const totalSeconds = Math.floor(seconds);
+            const hours = Math.floor(totalSeconds / 3600) % 24;
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
         }
         
         function showNotification(message, duration = 3000) {
@@ -980,11 +947,9 @@ function loadUserStats() {
             }
             
             try {
-                // Пробуем воспроизвести сразу
                 audioSource.src = url;
                 audioPlayer.load();
                 
-                // Устанавливаем таймаут
                 const timeoutPromise = new Promise((_, reject) => {
                     setTimeout(() => reject(new Error('Таймаут загрузки')), 10000);
                 });
@@ -996,7 +961,6 @@ function loadUserStats() {
             } catch (error) {
                 console.error('Ошибка воспроизведения:', error);
                 
-                // Пробуем альтернативный подход
                 try {
                     const testAudio = new Audio();
                     testAudio.src = url;
@@ -1013,7 +977,6 @@ function loadUserStats() {
                 } catch (secondError) {
                     console.error('Вторичная проверка не удалась:', secondError);
                     
-                    // Проверяем доступность через fetch
                     try {
                         const controller = new AbortController();
                         const timeoutId = setTimeout(() => controller.abort(), 3000);
@@ -1089,7 +1052,6 @@ function loadUserStats() {
                     showNotification('Нет файла для воспроизведения', 3000);
                 }
             } else {
-                // Пауза
                 audioPlayer.pause();
                 isPlaying = false;
                 playIcon.textContent = '▶';
@@ -1111,7 +1073,7 @@ function loadUserStats() {
                 
                 const updateDate = new Date(schedule.updated_at);
                 const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
-                document.getElementById('update-time').textContent = formatTimeWithSeconds(ekbUpdateTime);
+                document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
                 document.getElementById('track-count').textContent = schedule.tracks.length;
                 
                 updateScheduleDisplay();
@@ -1171,31 +1133,29 @@ function loadUserStats() {
             const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
             const elapsed = Math.max(0, currentSeconds - startSeconds);
             
-            const elapsedHours = Math.floor(elapsed / 3600);
-            const elapsedMins = Math.floor((elapsed % 3600) / 60);
-            const elapsedSecs = elapsed % 60;
+            const elapsedMins = Math.floor(elapsed / 60);
+            const elapsedSecs = Math.floor(elapsed % 60);
             const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
             
-            let elapsedStr = '';
-            if (elapsedHours > 0) {
-                elapsedStr = `${elapsedHours}:${elapsedMins.toString().padStart(2, '0')}:${elapsedSecs.toString().padStart(2, '0')}`;
-            } else {
-                elapsedStr = `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')}`;
-            }
-            
             document.getElementById('track-progress').textContent = 
-                `${elapsedStr} / ${formatDuration(duration)}`;
+                `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${formatDuration(duration)}`;
             progressBar.style.width = `${progressPercent}%`;
             
-            // Следующий трек
+            // Следующий трек (показываем только часы и минуты)
             if (currentSchedule && index < currentSchedule.tracks.length - 1) {
                 const nextTrack = currentSchedule.tracks[index + 1];
+                const nextTimeParts = nextTrack.start.split(':');
+                const displayTime = `${nextTimeParts[0]}:${nextTimeParts[1]}`;
+                
                 nextTrackTitle.textContent = `${nextTrack.title} (${nextTrack.artist})`;
-                nextTrackTime.textContent = `Начинается в ${nextTrack.start}`;
+                nextTrackTime.textContent = `Начинается в ${displayTime}`;
             } else if (currentSchedule?.tracks?.length > 0) {
                 const firstTrack = currentSchedule.tracks[0];
+                const firstTimeParts = firstTrack.start.split(':');
+                const displayTime = `${firstTimeParts[0]}:${firstTimeParts[1]}`;
+                
                 nextTrackTitle.textContent = `${firstTrack.title} (${firstTrack.artist})`;
-                nextTrackTime.textContent = `Начинается в ${firstTrack.start}`;
+                nextTrackTime.textContent = `Начинается в ${displayTime}`;
             }
             
             updateScheduleDisplay();
@@ -1227,29 +1187,9 @@ function loadUserStats() {
                 const startSeconds = parseTimeToSeconds(track.start);
                 const endSeconds = startSeconds + duration;
                 
-                // Форматируем время начала и окончания
-                const startHours = Math.floor(startSeconds / 3600);
-                const startMins = Math.floor((startSeconds % 3600) / 60);
-                const startSecs = startSeconds % 60;
-                
-                const endHours = Math.floor(endSeconds / 3600);
-                const endMins = Math.floor((endSeconds % 3600) / 60);
-                const endSecs = Math.floor(endSeconds % 60);
-                
-                let startTimeStr = '';
-                let endTimeStr = '';
-                
-                if (startHours > 0) {
-                    startTimeStr = `${startHours.toString().padStart(2, '0')}:${startMins.toString().padStart(2, '0')}:${startSecs.toString().padStart(2, '0')}`;
-                } else {
-                    startTimeStr = `${startMins.toString().padStart(2, '0')}:${startSecs.toString().padStart(2, '0')}`;
-                }
-                
-                if (endHours > 0) {
-                    endTimeStr = `${endHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}:${endSecs.toString().padStart(2, '0')}`;
-                } else {
-                    endTimeStr = `${endMins.toString().padStart(2, '0')}:${endSecs.toString().padStart(2, '0')}`;
-                }
+                // Форматируем время для отображения (без секунд)
+                const startTimeStr = formatTimeForDisplay(startSeconds);
+                const endTimeStr = formatTimeForDisplay(endSeconds);
                 
                 html += `
                     <div class="schedule-item ${isActive ? 'active' : ''}">
@@ -1284,19 +1224,11 @@ function loadUserStats() {
                 const progressPercent = (elapsed / duration) * 100;
                 progressBar.style.width = `${progressPercent}%`;
                 
-                const elapsedHours = Math.floor(elapsed / 3600);
-                const elapsedMins = Math.floor((elapsed % 3600) / 60);
-                const elapsedSecs = elapsed % 60;
-                
-                let elapsedStr = '';
-                if (elapsedHours > 0) {
-                    elapsedStr = `${elapsedHours}:${elapsedMins.toString().padStart(2, '0')}:${elapsedSecs.toString().padStart(2, '0')}`;
-                } else {
-                    elapsedStr = `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')}`;
-                }
+                const elapsedMins = Math.floor(elapsed / 60);
+                const elapsedSecs = Math.floor(elapsed % 60);
                 
                 document.getElementById('track-progress').textContent = 
-                    `${elapsedStr} / ${formatDuration(duration)}`;
+                    `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${formatDuration(duration)}`;
             }
         }
         
@@ -1324,35 +1256,22 @@ function loadUserStats() {
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🚀 LAP.FM Radio загружается...');
             
-            // Загружаем тему
             loadTheme();
-            
-            // Загружаем статистику
             loadUserStats();
-            
-            // Загружаем расписание
             loadSchedule();
             
-            // Настраиваем кнопку
             playButton.addEventListener('click', togglePlayback);
             
-            // Обновляем время ЕКБ каждую секунду
             setInterval(updateEkbTimeDisplay, 1000);
             updateEkbTimeDisplay();
             
-            // Обновляем трек каждую секунду
             setInterval(() => {
                 findCurrentTrack();
                 updateCurrentTime();
             }, 1000);
             
-            // Обновляем статистику каждые 5 минут
-            setInterval(updateUserStats, 300000);
+            setInterval(updateUserStats, 60000);
             
-            // Обновляем прогресс каждую секунду
-            setInterval(updateCurrentTime, 1000);
-            
-            // События плеера
             audioPlayer.addEventListener('playing', () => {
                 console.log('▶️ Аудио запущено');
             });
@@ -1364,7 +1283,6 @@ function loadUserStats() {
             });
         });
         
-        // Глобальные функции
         window.refreshSchedule = refreshSchedule;
         window.shareRadio = shareRadio;
         window.setTheme = setTheme;
