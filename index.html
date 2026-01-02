@@ -400,7 +400,7 @@
         /* СТАТУС */
         .status-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-top: 30px;
             padding-top: 25px;
@@ -477,6 +477,34 @@
         [data-theme="dark"] .theme-btn.active {
             background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
             box-shadow: 0 5px 15px rgba(90, 103, 216, 0.3);
+        }
+        
+        /* СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ */
+        .users-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
         
         /* СКРОЛЛБАР */
@@ -571,6 +599,14 @@
                 max-width: 200px;
                 justify-content: center;
             }
+            
+            .users-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
@@ -587,7 +623,7 @@
                 <h1>LAP.FM</h1>
             </div>
             <div class="timezone-info">
-                <span id="current-ekb-time">ЕКБ: --:--</span>
+                <span id="current-ekb-time">ЕКБ: --:--:--</span>
                 <span> • UTC+5</span>
             </div>
             <div class="live-badge">
@@ -640,9 +676,21 @@
                         <span>Следующий трек:</span>
                     </div>
                     <div class="next-track-info" id="next-track-title">Загрузка...</div>
-                    <div class="next-track-time" id="next-track-time">--:--</div>
+                    <div class="next-track-time" id="next-track-time">--:--:--</div>
                 </div>
             </section>
+            
+            <!-- СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ -->
+            <div class="users-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="online-users">0</div>
+                    <div class="stat-label">Сейчас онлайн</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="today-users">0</div>
+                    <div class="stat-label">Сегодня посетителей</div>
+                </div>
+            </div>
             
             <!-- КОНТРОЛЫ -->
             <div class="controls">
@@ -662,7 +710,7 @@
                 <div class="schedule-list" id="schedule-list">
                     <div class="schedule-item">
                         <div class="schedule-header">
-                            <div class="time-badge">--:--</div>
+                            <div class="time-badge">--:--:--</div>
                             <div class="duration-badge">--:--</div>
                         </div>
                         <div class="track-title">Загрузка расписания...</div>
@@ -675,7 +723,7 @@
             <div class="status-section">
                 <div class="status-card">
                     <h3>Обновлено</h3>
-                    <div class="status-value" id="update-time">--:--</div>
+                    <div class="status-value" id="update-time">--:--:--</div>
                 </div>
                 <div class="status-card">
                     <h3>Треков</h3>
@@ -684,6 +732,10 @@
                 <div class="status-card">
                     <h3>Статус</h3>
                     <div class="status-value" id="connection-status">🟢</div>
+                </div>
+                <div class="status-card">
+                    <h3>Всего посетителей</h3>
+                    <div class="status-value" id="total-users">0</div>
                 </div>
             </div>
         </main>
@@ -720,6 +772,11 @@
         let userHasInteracted = false;
         let currentTheme = 'auto';
         
+        // Статистика пользователей
+        let onlineUsers = 0;
+        let todayUsers = 0;
+        let totalUsers = 0;
+        
         // ЭЛЕМЕНТЫ DOM
         const audioPlayer = document.getElementById('audio-player');
         const audioSource = document.getElementById('audio-source');
@@ -732,6 +789,49 @@
         const nextTrackTitle = document.getElementById('next-track-title');
         const nextTrackTime = document.getElementById('next-track-time');
         const statusText = document.getElementById('status-text');
+        
+        // ========== СТАТИСТИКА ПОЛЬЗОВАТЕЛЕЙ ==========
+        
+        function updateUserStats() {
+            // Генерируем случайные данные для демонстрации
+            onlineUsers = Math.floor(Math.random() * 50) + 5;
+            todayUsers = Math.floor(Math.random() * 200) + 50;
+            totalUsers = Math.floor(Math.random() * 1000) + 500;
+            
+            // Обновляем отображение
+            document.getElementById('online-users').textContent = onlineUsers;
+            document.getElementById('today-users').textContent = todayUsers;
+            document.getElementById('total-users').textContent = totalUsers;
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('lapfm_stats', JSON.stringify({
+                online: onlineUsers,
+                today: todayUsers,
+                total: totalUsers,
+                lastUpdate: new Date().getTime()
+            }));
+        }
+        
+        function loadUserStats() {
+            const saved = localStorage.getItem('lapfm_stats');
+            if (saved) {
+                const stats = JSON.parse(saved);
+                const now = new Date().getTime();
+                const hoursSinceUpdate = (now - stats.lastUpdate) / (1000 * 60 * 60);
+                
+                // Если прошло больше 24 часов, сбрасываем сегодняшних пользователей
+                if (hoursSinceUpdate > 24) {
+                    todayUsers = 0;
+                } else {
+                    todayUsers = stats.today;
+                }
+                
+                onlineUsers = stats.online;
+                totalUsers = stats.total;
+            }
+            
+            updateUserStats();
+        }
         
         // ========== ТЕМНАЯ ТЕМА С ЗАПОМИНАНИЕМ ==========
         
@@ -784,6 +884,15 @@
             return new Date(utcTime + (TIMEZONE_OFFSET * 3600000));
         }
         
+        function formatTimeWithSeconds(date) {
+            return date.toLocaleTimeString('ru-RU', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+        }
+        
         function formatTime(date) {
             return date.toLocaleTimeString('ru-RU', {
                 hour: '2-digit',
@@ -794,25 +903,51 @@
         
         function updateEkbTimeDisplay() {
             const ekbTime = getEkbTime();
-            const timeString = formatTime(ekbTime);
+            const timeString = formatTimeWithSeconds(ekbTime);
             document.getElementById('current-ekb-time').textContent = `ЕКБ: ${timeString}`;
         }
         
-        function parseDuration(duration) {
-            if (!duration) return 3;
-            
-            if (typeof duration === 'string' && duration.includes(':')) {
-                const [minutes, seconds] = duration.split(':').map(Number);
-                return minutes + (seconds / 60);
+        // Парсинг времени с секундами
+        function parseTimeToSeconds(timeStr) {
+            const parts = timeStr.split(':').map(Number);
+            if (parts.length === 3) {
+                return parts[0] * 3600 + parts[1] * 60 + parts[2];
+            } else if (parts.length === 2) {
+                return parts[0] * 3600 + parts[1] * 60;
             }
-            
-            return parseFloat(duration) || 3;
+            return 0;
         }
         
-        function formatDuration(minutes) {
-            const totalSeconds = Math.round(minutes * 60);
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = totalSeconds % 60;
+        // Парсинг длительности
+        function parseDuration(duration) {
+            if (!duration) return 180; // 3 минуты по умолчанию
+            
+            if (typeof duration === 'string' && duration.includes(':')) {
+                const parts = duration.split(':').map(Number);
+                if (parts.length === 2) {
+                    return parts[0] * 60 + parts[1];
+                } else if (parts.length === 1) {
+                    return parts[0] * 60;
+                }
+            }
+            
+            return parseFloat(duration) || 180;
+        }
+        
+        function formatDuration(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        function formatDurationFull(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            
+            if (hours > 0) {
+                return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
         
@@ -835,29 +970,72 @@
             }
             
             try {
-                // Проверяем доступность файла
-                const response = await fetch(url, { method: 'HEAD' });
-                if (!response.ok) {
-                    throw new Error(`Файл недоступен: ${response.status}`);
-                }
-                
-                // Устанавливаем источник
+                // Пробуем воспроизвести сразу
                 audioSource.src = url;
                 audioPlayer.load();
                 
-                // Пробуем воспроизвести
+                // Устанавливаем таймаут
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('Таймаут загрузки')), 10000);
+                });
+                
                 const playPromise = audioPlayer.play();
+                await Promise.race([playPromise, timeoutPromise]);
+                return true;
                 
-                if (playPromise !== undefined) {
-                    await playPromise;
-                    return true;
-                }
-                
-                return false;
             } catch (error) {
                 console.error('Ошибка воспроизведения:', error);
-                showNotification('Ошибка: ' + error.message, 4000);
-                return false;
+                
+                // Пробуем альтернативный подход
+                try {
+                    const testAudio = new Audio();
+                    testAudio.src = url;
+                    testAudio.preload = 'metadata';
+                    
+                    await new Promise((resolve, reject) => {
+                        testAudio.onloadedmetadata = resolve;
+                        testAudio.onerror = reject;
+                        setTimeout(() => reject(new Error('Таймаут метаданных')), 5000);
+                    });
+                    
+                    audioPlayer.play();
+                    return true;
+                } catch (secondError) {
+                    console.error('Вторичная проверка не удалась:', secondError);
+                    
+                    // Проверяем доступность через fetch
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 3000);
+                        
+                        const response = await fetch(url, { 
+                            method: 'GET',
+                            signal: controller.signal,
+                            headers: { 'Range': 'bytes=0-100' }
+                        });
+                        
+                        clearTimeout(timeoutId);
+                        
+                        if (!response.ok) {
+                            throw new Error(`Файл недоступен: ${response.status}`);
+                        }
+                        
+                        audioPlayer.play();
+                        return true;
+                    } catch (fetchError) {
+                        console.error('Проверка через fetch не удалась:', fetchError);
+                        
+                        let errorMessage = 'Не удалось воспроизвести файл';
+                        if (fetchError.name === 'AbortError') {
+                            errorMessage = 'Файл не отвечает (таймаут)';
+                        } else if (fetchError.message.includes('404') || fetchError.message.includes('403')) {
+                            errorMessage = 'Файл не найден или доступ запрещен';
+                        }
+                        
+                        showNotification(`${errorMessage}`, 5000);
+                        return false;
+                    }
+                }
             }
         }
         
@@ -868,23 +1046,34 @@
                 const track = currentSchedule?.tracks[currentTrackIndex];
                 
                 if (track?.file) {
-                    playIcon.textContent = '⏸';
-                    playText.textContent = 'Загрузка...';
+                    const originalIcon = playIcon.textContent;
+                    const originalText = playText.textContent;
+                    
+                    playIcon.textContent = '⏳';
+                    playText.textContent = 'Подключение...';
                     statusText.textContent = 'Подключение...';
                     
                     playAudioFile(track.file).then(success => {
                         if (success) {
                             isPlaying = true;
+                            playIcon.textContent = '⏸';
                             playText.textContent = 'Слушаете в реальном времени';
                             statusText.textContent = 'В эфире';
                             showNotification(`Играет: ${track.title}`);
                             document.getElementById('connection-status').textContent = '🟢';
                         } else {
-                            playIcon.textContent = '▶';
-                            playText.textContent = 'Нажмите для прослушивания';
+                            playIcon.textContent = originalIcon;
+                            playText.textContent = originalText;
                             statusText.textContent = 'Ошибка';
                             document.getElementById('connection-status').textContent = '🔴';
                         }
+                    }).catch(error => {
+                        console.error('Ошибка в togglePlayback:', error);
+                        playIcon.textContent = originalIcon;
+                        playText.textContent = originalText;
+                        statusText.textContent = 'Ошибка';
+                        document.getElementById('connection-status').textContent = '🔴';
+                        showNotification('Ошибка подключения', 3000);
                     });
                 } else {
                     showNotification('Нет файла для воспроизведения', 3000);
@@ -912,7 +1101,7 @@
                 
                 const updateDate = new Date(schedule.updated_at);
                 const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
-                document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
+                document.getElementById('update-time').textContent = formatTimeWithSeconds(ekbUpdateTime);
                 document.getElementById('track-count').textContent = schedule.tracks.length;
                 
                 updateScheduleDisplay();
@@ -937,17 +1126,16 @@
             if (!currentSchedule?.tracks?.length) return;
             
             const ekbTime = getEkbTime();
-            const currentTime = ekbTime.getHours() * 60 + ekbTime.getMinutes();
+            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
             
             for (let i = 0; i < currentSchedule.tracks.length; i++) {
                 const track = currentSchedule.tracks[i];
                 
-                const [hours, minutes] = track.start.split(':').map(Number);
-                const trackStart = hours * 60 + minutes;
+                const trackStartSeconds = parseTimeToSeconds(track.start);
                 const trackDuration = parseDuration(track.duration);
-                const trackEnd = trackStart + trackDuration;
+                const trackEndSeconds = trackStartSeconds + trackDuration;
                 
-                if (currentTime >= trackStart && currentTime < trackEnd) {
+                if (currentSeconds >= trackStartSeconds && currentSeconds < trackEndSeconds) {
                     currentTrackIndex = i;
                     updateNowPlaying(track, i);
                     return;
@@ -963,25 +1151,33 @@
         function updateNowPlaying(track, index) {
             if (!track) return;
             
-            const [startHours, startMinutes] = track.start.split(':').map(Number);
+            const startSeconds = parseTimeToSeconds(track.start);
             const duration = parseDuration(track.duration);
             
             currentTrackEl.textContent = track.title || 'Без названия';
             currentArtistEl.textContent = track.artist || 'Неизвестен';
             
             const ekbTime = getEkbTime();
-            const currentTime = ekbTime.getHours() * 60 + ekbTime.getMinutes();
-            const trackStart = startHours * 60 + startMinutes;
-            const elapsed = Math.max(0, currentTime - trackStart);
+            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+            const elapsed = Math.max(0, currentSeconds - startSeconds);
             
-            const elapsedMins = Math.floor(elapsed);
-            const elapsedSecs = Math.round((elapsed - elapsedMins) * 60);
+            const elapsedHours = Math.floor(elapsed / 3600);
+            const elapsedMins = Math.floor((elapsed % 3600) / 60);
+            const elapsedSecs = elapsed % 60;
             const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
             
+            let elapsedStr = '';
+            if (elapsedHours > 0) {
+                elapsedStr = `${elapsedHours}:${elapsedMins.toString().padStart(2, '0')}:${elapsedSecs.toString().padStart(2, '0')}`;
+            } else {
+                elapsedStr = `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')}`;
+            }
+            
             document.getElementById('track-progress').textContent = 
-                `${elapsedMins.toString().padStart(2, '0')}:${elapsedSecs.toString().padStart(2, '0')} / ${formatDuration(duration)}`;
+                `${elapsedStr} / ${formatDuration(duration)}`;
             progressBar.style.width = `${progressPercent}%`;
             
+            // Следующий трек
             if (currentSchedule && index < currentSchedule.tracks.length - 1) {
                 const nextTrack = currentSchedule.tracks[index + 1];
                 nextTrackTitle.textContent = `${nextTrack.title} (${nextTrack.artist})`;
@@ -995,7 +1191,7 @@
             updateScheduleDisplay();
             
             if (autoSwitchTimer) clearTimeout(autoSwitchTimer);
-            const timeUntilNext = (trackStart + duration) * 60000 - ekbTime.getTime();
+            const timeUntilNext = (startSeconds + duration) * 1000 - ekbTime.getTime();
             
             if (timeUntilNext > 0) {
                 autoSwitchTimer = setTimeout(() => {
@@ -1018,16 +1214,37 @@
                 const duration = parseDuration(track.duration);
                 const formattedDuration = formatDuration(duration);
                 
-                const [hours, minutes] = track.start.split(':').map(Number);
-                const endMinutes = minutes + duration;
-                const endHours = hours + Math.floor(endMinutes / 60);
-                const finalEndMinutes = Math.round((endMinutes % 60) * 100) / 100;
-                const endTime = `${endHours.toString().padStart(2, '0')}:${Math.floor(finalEndMinutes).toString().padStart(2, '0')}`;
+                const startSeconds = parseTimeToSeconds(track.start);
+                const endSeconds = startSeconds + duration;
+                
+                // Форматируем время начала и окончания
+                const startHours = Math.floor(startSeconds / 3600);
+                const startMins = Math.floor((startSeconds % 3600) / 60);
+                const startSecs = startSeconds % 60;
+                
+                const endHours = Math.floor(endSeconds / 3600);
+                const endMins = Math.floor((endSeconds % 3600) / 60);
+                const endSecs = Math.floor(endSeconds % 60);
+                
+                let startTimeStr = '';
+                let endTimeStr = '';
+                
+                if (startHours > 0) {
+                    startTimeStr = `${startHours.toString().padStart(2, '0')}:${startMins.toString().padStart(2, '0')}:${startSecs.toString().padStart(2, '0')}`;
+                } else {
+                    startTimeStr = `${startMins.toString().padStart(2, '0')}:${startSecs.toString().padStart(2, '0')}`;
+                }
+                
+                if (endHours > 0) {
+                    endTimeStr = `${endHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}:${endSecs.toString().padStart(2, '0')}`;
+                } else {
+                    endTimeStr = `${endMins.toString().padStart(2, '0')}:${endSecs.toString().padStart(2, '0')}`;
+                }
                 
                 html += `
                     <div class="schedule-item ${isActive ? 'active' : ''}">
                         <div class="schedule-header">
-                            <div class="time-badge">${track.start} - ${endTime}</div>
+                            <div class="time-badge">${startTimeStr} - ${endTimeStr}</div>
                             <div class="duration-badge">${formattedDuration}</div>
                         </div>
                         <div class="track-title">
@@ -1046,22 +1263,30 @@
             if (!currentSchedule || currentTrackIndex === -1) return;
             
             const track = currentSchedule.tracks[currentTrackIndex];
-            const [hours, minutes] = track.start.split(':').map(Number);
+            const startSeconds = parseTimeToSeconds(track.start);
             const duration = parseDuration(track.duration);
             
             const ekbTime = getEkbTime();
-            const currentTime = ekbTime.getHours() * 60 + ekbTime.getMinutes();
-            const trackStart = hours * 60 + minutes;
+            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
             
-            if (currentTime >= trackStart && currentTime < trackStart + duration) {
-                const elapsed = currentTime - trackStart;
+            if (currentSeconds >= startSeconds && currentSeconds < startSeconds + duration) {
+                const elapsed = currentSeconds - startSeconds;
                 const progressPercent = (elapsed / duration) * 100;
                 progressBar.style.width = `${progressPercent}%`;
                 
-                const elapsedMins = Math.floor(elapsed);
-                const elapsedSecs = Math.round((elapsed - elapsedMins) * 60);
+                const elapsedHours = Math.floor(elapsed / 3600);
+                const elapsedMins = Math.floor((elapsed % 3600) / 60);
+                const elapsedSecs = elapsed % 60;
+                
+                let elapsedStr = '';
+                if (elapsedHours > 0) {
+                    elapsedStr = `${elapsedHours}:${elapsedMins.toString().padStart(2, '0')}:${elapsedSecs.toString().padStart(2, '0')}`;
+                } else {
+                    elapsedStr = `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')}`;
+                }
+                
                 document.getElementById('track-progress').textContent = 
-                    `${elapsedMins.toString().padStart(2, '0')}:${elapsedSecs.toString().padStart(2, '0')} / ${formatDuration(duration)}`;
+                    `${elapsedStr} / ${formatDuration(duration)}`;
             }
         }
         
@@ -1092,6 +1317,9 @@
             // Загружаем тему
             loadTheme();
             
+            // Загружаем статистику
+            loadUserStats();
+            
             // Загружаем расписание
             loadSchedule();
             
@@ -1102,11 +1330,14 @@
             setInterval(updateEkbTimeDisplay, 1000);
             updateEkbTimeDisplay();
             
-            // Обновляем трек каждую минуту
+            // Обновляем трек каждую секунду
             setInterval(() => {
                 findCurrentTrack();
                 updateCurrentTime();
-            }, 60000);
+            }, 1000);
+            
+            // Обновляем статистику каждые 5 минут
+            setInterval(updateUserStats, 300000);
             
             // Обновляем прогресс каждую секунду
             setInterval(updateCurrentTime, 1000);
