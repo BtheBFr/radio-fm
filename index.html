@@ -986,7 +986,7 @@ async function playAudioFile(url) {
         return false;
     }
     
-    const directUrl = convertDropboxLink(url);
+    const directUrl = convertFileLink(url);
     console.log('🎵 Пробуем воспроизвести:', directUrl);
     
     try {
