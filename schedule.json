@@ -3,18 +3,18 @@
   "updated_at": "2026-01-02T00:00:00Z",
   "tracks": [
     {
-      "start": "18:34:00",
-      "title": "Скалкой Hoodtrap",
+      "start": "18:39:00",
+      "title": "Скалкой",
       "artist": "LAP.FM",
-      "duration": "1:20",
+      "duration": "1:00",
       "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/FACT.mp3"
     },
     {
-      "start": "18:35:21",
+      "start": "18:40:01",
       "title": "Электронные волны",
       "artist": "DJ Pulse",
       "duration": "2:15",
-      "file": "https://dl.dropboxusercontent.com/s/xxx/track2.mp3"
+      "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/FACT.mp3"
     },
     {
       "start": "18:37:36",
