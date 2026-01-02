@@ -1308,171 +1308,120 @@
         const commentInput = document.getElementById('comment-input');
         
         // ========== СИСТЕМА СТАТИСТИКИ ==========
+
+let statsUpdateInterval;
+let lastStatsUpdate = 0;
+
+async function updateUserStats(force = false) {
+    try {
+        console.log('📊 Обновляю статистику...');
         
-        async function updateUserStats() {
-            try {
-                const response = await fetch(STATS_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'ping' })
-                });
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
-                const data = await response.json();
-                
-                if (data.success && data.stats) {
-                    const stats = data.stats;
-                    
-                    // Обновляем отображение
-                    document.getElementById('online-users').textContent = stats.online || 1;
-                    document.getElementById('today-users').textContent = stats.today || 1;
-                    document.getElementById('total-users').textContent = stats.total || 1;
-                    
-                    // Сохраняем в localStorage для резервного отображения
-                    localStorage.setItem('lapfm_stats', JSON.stringify({
-                        online: stats.online || 1,
-                        today: stats.today || 1,
-                        total: stats.total || 1,
-                        updated: Date.now()
-                    }));
-                }
-                
-            } catch (error) {
-                console.warn('Не удалось обновить статистику:', error);
-                // Используем сохраненные значения
-                const savedStats = JSON.parse(localStorage.getItem('lapfm_stats')) || {
-                    online: 1,
-                    today: 1,
-                    total: 1
-                };
-                
-                document.getElementById('online-users').textContent = savedStats.online;
-                document.getElementById('today-users').textContent = savedStats.today;
-                document.getElementById('total-users').textContent = savedStats.total;
-            }
+        const response = await fetch(STATS_API_URL + '?t=' + Date.now(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                action: 'ping',
+                force: force 
+            })
+        });
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        
+        if (data.success && data.stats) {
+            const stats = data.stats;
+            
+            // Обновляем отображение
+            document.getElementById('online-users').textContent = stats.online || 1;
+            document.getElementById('today-users').textContent = stats.today || 1;
+            document.getElementById('total-users').textContent = stats.total || 1;
+            
+            // Сохраняем в localStorage для резервного отображения
+            localStorage.setItem('lapfm_stats', JSON.stringify({
+                online: stats.online || 1,
+                today: stats.today || 1,
+                total: stats.total || 1,
+                totalVisits: stats.totalVisits || 1,
+                updated: Date.now()
+            }));
+            
+            lastStatsUpdate = Date.now();
+            
+            // Лог для отладки
+            console.log('📈 Статистика обновлена:', {
+                online: stats.online,
+                today: stats.today,
+                total: stats.total
+            });
         }
         
-        // ========== СИСТЕМА ОТЗЫВОВ ==========
+    } catch (error) {
+        console.warn('⚠️ Не удалось обновить статистику:', error);
         
-        async function loadReviewsFromAPI() {
-            try {
-                console.log('📥 Загружаю отзывы через API...');
-                
-                const response = await fetch(`${API_BASE_URL}/get-reviews?t=${Date.now()}`, {
-                    headers: { 'Cache-Control': 'no-cache' }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    console.log('✅ Отзывы загружены:', data.total, 'оценок');
-                    return data;
-                } else {
-                    throw new Error('API returned error');
-                }
-                
-            } catch (error) {
-                console.warn('⚠️ Не удалось загрузить отзывы:', error);
-                
-                // Возвращаем локальные данные
-                return JSON.parse(localStorage.getItem('lapfm_local_reviews')) || {
-                    ratings: [],
-                    total: 0,
-                    average: 0,
-                    updated: new Date().toISOString()
-                };
-            }
-        }
+        // Используем сохраненные значения
+        const savedStats = JSON.parse(localStorage.getItem('lapfm_stats')) || {
+            online: 1,
+            today: 1,
+            total: 1,
+            totalVisits: 1
+        };
         
-        async function saveReviewToServer(ratingData) {
-            try {
-                console.log('🚀 Отправляю отзыв на сервер...');
-                
-                const response = await fetch(`${API_BASE_URL}/save-review`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(ratingData)
-                });
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Server error ${response.status}: ${errorText}`);
-                }
-                
-                const result = await response.json();
-                console.log('✅ Отзыв сохранен:', result);
-                return result;
-                
-            } catch (error) {
-                console.error('❌ Ошибка отправки на сервер:', error);
-                // Запасной вариант: сохраняем локально
-                return saveReviewLocally(ratingData);
-            }
-        }
+        document.getElementById('online-users').textContent = savedStats.online;
+        document.getElementById('today-users').textContent = savedStats.today;
+        document.getElementById('total-users').textContent = savedStats.total;
         
-        function saveReviewLocally(ratingData) {
-            console.log('💾 Сохраняю отзыв локально...');
-            let localReviews = JSON.parse(localStorage.getItem('lapfm_local_reviews')) || {
-                ratings: [],
-                total: 0,
-                average: 0,
-                updated: new Date().toISOString()
-            };
-            
-            const userHash = generateUserHash();
-            const existingIndex = localReviews.ratings.findIndex(r => r.userHash === userHash);
-            
-            const newRating = {
-                ...ratingData,
-                userHash: userHash,
-                timestamp: new Date().toISOString()
-            };
-            
-            if (existingIndex !== -1) {
-                localReviews.ratings[existingIndex] = newRating;
-            } else {
-                localReviews.ratings.push(newRating);
-            }
-            
-            localReviews.total = localReviews.ratings.length;
-            localReviews.average = calculateAverageRating(localReviews.ratings);
-            localReviews.updated = new Date().toISOString();
-            
-            localStorage.setItem('lapfm_local_reviews', JSON.stringify(localReviews));
-            return { 
-                success: true, 
-                total: localReviews.total, 
-                average: localReviews.average,
-                canEditAfter: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-                ratingId: 'local_' + Date.now()
-            };
+        // Увеличиваем счетчик при ошибке (имитация активности)
+        if (Date.now() - (savedStats.updated || 0) > 60000) {
+            savedStats.online = Math.max(1, Math.floor(savedStats.online * 0.9));
+            localStorage.setItem('lapfm_stats', JSON.stringify(savedStats));
         }
-        
-        function generateUserHash() {
-            const storedId = localStorage.getItem('lapfm_user_id');
-            if (storedId) return storedId;
-            
-            const newId = 'user_' + Math.random().toString(36).substr(2, 9) + 
-                         '_' + Date.now().toString(36);
-            localStorage.setItem('lapfm_user_id', newId);
-            return newId;
+    }
+}
+
+// Автообновление статистики каждые 30 секунд
+function startStatsAutoUpdate() {
+    if (statsUpdateInterval) {
+        clearInterval(statsUpdateInterval);
+    }
+    
+    // Обновляем сразу
+    updateUserStats(true);
+    
+    // Запускаем интервал
+    statsUpdateInterval = setInterval(() => {
+        updateUserStats();
+    }, 30000); // 30 секунд
+    
+    // Обновляем при возвращении на вкладку
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && Date.now() - lastStatsUpdate > 10000) {
+            console.log('🔄 Возврат на вкладку, обновляю статистику...');
+            updateUserStats(true);
         }
-        
-        function calculateAverageRating(ratings) {
-            if (!ratings.length) return 0;
-            
-            const total = ratings.reduce((sum, rating) => {
-                const avg = (rating.sound + rating.design + rating.remix + rating.song) / 4;
-                return sum + avg;
-            }, 0);
-            
-            return parseFloat((total / ratings.length).toFixed(1));
+    });
+    
+    // Обновляем при фокусе окна
+    window.addEventListener('focus', () => {
+        if (Date.now() - lastStatsUpdate > 15000) {
+            updateUserStats(true);
         }
+    });
+}
+
+// Отправка активности пользователя (каждые 2 минуты)
+function sendUserActivity() {
+    setInterval(() => {
+        if (!document.hidden) {
+            // Просто пингуем сервер для поддержания активности
+            fetch(STATS_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'ping', silent: true })
+            }).catch(() => {});
+        }
+    }, 120000); // 2 минуты
+}
         
         // ========== ОТОБРАЖЕНИЕ ОТЗЫВОВ ==========
         
