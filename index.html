@@ -1426,34 +1426,37 @@ function sendUserActivity() {
         // ========== ОТОБРАЖЕНИЕ ОТЗЫВОВ ==========
         
         async function updateOverallRatingDisplay() {
-            try {
-                const reviews = await loadReviewsFromAPI();
-                
-                document.getElementById('average-rating').textContent = reviews.average.toFixed(1);
-                document.getElementById('rating-count').textContent = 
-                    `(${reviews.total} ${getRatingWord(reviews.total)})`;
-                
-                updateStars(reviews.average);
-                updateModalReviewsInfo(reviews);
-                
-            } catch (error) {
-                console.error('Ошибка обновления рейтинга:', error);
-                
-                // Показываем локальные данные
-                const localReviews = JSON.parse(localStorage.getItem('lapfm_local_reviews')) || {
-                    ratings: [],
-                    total: 0,
-                    average: 0,
-                    updated: new Date().toISOString()
-                };
-                
-                document.getElementById('average-rating').textContent = localReviews.average.toFixed(1);
-                document.getElementById('rating-count').textContent = 
-                    `(${localReviews.total} ${getRatingWord(localReviews.total)})`;
-                
-                updateStars(localReviews.average);
-            }
-        }
+    try {
+        const reviews = await loadReviewsFromAPI();
+        
+        document.getElementById('average-rating').textContent = reviews.average.toFixed(1);
+        document.getElementById('rating-count').textContent = 
+            `(${reviews.total} ${getRatingWord(reviews.total)})`;
+        
+        updateStars(reviews.average);
+        updateModalReviewsInfo(reviews);
+        
+    } catch (error) {
+        console.error('Ошибка обновления рейтинга:', error);
+        
+        // Показываем локальные данные
+        const localReviews = JSON.parse(localStorage.getItem('lapfm_local_reviews')) || {
+            ratings: [],
+            total: 0,
+            average: 0,
+            updated: new Date().toISOString()
+        };
+        
+        document.getElementById('average-rating').textContent = localReviews.average.toFixed(1);
+        document.getElementById('rating-count').textContent = 
+            `(${localReviews.total} ${getRatingWord(localReviews.total)})`;
+        
+        updateStars(localReviews.average);
+        
+        // Пробуем обновить через 30 секунд
+        setTimeout(updateOverallRatingDisplay, 30000);
+    }
+}
         
         function updateModalReviewsInfo(reviews) {
             const infoDiv = document.getElementById('reviews-info');
