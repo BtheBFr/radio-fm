@@ -3,17 +3,39 @@
   "updated_at": "2026-01-02T00:00:00Z",
   "tracks": [
     {
-      "start": "01:12",
-      "title": "Моя первая песня",
-      "artist": "Я",
-      "duration": "1:20",
+      "start": "00:27:00",
+      "title": "Утренний эфир",
+      "artist": "LAP.FM",
+      "duration": "0:28",
       "file": "https://files.catbox.moe/suf9er.mp3"
     },
     {
-      "start": "02:00",
-      "title": "Следующий трек",
-      "artist": "LAP.FM",
-      "duration": "3:00"
+      "start": "00:27:29",
+      "title": "Электронные волны",
+      "artist": "DJ Pulse",
+      "duration": "2:15",
+      "file": "https://example.com/track2.mp3"
+    },
+    {
+      "start": "00:29:45",
+      "title": "Ритмы города",
+      "artist": "Urban Beats",
+      "duration": "3:42",
+      "file": "https://example.com/track3.mp3"
+    },
+    {
+      "start": "00:33:28",
+      "title": "Тихая ночь",
+      "artist": "Мелодия",
+      "duration": "1:50",
+      "file": "https://example.com/track4.mp3"
+    },
+    {
+      "start": "00:35:19",
+      "title": "Рассвет",
+      "artist": "Sunrise Project",
+      "duration": "4:10",
+      "file": "https://example.com/track5.mp3"
     }
   ]
 }
