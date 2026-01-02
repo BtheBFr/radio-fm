@@ -1155,10 +1155,6 @@
                 findCurrentTrack();
                 
                 // Автоскролл только при первой загрузке
-                setTimeout(() => {
-                    scrollToCurrentTrack();
-                }, 500);
-                
                 showNotification(`Расписание ${schedule.date} загружено`);
                 
             } catch (error) {
