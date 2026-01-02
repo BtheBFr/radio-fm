@@ -1259,64 +1259,42 @@
 }
         }
         
-        function updateNowPlaying(track, index) {
-            if (!track) return;
-            
-            const startSeconds = parseTimeToSeconds(track.start);
-            const duration = parseDuration(track.duration);
-            
-            currentTrackEl.textContent = track.title || 'Без названия';
-            currentArtistEl.textContent = track.artist || 'Неизвестен';
-            
-            const ekbTime = getEkbTime();
-            const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
-            const elapsed = Math.max(0, currentSeconds - startSeconds);
-            
-            const elapsedMins = Math.floor(elapsed / 60);
-            const elapsedSecs = Math.floor(elapsed % 60);
-            const totalMins = Math.floor(duration / 60);
-            const totalSecs = Math.floor(duration % 60);
-            const progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
-            
-            document.getElementById('track-progress').textContent = 
-                `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
-            progressBar.style.width = `${progressPercent}%`;
-            
-            if (currentSchedule && index < currentSchedule.tracks.length - 1) {
-                const nextTrack = currentSchedule.tracks[index + 1];
-                const nextTimeParts = nextTrack.start.split(':');
-                const displayTime = `${nextTimeParts[0]}:${nextTimeParts[1]}`;
-                
-                nextTrackTitle.textContent = `${nextTrack.title} (${nextTrack.artist})`;
-                nextTrackTime.textContent = `Начинается в ${displayTime}`;
-            } else if (currentSchedule?.tracks?.length > 0) {
-                const firstTrack = currentSchedule.tracks[0];
-                const firstTimeParts = firstTrack.start.split(':');
-                const displayTime = `${firstTimeParts[0]}:${firstTimeParts[1]}`;
-                
-                nextTrackTitle.textContent = `${firstTrack.title} (${firstTrack.artist})`;
-                nextTrackTime.textContent = `Начинается в ${displayTime}`;
-            }
-            
-            updateScheduleDisplay();
-            
-            // Автоматически прокручиваем к текущему треку при смене
-            setTimeout(() => {
-                scrollToCurrentTrack();
-            }, 100);
-            
-            if (autoSwitchTimer) clearTimeout(autoSwitchTimer);
-            const timeUntilNext = (startSeconds + duration) * 1000 - ekbTime.getTime();
-            
-            if (timeUntilNext > 0) {
-                autoSwitchTimer = setTimeout(() => {
-                    findCurrentTrack();
-                    if (isPlaying && track.file) {
-                        playAudioFile(track.file);
-                    }
-                }, timeUntilNext);
-            }
+        function findCurrentTrack() {
+    if (!currentSchedule?.tracks?.length) return;
+    
+    const ekbTime = getEkbTime();
+    const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+    
+    let foundIndex = -1;
+    
+    for (let i = 0; i < currentSchedule.tracks.length; i++) {
+        const track = currentSchedule.tracks[i];
+        
+        const trackStartSeconds = parseTimeToSeconds(track.start);
+        const trackDuration = parseDuration(track.duration);
+        const trackEndSeconds = trackStartSeconds + trackDuration;
+        
+        if (currentSeconds >= trackStartSeconds && currentSeconds < trackEndSeconds) {
+            foundIndex = i;
+            break;
         }
+    }
+    
+    // Если не нашли текущий трек, используем первый
+    if (foundIndex === -1) {
+        foundIndex = 0;
+    }
+    
+    // Обновляем только если трек изменился
+    if (currentTrackIndex !== foundIndex) {
+        currentTrackIndex = foundIndex;
+        const track = currentSchedule.tracks[currentTrackIndex];
+        updateNowPlaying(track, currentTrackIndex);
+        
+        // НЕ прокручиваем автоматически при смене трека!
+        // Только обновляем отображение
+    }
+}
         
         function updateScheduleDisplay() {
             if (!currentSchedule?.tracks?.length) return;
