@@ -1002,12 +1002,11 @@
 <body>
     <!-- Конфигурация API -->
     <script>
-        // 🔥 ПРАВИЛЬНЫЙ GIST ID!
-        const API_BASE_URL = 'https://radio-fm-sable.vercel.app/api';
-        const GIST_ID = 'b056c709d34505ba89050795235b9204';
-        const REVIEWS_URL = `https://gist.githubusercontent.com/BtheBFr/${GIST_ID}/raw/reviews.json`;
-        const STATS_API_URL = 'https://radio-fm-sable.vercel.app/api/stats';
-    </script>
+    // 🔥 ИСПОЛЬЗУЕМ VERCEL API вместо Gist!
+    const API_BASE_URL = 'https://radio-fm-sable.vercel.app/api';
+    const REVIEWS_URL = API_BASE_URL + '/get-reviews'; // ВАЖНО!
+    const STATS_API_URL = 'https://radio-fm-sable.vercel.app/api/stats';
+</script>
     
     <div id="notification" class="notification"></div>
     
