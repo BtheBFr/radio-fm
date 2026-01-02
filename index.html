@@ -943,7 +943,6 @@
 function convertDropboxLink(url) {
     if (!url || typeof url !== 'string') return url;
     
-    // Если это ссылка Dropbox
     if (url.includes('dropbox.com')) {
         let converted = url
             .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
@@ -969,15 +968,11 @@ async function playAudioFile(url) {
         return false;
     }
     
-    // Преобразуем Dropbox ссылку
     const directUrl = convertDropboxLink(url);
     console.log('🎵 Пробуем воспроизвести:', directUrl);
     
-    // ПРОБЛЕМА: используем оригинальный url вместо directUrl
-    // Исправляем ВЕЗДЕ в функции:
-    
     try {
-        audioSource.src = directUrl; // ← ИЗМЕНИТЬ
+        audioSource.src = directUrl;
         audioPlayer.load();
         
         const timeoutPromise = new Promise((_, reject) => {
@@ -993,7 +988,7 @@ async function playAudioFile(url) {
         
         try {
             const testAudio = new Audio();
-            testAudio.src = directUrl; // ← ИЗМЕНИТЬ
+            testAudio.src = directUrl;
             testAudio.preload = 'metadata';
             
             await new Promise((resolve, reject) => {
@@ -1011,7 +1006,7 @@ async function playAudioFile(url) {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 3000);
                 
-                const response = await fetch(directUrl, { // ← ИЗМЕНИТЬ
+                const response = await fetch(directUrl, { 
                     method: 'GET',
                     signal: controller.signal,
                     headers: { 'Range': 'bytes=0-100' }
@@ -1039,6 +1034,57 @@ async function playAudioFile(url) {
                 return false;
             }
         }
+    }
+}
+
+// ========== ФУНКЦИЯ TOGGLEPLAYBACK ==========
+
+function togglePlayback() {
+    userHasInteracted = true;
+    
+    if (!isPlaying) {
+        const track = currentSchedule?.tracks[currentTrackIndex];
+        
+        if (track?.file) {
+            const originalIcon = playIcon.textContent;
+            const originalText = playText.textContent;
+            
+            playIcon.textContent = '⏳';
+            playText.textContent = 'Подключение...';
+            statusText.textContent = 'Подключение...';
+            
+            playAudioFile(track.file).then(success => {
+                if (success) {
+                    isPlaying = true;
+                    playIcon.textContent = '⏸';
+                    playText.textContent = 'Слушаете в реальном времени';
+                    statusText.textContent = 'В эфире';
+                    showNotification(`Играет: ${track.title}`);
+                    document.getElementById('connection-status').textContent = '🟢';
+                } else {
+                    playIcon.textContent = originalIcon;
+                    playText.textContent = originalText;
+                    statusText.textContent = 'Ошибка';
+                    document.getElementById('connection-status').textContent = '🔴';
+                }
+            }).catch(error => {
+                console.error('Ошибка в togglePlayback:', error);
+                playIcon.textContent = originalIcon;
+                playText.textContent = originalText;
+                statusText.textContent = 'Ошибка';
+                document.getElementById('connection-status').textContent = '🔴';
+                showNotification('Ошибка подключения', 3000);
+            });
+        } else {
+            showNotification('Нет файла для воспроизведения', 3000);
+        }
+    } else {
+        audioPlayer.pause();
+        isPlaying = false;
+        playIcon.textContent = '▶';
+        playText.textContent = 'Нажмите для прослушивания';
+        statusText.textContent = 'На паузе';
+        showNotification('Воспроизведение приостановлено');
     }
 }
         
