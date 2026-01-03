@@ -971,41 +971,12 @@
             display: block;
         }
         
-        /* REVIEWS IN MODAL */
-        .reviews-in-modal {
-            margin: 30px 0 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .reviews-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .reviews-title {
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .reviews-title::before {
-            content: '';
-            width: 5px;
-            height: 22px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 3px;
-        }
-        
+        /* REVIEWS IN MODAL - УБРАН ОТДЕЛЬНЫЙ БЛОК */
         .modal-reviews-list {
             max-height: 250px;
             overflow-y: auto;
             padding-right: 5px;
+            margin-bottom: 20px;
         }
         
         .review-item-modal {
@@ -1101,7 +1072,7 @@
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         
-                .modal-btn.submit:disabled {
+        .modal-btn.submit:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
@@ -1211,101 +1182,76 @@
     <div id="notification" class="notification"></div>
     
     <!-- Модальное окно оценки -->
-<div id="rating-modal" class="modal-overlay">
-    <div class="modal">
-        <div class="modal-header">
-            <h2 class="modal-title">Оцените LAP.FM</h2>
-            <button class="modal-close" onclick="closeRatingModal()">×</button>
-        </div>
-        
-        <div class="modal-content">
-            <!-- Статистика сверху -->
-<div id="reviews-info" class="rating-summary">
-    <!-- Сюда вставляется общая статистика -->
-</div>
+    <div id="rating-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Оцените LAP.FM</h2>
+                <button class="modal-close" onclick="closeRatingModal()">×</button>
+            </div>
+            
+            <div class="modal-content">
+                <!-- Статистика сверху -->
+                <div id="reviews-info" class="rating-summary">
+                    <!-- Сюда вставляется общая статистика -->
+                </div>
 
-<!-- Форма оценки -->
-<div id="rating-form">
-    <div class="rating-category">
-        <div class="category-title">
-            <span>Качество звука</span>
-            <span id="sound-rating-value">0/5</span>
-        </div>
-        <div class="category-stars" id="sound-stars">
-            <span class="category-star" data-rating="1">★</span>
-            <span class="category-star" data-rating="2">★</span>
-            <span class="category-star" data-rating="3">★</span>
-            <span class="category-star" data-rating="4">★</span>
-            <span class="category-star" data-rating="5">★</span>
-        </div>
-    </div>
-    
-    <div class="rating-category">
-        <div class="category-title">
-            <span>Дизайн сайта</span>
-            <span id="design-rating-value">0/5</span>
-        </div>
-        <div class="category-stars" id="design-stars">
-            <span class="category-star" data-rating="1">★</span>
-            <span class="category-star" data-rating="2">★</span>
-            <span class="category-star" data-rating="3">★</span>
-            <span class="category-star" data-rating="4">★</span>
-            <span class="category-star" data-rating="5">★</span>
-        </div>
-    </div>
-    
-    <div class="rating-category">
-        <div class="category-title">
-            <span>Качество ремиксов</span>
-            <span id="remix-rating-value">0/5</span>
-        </div>
-        <div class="category-stars" id="remix-stars">
-            <span class="category-star" data-rating="1">★</span>
-            <span class="category-star" data-rating="2">★</span>
-            <span class="category-star" data-rating="3">★</span>
-            <span class="category-star" data-rating="4">★</span>
-            <span class="category-star" data-rating="5">★</span>
-        </div>
-    </div>
-    
-    <div class="rating-category">
-        <div class="category-title">
-            <span>Качество песен</span>
-            <span id="song-rating-value">0/5</span>
-        </div>
-        <div class="category-stars" id="song-stars">
-            <span class="category-star" data-rating="1">★</span>
-            <span class="category-star" data-rating="2">★</span>
-            <span class="category-star" data-rating="3">★</span>
-            <span class="category-star" data-rating="4">★</span>
-            <span class="category-star" data-rating="5">★</span>
-        </div>
-    </div>
-    
-    <!-- Комментарий -->
-    <label class="comment-label" for="comment-input">Ваш комментарий (необязательно):</label>
-    <div class="bad-words-warning" id="bad-words-warning">
-        ⚠️ Ваш комментарий содержит недопустимые слова.
-    </div>
-    <textarea class="comment-input" id="comment-input" placeholder="Напишите ваш отзыв..." maxlength="500"></textarea>
-</div>
-
-<!-- Информация о пользователе -->
-<div id="user-review-info" class="user-rating-info" style="display: none; margin: 20px 0;">
-    <div class="rating-text">Ваш отзыв: <span id="user-rating-value">0.0</span>/5</div>
-    <div class="timer-text" id="edit-timer-text"></div>
-    <button id="edit-rating-btn" class="edit-btn" disabled>
-        Изменить оценку
-    </button>
-</div>
-
-<!-- Отзывы других слушателей (ПРОСТО ПОД ФОРМОЙ, БЕЗ ОТДЕЛЬНОГО БЛОКА) -->
-<h3 class="reviews-title" style="margin: 30px 0 15px; padding-top: 20px; border-top: 1px solid var(--border-color);">💬 Отзывы других слушателей</h3>
-<div class="modal-reviews-list" id="modal-reviews-list"></div>
-<div id="no-reviews-in-modal" class="no-reviews-in-modal" style="display: none;">
-    <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
-    <p>Пока нет отзывов. Будьте первым!</p>
-</div>
+                <!-- Форма оценки -->
+                <div id="rating-form">
+                    <div class="rating-category">
+                        <div class="category-title">
+                            <span>Качество звука</span>
+                            <span id="sound-rating-value">0/5</span>
+                        </div>
+                        <div class="category-stars" id="sound-stars">
+                            <span class="category-star" data-rating="1">★</span>
+                            <span class="category-star" data-rating="2">★</span>
+                            <span class="category-star" data-rating="3">★</span>
+                            <span class="category-star" data-rating="4">★</span>
+                            <span class="category-star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-category">
+                        <div class="category-title">
+                            <span>Дизайн сайта</span>
+                            <span id="design-rating-value">0/5</span>
+                        </div>
+                        <div class="category-stars" id="design-stars">
+                            <span class="category-star" data-rating="1">★</span>
+                            <span class="category-star" data-rating="2">★</span>
+                            <span class="category-star" data-rating="3">★</span>
+                            <span class="category-star" data-rating="4">★</span>
+                            <span class="category-star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-category">
+                        <div class="category-title">
+                            <span>Качество ремиксов</span>
+                            <span id="remix-rating-value">0/5</span>
+                        </div>
+                        <div class="category-stars" id="remix-stars">
+                            <span class="category-star" data-rating="1">★</span>
+                            <span class="category-star" data-rating="2">★</span>
+                            <span class="category-star" data-rating="3">★</span>
+                            <span class="category-star" data-rating="4">★</span>
+                            <span class="category-star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-category">
+                        <div class="category-title">
+                            <span>Качество песен</span>
+                            <span id="song-rating-value">0/5</span>
+                        </div>
+                        <div class="category-stars" id="song-stars">
+                            <span class="category-star" data-rating="1">★</span>
+                            <span class="category-star" data-rating="2">★</span>
+                            <span class="category-star" data-rating="3">★</span>
+                            <span class="category-star" data-rating="4">★</span>
+                            <span class="category-star" data-rating="5">★</span>
+                        </div>
+                    </div>
                     
                     <!-- Комментарий -->
                     <label class="comment-label" for="comment-input">Ваш комментарий (необязательно):</label>
@@ -1314,15 +1260,31 @@
                     </div>
                     <textarea class="comment-input" id="comment-input" placeholder="Напишите ваш отзыв..." maxlength="500"></textarea>
                 </div>
+
+                <!-- Информация о пользователе -->
+                <div id="user-review-info" class="user-rating-info" style="display: none; margin: 20px 0;">
+                    <div class="rating-text">Ваш отзыв: <span id="user-rating-value">0.0</span>/5</div>
+                    <div class="timer-text" id="edit-timer-text"></div>
+                    <button id="edit-rating-btn" class="edit-btn" disabled>
+                        Изменить оценку
+                    </button>
+                </div>
+
+                <!-- Отзывы других слушателей - ПРОСТО ЗАГОЛОВОК -->
+                <h3 class="reviews-title" style="margin: 30px 0 15px; padding-top: 20px; border-top: 1px solid var(--border-color);">💬 Отзывы других слушателей</h3>
+                <div class="modal-reviews-list" id="modal-reviews-list"></div>
+                <div id="no-reviews-in-modal" class="no-reviews-in-modal" style="display: none;">
+                    <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
+                    <p>Пока нет отзывов. Будьте первым!</p>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <!-- УБРАЛИ КНОПКУ "ОТМЕНА" ИЗ УГЛА ЭКРАНА -->
+                <button class="modal-btn submit" id="submit-rating" onclick="submitRating()" disabled>Отправить оценку</button>
             </div>
         </div>
-        
-        <div class="modal-actions">
-            <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
-            <button class="modal-btn submit" id="submit-rating" onclick="submitRating()" disabled>Отправить оценку</button>
-        </div>
     </div>
-</div>
     
     <!-- Основной контейнер -->
     <div class="container">
@@ -1349,10 +1311,7 @@
             <!-- Плеер -->
             <section class="player-section">
                 <div class="track-info">
-                    <button class="like-button" id="track-like-btn" onclick="toggleLike()">
-                        <span>♡</span>
-                        <span class="like-count" id="track-like-count">0</span>
-                    </button>
+                    <!-- УБРАЛИ КНОПКУ "ПОСТАВИТЬ ЛАЙК" ИЗ УГЛА ЭКРАНА -->
                     <div class="current-track" id="current-track">Загрузка...</div>
                     <div class="current-artist" id="current-artist">LAP.FM</div>
                     <div class="current-time">
@@ -1517,9 +1476,9 @@
         let userHasInteracted = false;
         let currentTheme = 'auto';
         let allReviews = [];
-        let isLikeProcessing = false; // Защита от повторных нажатий на лайк
+        let isLikeProcessing = false;
         
-        // Лайки - ИСПРАВЛЕНО: сразу загружаем из localStorage
+        // Лайки
         let userLikes = new Set();
         let trackLikes = {};
         
@@ -1555,8 +1514,6 @@
         const nextTrackTime = document.getElementById('next-track-time');
         const statusText = document.getElementById('status-text');
         const commentInput = document.getElementById('comment-input');
-        const trackLikeBtn = document.getElementById('track-like-btn');
-        const trackLikeCount = document.getElementById('track-like-count');
         
         // ========== ИСПРАВЛЕНИЕ ЛАЙКОВ ==========
         // Загружаем лайки из localStorage при запуске
@@ -1620,94 +1577,18 @@
             }
         }
         
-        // Обновляем кнопку лайка
-        function updateLikeButton(track) {
-            if (!track) return;
-            
+        // ИСПРАВЛЕНИЕ: Функция для правильного подсчета лайков
+        function getTrackLikes(track) {
+            if (!track) return 0;
             const trackId = `${track.title}_${track.artist}`;
-            const isLiked = userLikes.has(trackId);
-            const likesCount = trackLikes[trackId] || 0;
-            
-            trackLikeCount.textContent = likesCount;
-            
-            if (isLiked) {
-                trackLikeBtn.innerHTML = '<span style="color: var(--like-active)">❤️</span><span class="like-count">' + likesCount + '</span>';
-                trackLikeBtn.classList.add('active');
-            } else {
-                trackLikeBtn.innerHTML = '<span>♡</span><span class="like-count">' + likesCount + '</span>';
-                trackLikeBtn.classList.remove('active');
-            }
+            return trackLikes[trackId] || 0;
         }
         
-        // Функция лайка с защитой от повторных нажатий
-        async function toggleLike() {
-            if (isLikeProcessing) {
-                console.log('⏳ Лайк уже обрабатывается...');
-                return;
-            }
-            
-            const track = currentSchedule?.tracks[currentTrackIndex];
-            if (!track) return;
-            
+        // ИСПРАВЛЕНИЕ: Функция для проверки лайка пользователя
+        function hasUserLiked(track) {
+            if (!track) return false;
             const trackId = `${track.title}_${track.artist}`;
-            const isLiked = userLikes.has(trackId);
-            
-            isLikeProcessing = true;
-            trackLikeBtn.style.opacity = '0.5';
-            trackLikeBtn.style.pointerEvents = 'none';
-            
-            try {
-                if (isLiked) {
-                    // Убираем лайк
-                    userLikes.delete(trackId);
-                    trackLikes[trackId] = Math.max(0, (trackLikes[trackId] || 1) - 1);
-                    trackLikeBtn.classList.remove('active');
-                    showNotification('❤️ Лайк убран');
-                    
-                    // Отправляем на сервер
-                    try {
-                        await fetch(LIKES_API_URL, {
-                            method: 'DELETE',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ trackId: trackId })
-                        });
-                    } catch (error) {
-                        console.warn('Ошибка отправки лайка на сервер:', error);
-                    }
-                } else {
-                    // Ставим лайк
-                    userLikes.add(trackId);
-                    trackLikes[trackId] = (trackLikes[trackId] || 0) + 1;
-                    trackLikeBtn.classList.add('active');
-                    showNotification('❤️ Трек понравился');
-                    
-                    // Отправляем на сервер
-                    try {
-                        await fetch(LIKES_API_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ trackId: trackId })
-                        });
-                    } catch (error) {
-                        console.warn('Ошибка отправки лайка на сервер:', error);
-                    }
-                }
-                
-                // Сохраняем в localStorage
-                saveLikesToLocalStorage();
-                updateLikeButton(track);
-                
-            } catch (error) {
-                console.error('Ошибка изменения лайка:', error);
-                showNotification('Ошибка, попробуйте снова', 3000);
-            } finally {
-                // Разблокируем кнопку
-                setTimeout(() => {
-                    isLikeProcessing = false;
-                    trackLikeBtn.style.opacity = '1';
-                    trackLikeBtn.style.pointerEvents = 'auto';
-                }, 500);
-            }
+            return userLikes.has(trackId);
         }
         
         // ========== АВТОМАТИЧЕСКАЯ ПРОКРУТКА ==========
@@ -1796,9 +1677,6 @@
             document.getElementById('track-progress').textContent = 
                 `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
             progressBar.style.width = `${progressPercent}%`;
-            
-            // Обновляем кнопку лайка
-            updateLikeButton(track);
             
             if (currentSchedule && index < currentSchedule.tracks.length - 1) {
                 const nextTrack = currentSchedule.tracks[index + 1];
@@ -2000,6 +1878,7 @@
                 const startTimeStr = `${Math.floor(startSeconds / 3600) % 24}:${Math.floor((startSeconds % 3600) / 60).toString().padStart(2, '0')}`;
                 const endTimeStr = `${Math.floor(endSeconds / 3600) % 24}:${Math.floor((endSeconds % 3600) / 60).toString().padStart(2, '0')}`;
                 
+                // ИСПРАВЛЕНИЕ: Правильный подсчет лайков
                 const trackId = `${track.title}_${track.artist}`;
                 const likesCount = trackLikes[trackId] || 0;
                 
@@ -2040,15 +1919,36 @@
                 const response = await fetch(SCHEDULE_URL + '?v=' + Date.now());
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
-                currentSchedule = await response.json();
+                const data = await response.json();
                 
-                const updateDate = new Date(currentSchedule.updated_at);
+                // ИСПРАВЛЕНИЕ: Поддержка нового формата schedule.json с недельным расписанием
+                let todaySchedule;
+                
+                if (data.week_start && data.days) {
+                    // Новый формат: недельное расписание
+                    const today = new Date().toISOString().split('T')[0];
+                    todaySchedule = data.days.find(day => day.date === today);
+                    
+                    if (!todaySchedule && data.days.length > 0) {
+                        todaySchedule = data.days[0]; // Берем первый день, если сегодняшний не найден
+                    }
+                    
+                    currentSchedule = todaySchedule || { tracks: [] };
+                } else {
+                    // Старый формат: один день
+                    currentSchedule = data;
+                }
+                
+                const updateDate = new Date(data.updated_at || data.week_start || Date.now());
                 const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
                 document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
                 document.getElementById('track-count').textContent = currentSchedule.tracks.length;
                 
                 updateScheduleDisplay();
                 findCurrentTrack();
+                
+                // Автопрокрутка к текущему треку при загрузке
+                setTimeout(() => autoScrollToCurrentTrack(), 500);
                 
             } catch (error) {
                 console.error('Ошибка загрузки расписания:', error);
@@ -2372,12 +2272,10 @@
         function displayReviewsInModal(reviews) {
             const reviewsList = document.getElementById('modal-reviews-list');
             const noReviews = document.getElementById('no-reviews-in-modal');
-            const reviewsCount = document.getElementById('reviews-count');
             
             if (!reviews || reviews.length === 0) {
                 reviewsList.style.display = 'none';
                 noReviews.style.display = 'block';
-                reviewsCount.textContent = '';
                 return;
             }
             
@@ -2419,7 +2317,6 @@
             reviewsList.innerHTML = html;
             reviewsList.style.display = 'block';
             noReviews.style.display = 'none';
-            reviewsCount.textContent = `${reviews.length} ${getRatingWord(reviews.length)}`;
         }
         
         function escapeHtml(text) {
@@ -2689,7 +2586,6 @@
         window.openRatingModal = openRatingModal;
         window.closeRatingModal = closeRatingModal;
         window.submitRating = submitRating;
-        window.toggleLike = toggleLike;
     </script>
 </body>
 </html>
