@@ -1,10 +1,4 @@
 {
-  "tracks": {
-    "Скалкой_B the B & MC Kurduk": 5,
-    "DnB_B the B": 3
-  },
-  "users": {
-    "127.0.0.1-Mozilla": ["Скалкой_B the B & MC Kurduk"],
-    "192.168.1.1-Chrome": ["Скалкой_B the B & MC Kurduk", "DnB_B the B"]
-  }
+  "tracks": {},
+  "users": {}
 }
