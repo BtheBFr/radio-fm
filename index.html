@@ -1480,10 +1480,14 @@
                 currentTrackEl.textContent = track.title || 'Без названия';
                 currentArtistEl.textContent = track.artist || 'Неизвестен';
                 
+                // ВЫЗОВ С ПЕРЕДАЧЕЙ ВРЕМЕНИ
                 playAudioFile(track.file).then(success => {
                     if (success) {
                         showNotification(`Играет: ${track.title}`);
                         document.getElementById('connection-status').textContent = '🟢';
+                        
+                        // Обновляем прогресс сразу после запуска
+                        updateCurrentTime();
                     } else {
                         isPlaying = false;
                         playIcon.textContent = '▶';
@@ -1614,21 +1618,33 @@
             try {
                 console.log('🔊 Загружаем аудио:', directUrl);
                 
-                // Важно: полностью перезагружаем аудио
+                // Получаем текущую позицию в треке по расписанию
+                const track = currentSchedule?.tracks[currentTrackIndex];
+                if (!track) return false;
+                
+                const startSeconds = parseTimeToSeconds(track.start);
+                const ekbTime = getEkbTime();
+                const currentSeconds = ekbTime.getHours() * 3600 + ekbTime.getMinutes() * 60 + ekbTime.getSeconds();
+                const elapsedInTrack = Math.max(0, currentSeconds - startSeconds);
+                
                 audioSource.src = directUrl;
                 audioPlayer.load();
                 
-                // Сбрасываем время
-                audioPlayer.currentTime = 0;
-                
-                // Небольшая задержка для загрузки
+                // Небольшая задержка для загрузки метаданных
                 await new Promise(resolve => setTimeout(resolve, 300));
+                
+                // Устанавливаем время на позицию, где должен быть трек
+                if (elapsedInTrack > 0 && elapsedInTrack < audioPlayer.duration) {
+                    audioPlayer.currentTime = elapsedInTrack;
+                } else {
+                    audioPlayer.currentTime = 0;
+                }
                 
                 const playPromise = audioPlayer.play();
                 
                 if (playPromise !== undefined) {
                     await playPromise;
-                    console.log('✅ Аудио воспроизводится');
+                    console.log('✅ Аудио воспроизводится с позиции:', audioPlayer.currentTime);
                     return true;
                 }
                 
@@ -1662,7 +1678,7 @@
             }
         });
         
-        // ========== ОСТАЛЬНЫЙ КОД (без изменений) ==========
+        // ========== ОСТАЛЬНЫЙ КОД ==========
         function convertFileLink(url) {
             if (!url || typeof url !== 'string') return url;
             
@@ -1783,7 +1799,6 @@
             }
         }
         
-        // ========== ОСТАЛЬНЫЕ ФУНКЦИИ (без изменений) ==========
         function showNotification(message, duration = 3000) {
             const notification = document.getElementById('notification');
             if (!notification) return;
@@ -1876,7 +1891,7 @@
             document.getElementById('theme-' + theme).classList.add('active');
         }
         
-        // Функции рейтинга (без изменений)
+        // Функции рейтинга
         function loadRatingCache() {
             try {
                 const saved = localStorage.getItem('lapfm_rating_cache');
@@ -1972,7 +1987,7 @@
             return 'оценок';
         }
         
-        // Модальное окно (без изменений)
+        // Модальное окно
         async function openRatingModal() {
             document.getElementById('rating-modal').classList.add('show');
             
@@ -2003,7 +2018,6 @@
             commentInput.disabled = false;
         }
         
-        // Остальные функции рейтинга (без изменений)...
         function loadUserRating() {
             const saved = localStorage.getItem('lapfm_user_rating');
             if (saved) {
@@ -2115,7 +2129,7 @@
         window.closeRatingModal = closeRatingModal;
         window.submitRating = submitRating;
         
-        // Функции рейтинга (остальные)
+        // Функции рейтинга
         function updateEditTimer() {
             const userInfoDiv = document.getElementById('user-review-info');
             const timerText = document.getElementById('edit-timer-text');
