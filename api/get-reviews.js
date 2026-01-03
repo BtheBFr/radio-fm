@@ -1,6 +1,8 @@
-// api/get-reviews.js - Получение отзывов из Edge Config
+// api/get-reviews.js - Получение отзывов из Google Sheets
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxixUt1dXs0mnpnoayd5CvTeqqBW9slqOjoAVmmuoJwFROa6WV-NS-RQBkpnUgUXrqCQA/exec';
+
 export default async function handler(req, res) {
-    // Настройки CORS
+    // CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -8,56 +10,14 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
     
     try {
-        console.log('📥 Загружаю отзывы из Edge Config...');
+        console.log('📥 Загружаю отзывы из Google Sheets...');
         
-        // 🔥 Пока тестовые данные
-        const testReviews = [
-            {
-                id: 'test1',
-                sound: 5,
-                design: 4,
-                remix: 5,
-                song: 4,
-                comment: 'Отличное радио! Слушаю каждый день.',
-                timestamp: new Date().toISOString()
-            },
-            {
-                id: 'test2',
-                sound: 4,
-                design: 5,
-                remix: 4,
-                song: 5,
-                comment: 'Крутой дизайн сайта!',
-                timestamp: new Date().toISOString()
-            },
-            {
-                id: 'test3',
-                sound: 3,
-                design: 4,
-                remix: 5,
-                song: 3,
-                comment: 'Нормально, но можно лучше',
-                timestamp: new Date().toISOString()
-            }
-        ];
+        const response = await fetch(GOOGLE_SCRIPT_URL);
+        const data = await response.json();
         
-        // Рассчитываем среднюю
-        const totalScore = testReviews.reduce((sum, review) => {
-            const avg = (review.sound + review.design + review.remix + review.song) / 4;
-            return sum + avg;
-        }, 0);
+        console.log('✅ Отзывы загружены:', data.total || 0, 'оценок');
         
-        const average = totalScore / testReviews.length;
-        
-        console.log('✅ Отзывы загружены:', testReviews.length, 'шт.');
-        
-        res.status(200).json({
-            success: true,
-            ratings: testReviews,
-            total: testReviews.length,
-            average: parseFloat(average.toFixed(1)),
-            updated: new Date().toISOString()
-        });
+        res.status(200).json(data);
         
     } catch (error) {
         console.error('❌ Error loading reviews:', error);
