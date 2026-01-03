@@ -1219,99 +1219,93 @@
         </div>
         
         <div class="modal-content">
-            <!-- ОБЪЕДИНЕННЫЙ БЛОК: Статистика + Отзывы + Форма -->
-            <div class="combined-rating-section">
-                <!-- Статистика сверху -->
-                <div id="reviews-info" class="rating-summary">
-                    <!-- Сюда вставляется общая статистика -->
-                </div>
-                
-                <!-- Отзывы пользователей (сразу под статистикой) -->
-                <div class="reviews-in-modal" style="margin: 20px 0;">
-                    <div class="reviews-header">
-                        <h3 class="reviews-title">💬 Отзывы других слушателей</h3>
-                        <span id="reviews-count" style="font-size: 0.85rem; color: var(--text-light);"></span>
-                    </div>
-                    <div class="modal-reviews-list" id="modal-reviews-list"></div>
-                    <div id="no-reviews-in-modal" class="no-reviews-in-modal" style="display: none;">
-                        <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
-                        <p>Пока нет отзывов. Будьте первым!</p>
-                    </div>
-                </div>
-                
-                <!-- Разделитель -->
-                <div style="border-top: 2px solid var(--border-color); margin: 25px 0;"></div>
-                
-                <!-- Информация о пользователе -->
-                <div id="user-review-info" class="user-rating-info" style="display: none; margin-bottom: 20px;">
-                    <div class="rating-text">Ваш отзыв: <span id="user-rating-value">0.0</span>/5</div>
-                    <div class="timer-text" id="edit-timer-text"></div>
-                    <button id="edit-rating-btn" class="edit-btn" disabled>
-                        Изменить оценку
-                    </button>
-                </div>
-                
-                <!-- Форма оценки (только если пользователь еще не оценивал) -->
-                <div id="rating-form">
-                    <h3 style="color: var(--text-primary); margin-bottom: 20px; font-size: 1.2rem;">
-                        ⭐ Ваша оценка
-                    </h3>
-                    
-                    <div class="rating-category">
-                        <div class="category-title">
-                            <span>Качество звука</span>
-                            <span id="sound-rating-value">0/5</span>
-                        </div>
-                        <div class="category-stars" id="sound-stars">
-                            <span class="category-star" data-rating="1">★</span>
-                            <span class="category-star" data-rating="2">★</span>
-                            <span class="category-star" data-rating="3">★</span>
-                            <span class="category-star" data-rating="4">★</span>
-                            <span class="category-star" data-rating="5">★</span>
-                        </div>
-                    </div>
-                    
-                    <div class="rating-category">
-                        <div class="category-title">
-                            <span>Дизайн сайта</span>
-                            <span id="design-rating-value">0/5</span>
-                        </div>
-                        <div class="category-stars" id="design-stars">
-                            <span class="category-star" data-rating="1">★</span>
-                            <span class="category-star" data-rating="2">★</span>
-                            <span class="category-star" data-rating="3">★</span>
-                            <span class="category-star" data-rating="4">★</span>
-                            <span class="category-star" data-rating="5">★</span>
-                        </div>
-                    </div>
-                    
-                    <div class="rating-category">
-                        <div class="category-title">
-                            <span>Качество ремиксов</span>
-                            <span id="remix-rating-value">0/5</span>
-                        </div>
-                        <div class="category-stars" id="remix-stars">
-                            <span class="category-star" data-rating="1">★</span>
-                            <span class="category-star" data-rating="2">★</span>
-                            <span class="category-star" data-rating="3">★</span>
-                            <span class="category-star" data-rating="4">★</span>
-                            <span class="category-star" data-rating="5">★</span>
-                        </div>
-                    </div>
-                    
-                    <div class="rating-category">
-                        <div class="category-title">
-                            <span>Качество песен</span>
-                            <span id="song-rating-value">0/5</span>
-                        </div>
-                        <div class="category-stars" id="song-stars">
-                            <span class="category-star" data-rating="1">★</span>
-                            <span class="category-star" data-rating="2">★</span>
-                            <span class="category-star" data-rating="3">★</span>
-                            <span class="category-star" data-rating="4">★</span>
-                            <span class="category-star" data-rating="5">★</span>
-                        </div>
-                    </div>
+            <!-- Статистика сверху -->
+<div id="reviews-info" class="rating-summary">
+    <!-- Сюда вставляется общая статистика -->
+</div>
+
+<!-- Форма оценки -->
+<div id="rating-form">
+    <div class="rating-category">
+        <div class="category-title">
+            <span>Качество звука</span>
+            <span id="sound-rating-value">0/5</span>
+        </div>
+        <div class="category-stars" id="sound-stars">
+            <span class="category-star" data-rating="1">★</span>
+            <span class="category-star" data-rating="2">★</span>
+            <span class="category-star" data-rating="3">★</span>
+            <span class="category-star" data-rating="4">★</span>
+            <span class="category-star" data-rating="5">★</span>
+        </div>
+    </div>
+    
+    <div class="rating-category">
+        <div class="category-title">
+            <span>Дизайн сайта</span>
+            <span id="design-rating-value">0/5</span>
+        </div>
+        <div class="category-stars" id="design-stars">
+            <span class="category-star" data-rating="1">★</span>
+            <span class="category-star" data-rating="2">★</span>
+            <span class="category-star" data-rating="3">★</span>
+            <span class="category-star" data-rating="4">★</span>
+            <span class="category-star" data-rating="5">★</span>
+        </div>
+    </div>
+    
+    <div class="rating-category">
+        <div class="category-title">
+            <span>Качество ремиксов</span>
+            <span id="remix-rating-value">0/5</span>
+        </div>
+        <div class="category-stars" id="remix-stars">
+            <span class="category-star" data-rating="1">★</span>
+            <span class="category-star" data-rating="2">★</span>
+            <span class="category-star" data-rating="3">★</span>
+            <span class="category-star" data-rating="4">★</span>
+            <span class="category-star" data-rating="5">★</span>
+        </div>
+    </div>
+    
+    <div class="rating-category">
+        <div class="category-title">
+            <span>Качество песен</span>
+            <span id="song-rating-value">0/5</span>
+        </div>
+        <div class="category-stars" id="song-stars">
+            <span class="category-star" data-rating="1">★</span>
+            <span class="category-star" data-rating="2">★</span>
+            <span class="category-star" data-rating="3">★</span>
+            <span class="category-star" data-rating="4">★</span>
+            <span class="category-star" data-rating="5">★</span>
+        </div>
+    </div>
+    
+    <!-- Комментарий -->
+    <label class="comment-label" for="comment-input">Ваш комментарий (необязательно):</label>
+    <div class="bad-words-warning" id="bad-words-warning">
+        ⚠️ Ваш комментарий содержит недопустимые слова.
+    </div>
+    <textarea class="comment-input" id="comment-input" placeholder="Напишите ваш отзыв..." maxlength="500"></textarea>
+</div>
+
+<!-- Информация о пользователе -->
+<div id="user-review-info" class="user-rating-info" style="display: none; margin: 20px 0;">
+    <div class="rating-text">Ваш отзыв: <span id="user-rating-value">0.0</span>/5</div>
+    <div class="timer-text" id="edit-timer-text"></div>
+    <button id="edit-rating-btn" class="edit-btn" disabled>
+        Изменить оценку
+    </button>
+</div>
+
+<!-- Отзывы других слушателей (ПРОСТО ПОД ФОРМОЙ, БЕЗ ОТДЕЛЬНОГО БЛОКА) -->
+<h3 class="reviews-title" style="margin: 30px 0 15px; padding-top: 20px; border-top: 1px solid var(--border-color);">💬 Отзывы других слушателей</h3>
+<div class="modal-reviews-list" id="modal-reviews-list"></div>
+<div id="no-reviews-in-modal" class="no-reviews-in-modal" style="display: none;">
+    <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
+    <p>Пока нет отзывов. Будьте первым!</p>
+</div>
                     
                     <!-- Комментарий -->
                     <label class="comment-label" for="comment-input">Ваш комментарий (необязательно):</label>
