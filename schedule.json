@@ -1,41 +1,125 @@
 {
-  "date": "2026-01-03",
+  "week_start": "2026-01-03",
   "updated_at": "2026-01-03T00:05:00Z",
-  "tracks": [
+  "days": [
     {
-      "start": "21:39:00",
-      "title": "Скалкой",
-      "artist": "B the B & MC Kurduk",
-      "duration": "1:28",
-      "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/zhir.mp3"
+      "date": "2026-01-03",
+      "tracks": [
+        {
+          "start": "21:39:00",
+          "title": "Скалкой",
+          "artist": "B the B & MC Kurduk",
+          "duration": "1:28",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/zhir.mp3"
+        },
+        {
+          "start": "21:40:29",
+          "title": "DnB",
+          "artist": "B the B",
+          "duration": "1:26",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/dnb.mp3"
+        },
+        {
+          "start": "21:41:56",
+          "title": "Ритмы города",
+          "artist": "Urban Beats",
+          "duration": "1:28",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/zhir.mp3"
+        },
+        {
+          "start": "21:43:25",
+          "title": "Тихая ночь",
+          "artist": "Мелодия",
+          "duration": "1:50",
+          "file": "https://dl.dropboxusercontent.com/s/xxx/track4.mp3"
+        },
+        {
+          "start": "18:00:16",
+          "title": "Рассвет",
+          "artist": "Sunrise Project",
+          "duration": "4:10",
+          "file": "https://dl.dropboxusercontent.com/s/xxx/track5.mp3"
+        }
+      ]
     },
     {
-      "start": "21:40:29",
-      "title": "DnB",
-      "artist": "B the B",
-      "duration": "1:26",
-      "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/dnb.mp3"
+      "date": "2026-01-04",
+      "tracks": [
+        {
+          "start": "08:00:00",
+          "title": "Утренний трек",
+          "artist": "Исполнитель",
+          "duration": "3:45",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/zhir.mp3"
+        },
+        {
+          "start": "12:00:00",
+          "title": "Дневной хит",
+          "artist": "Другой исполнитель",
+          "duration": "4:20",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/dnb.mp3"
+        }
+      ]
     },
     {
-      "start": "21:41:56",
-      "title": "Ритмы города",
-      "artist": "Urban Beats",
-      "duration": "1:28",
-      "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/zhir.mp3"
+      "date": "2026-01-05",
+      "tracks": [
+        {
+          "start": "10:00:00",
+          "title": "Рабочий ритм",
+          "artist": "Рабочий",
+          "duration": "3:30",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/zhir.mp3"
+        }
+      ]
     },
     {
-      "start": "21:43:25",
-      "title": "Тихая ночь",
-      "artist": "Мелодия",
-      "duration": "1:50",
-      "file": "https://dl.dropboxusercontent.com/s/xxx/track4.mp3"
+      "date": "2026-01-06",
+      "tracks": [
+        {
+          "start": "14:00:00",
+          "title": "Вечерний джем",
+          "artist": "Джем",
+          "duration": "5:15",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/dnb.mp3"
+        }
+      ]
     },
     {
-      "start": "18:00:16",
-      "title": "Рассвет",
-      "artist": "Sunrise Project",
-      "duration": "4:10",
-      "file": "https://dl.dropboxusercontent.com/s/xxx/track5.mp3"
+      "date": "2026-01-07",
+      "tracks": [
+        {
+          "start": "16:00:00",
+          "title": "Воскресный трек",
+          "artist": "Воскресение",
+          "duration": "4:00",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/zhir.mp3"
+        }
+      ]
+    },
+    {
+      "date": "2026-01-08",
+      "tracks": [
+        {
+          "start": "09:00:00",
+          "title": "Начало недели",
+          "artist": "Понедельник",
+          "duration": "3:45",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/dnb.mp3"
+        }
+      ]
+    },
+    {
+      "date": "2026-01-09",
+      "tracks": [
+        {
+          "start": "20:00:00",
+          "title": "Финальный трек",
+          "artist": "Финал",
+          "duration": "4:30",
+          "file": "https://github.com/BtheBFr/radio-fm/blob/main/audio/zhir.mp3"
+        }
+      ]
     }
   ]
 }
