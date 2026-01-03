@@ -1211,21 +1211,39 @@
     <div id="notification" class="notification"></div>
     
     <!-- Модальное окно оценки -->
-    <div id="rating-modal" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 class="modal-title">Оцените LAP.FM</h2>
-                <button class="modal-close" onclick="closeRatingModal()">×</button>
-            </div>
-            
-            <div class="modal-content">
-                <!-- Общая статистика и отзывы пользователей -->
+<div id="rating-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Оцените LAP.FM</h2>
+            <button class="modal-close" onclick="closeRatingModal()">×</button>
+        </div>
+        
+        <div class="modal-content">
+            <!-- ОБЪЕДИНЕННЫЙ БЛОК: Статистика + Отзывы + Форма -->
+            <div class="combined-rating-section">
+                <!-- Статистика сверху -->
                 <div id="reviews-info" class="rating-summary">
-                    <!-- Сюда будет вставлена статистика отзывов -->
+                    <!-- Сюда вставляется общая статистика -->
                 </div>
                 
+                <!-- Отзывы пользователей (сразу под статистикой) -->
+                <div class="reviews-in-modal" style="margin: 20px 0;">
+                    <div class="reviews-header">
+                        <h3 class="reviews-title">💬 Отзывы других слушателей</h3>
+                        <span id="reviews-count" style="font-size: 0.85rem; color: var(--text-light);"></span>
+                    </div>
+                    <div class="modal-reviews-list" id="modal-reviews-list"></div>
+                    <div id="no-reviews-in-modal" class="no-reviews-in-modal" style="display: none;">
+                        <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
+                        <p>Пока нет отзывов. Будьте первым!</p>
+                    </div>
+                </div>
+                
+                <!-- Разделитель -->
+                <div style="border-top: 2px solid var(--border-color); margin: 25px 0;"></div>
+                
                 <!-- Информация о пользователе -->
-                <div id="user-review-info" class="user-rating-info" style="display: none;">
+                <div id="user-review-info" class="user-rating-info" style="display: none; margin-bottom: 20px;">
                     <div class="rating-text">Ваш отзыв: <span id="user-rating-value">0.0</span>/5</div>
                     <div class="timer-text" id="edit-timer-text"></div>
                     <button id="edit-rating-btn" class="edit-btn" disabled>
@@ -1233,8 +1251,12 @@
                     </button>
                 </div>
                 
-                <!-- Форма оценки -->
+                <!-- Форма оценки (только если пользователь еще не оценивал) -->
                 <div id="rating-form">
+                    <h3 style="color: var(--text-primary); margin-bottom: 20px; font-size: 1.2rem;">
+                        ⭐ Ваша оценка
+                    </h3>
+                    
                     <div class="rating-category">
                         <div class="category-title">
                             <span>Качество звука</span>
@@ -1298,27 +1320,15 @@
                     </div>
                     <textarea class="comment-input" id="comment-input" placeholder="Напишите ваш отзыв..." maxlength="500"></textarea>
                 </div>
-                
-                <!-- Отзывы других слушателей -->
-                <div class="reviews-in-modal">
-                    <div class="reviews-header">
-                        <h3 class="reviews-title">💬 Отзывы других слушателей</h3>
-                        <span id="reviews-count" style="font-size: 0.85rem; color: var(--text-light);"></span>
-                    </div>
-                    <div class="modal-reviews-list" id="modal-reviews-list"></div>
-                    <div id="no-reviews-in-modal" class="no-reviews-in-modal" style="display: none;">
-                        <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
-                        <p>Пока нет отзывов. Будьте первым!</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="modal-actions">
-                <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
-                <button class="modal-btn submit" id="submit-rating" onclick="submitRating()" disabled>Отправить оценку</button>
             </div>
         </div>
+        
+        <div class="modal-actions">
+            <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
+            <button class="modal-btn submit" id="submit-rating" onclick="submitRating()" disabled>Отправить оценку</button>
+        </div>
     </div>
+</div>
     
     <!-- Основной контейнер -->
     <div class="container">
