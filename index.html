@@ -1117,15 +1117,6 @@
     </style>
 </head>
 <body>
-    <script>
-        // API URLs
-        const API_BASE_URL = 'https://radio-fm-sable.vercel.app/api';
-        const REVIEWS_URL = API_BASE_URL + '/get-reviews';
-        const STATS_API_URL = 'https://radio-fm-sable.vercel.app/api/stats';
-        const TIMEZONE_OFFSET = 5;
-        const SCHEDULE_URL = 'https://raw.githubusercontent.com/BtheBFr/radio-fm/main/schedule.json';
-    </script>
-    
     <!-- Уведомления -->
     <div id="notification" class="notification"></div>
     
@@ -1964,7 +1955,7 @@
             closeRatingModal();
             showNotification('Спасибо! Ваш отзыв сохранён.');
             
-            // Отправляем на серров в фоне
+            // Отправляем на сервер в фоне
             try {
                 const response = await fetch(API_BASE_URL + '/save-review', {
                     method: 'POST',
