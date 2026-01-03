@@ -1,5 +1,5 @@
 // api/get-reviews.js - Получение отзывов из Google Sheets
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxixUt1dXs0mnpnoayd5CvTeqqBW9slqOjoAVmmuoJwFROa6WV-NS-RQBkpnUgUXrqCQA/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTt4Gr7anIXAda8Z3RyZd3bk04ADrlMncSbyYBijF0XGkfhkgebAu5J1ZS0gLLhuYyRA/exec';
 
 export default async function handler(req, res) {
     // CORS
