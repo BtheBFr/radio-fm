@@ -215,6 +215,9 @@
         /* ИСПРАВЛЕНИЕ 1: Кнопка по центру */
         .play-button-container {
             margin: 25px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .play-button {
@@ -227,9 +230,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto;
             transition: all 0.3s ease;
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            position: relative;
         }
         
         .play-button:hover {
@@ -244,16 +247,20 @@
         .play-icon {
             font-size: 1.8rem;
             color: white;
-            /* УБРАЛ margin-left: 3px - было криво */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            line-height: 1;
+            margin-left: 0;
+            display: block;
         }
         
         .play-text {
             margin-top: 12px;
             color: var(--text-secondary);
             font-size: 0.85rem;
+            text-align: center;
         }
         
         .progress-container {
@@ -1128,7 +1135,7 @@
     
     <div id="notification" class="notification"></div>
     
-    <!-- ИСПРАВЛЕНИЕ 2,4: Единое модальное окно -->
+    <!-- ИСПРАВЛЕНИЕ 2: Единое модальное окно -->
     <div id="rating-modal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
@@ -1213,7 +1220,7 @@
                 </div>
                 <textarea class="comment-input" id="comment-input" placeholder="Напишите ваш отзыв..." maxlength="500"></textarea>
                 
-                <!-- ИСПРАВЛЕНИЕ 4: Отзывы в том же окне -->
+                <!-- ИСПРАВЛЕНИЕ 4,7: Отзывы в том же окне -->
                 <div class="reviews-in-modal">
                     <div class="reviews-header">
                         <h3 class="reviews-title">💬 Отзывы других слушателей</h3>
@@ -1439,7 +1446,7 @@
         const statusText = document.getElementById('status-text');
         const commentInput = document.getElementById('comment-input');
         
-        // ========== ИСПРАВЛЕНИЕ 1: Кнопка плеера ==========
+        // ========== ИСПРАВЛЕНИЕ 1: Кнопка плеера по центру ==========
         function togglePlayback() {
             userHasInteracted = true;
             
@@ -1451,6 +1458,11 @@
                 statusText.textContent = 'В эфире 24/7';
                 showNotification('Воспроизведение приостановлено');
             } else {
+                // ИСПРАВЛЕНИЕ 5: Проверяем текущий трек
+                if (currentTrackIndex === -1) {
+                    findCurrentTrack();
+                }
+                
                 const track = currentSchedule?.tracks[currentTrackIndex];
                 
                 if (!track?.file) {
@@ -1490,6 +1502,25 @@
         // ========== ИСПРАВЛЕНИЕ 3: Звёзды загружаются сразу ==========
         async function loadReviews(showInFooter = true) {
             try {
+                // Сначала загружаем из localStorage для мгновенного отображения
+                const cached = localStorage.getItem('lapfm_reviews_cache');
+                if (cached) {
+                    try {
+                        const cachedData = JSON.parse(cached);
+                        if (cachedData.average > 0) {
+                            savedAverageRating = cachedData.average;
+                            savedRatingCount = cachedData.total;
+                            allReviews = cachedData.ratings || [];
+                            
+                            if (showInFooter) {
+                                updateOverallRatingDisplay();
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('Ошибка загрузки кэша отзывов:', e);
+                    }
+                }
+                
                 const response = await fetch(REVIEWS_URL + '?t=' + Date.now());
                 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -1497,9 +1528,17 @@
                 const reviewsData = await response.json();
                 allReviews = reviewsData.ratings || [];
                 
-                // СОХРАНЯЕМ данные чтобы не было 0→4.2
+                // Сохраняем актуальные данные
                 savedAverageRating = reviewsData.average || 0;
                 savedRatingCount = reviewsData.total || 0;
+                
+                // Кэшируем
+                localStorage.setItem('lapfm_reviews_cache', JSON.stringify({
+                    average: savedAverageRating,
+                    total: savedRatingCount,
+                    ratings: allReviews,
+                    updated: new Date().toISOString()
+                }));
                 
                 if (showInFooter) {
                     updateOverallRatingDisplay();
@@ -1510,7 +1549,6 @@
             } catch (error) {
                 console.error('Ошибка загрузки отзывов:', error);
                 
-                // Используем сохранённые значения при ошибке
                 if (showInFooter) {
                     updateOverallRatingDisplay();
                 }
@@ -1525,7 +1563,6 @@
         }
         
         function updateOverallRatingDisplay() {
-            // ИСПРАВЛЕНИЕ 3: Используем сохранённые значения
             document.getElementById('average-rating').textContent = savedAverageRating.toFixed(1);
             document.getElementById('rating-count').textContent = `(${savedRatingCount} ${getRatingWord(savedRatingCount)})`;
             updateStars(savedAverageRating);
@@ -1534,7 +1571,11 @@
         function updateStars(rating) {
             const stars = document.querySelectorAll('#overall-stars .star');
             stars.forEach((star, index) => {
-                if (index < Math.floor(rating)) {
+                const starRating = index + 1;
+                if (starRating <= rating) {
+                    star.classList.add('filled');
+                } else if (starRating - 0.5 <= rating) {
+                    // Половина звезды (не реализовано в CSS, но можно добавить)
                     star.classList.add('filled');
                 } else {
                     star.classList.remove('filled');
@@ -1832,7 +1873,7 @@
             document.getElementById('submit-rating').disabled = !isComplete;
         }
         
-        // ========== ИСПРАВЛЕНИЕ 2: Окно закрывается сразу ==========
+        // ========== ИСПРАВЛЕНИЕ 2: Окно закрывается сразу после оценки ==========
         async function submitRating() {
             if (userRatings.hasRated) {
                 showNotification('Вы уже оценили это радио!', 3000);
@@ -1900,15 +1941,15 @@
                     userRatings.ratingId = userRatingData.ratingId;
                     userRatings.comment = comment;
                     
-                    await loadReviews(true);
-                    updateEditTimer();
-                    
                     showNotification(`Спасибо! Ваш отзыв сохранён.`, 1000);
                     
-                    // ИСПРАВЛЕНИЕ 2: Закрываем сразу
+                    // ИСПРАВЛЕНИЕ 2: Закрываем модальное окно СРАЗУ
+                    closeRatingModal();
+                    
+                    // Обновляем отзывы асинхронно
                     setTimeout(() => {
-                        closeRatingModal();
-                    }, 1000);
+                        loadReviews(true);
+                    }, 100);
                     
                 } else {
                     showNotification('Ошибка сохранения отзыва', 4000);
@@ -1930,12 +1971,8 @@
                 userRatings.ratingId = userRatingData.ratingId;
                 userRatings.comment = comment;
                 
-                updateEditTimer();
-                
-                // ИСПРАВЛЕНИЕ 2: Закрываем сразу
-                setTimeout(() => {
-                    closeRatingModal();
-                }, 1000);
+                // ИСПРАВЛЕНИЕ 2: Закрываем модальное окно СРАЗУ
+                closeRatingModal();
             }
         }
         
@@ -1993,7 +2030,6 @@
                     
                     if (elapsed > 0) {
                         audioPlayer.currentTime = elapsed;
-                        audioStartOffset = elapsed;
                     }
                 }
                 
@@ -2047,6 +2083,9 @@
         }
         
         // ========== ИСПРАВЛЕНИЕ 5: Нет мигания названия ==========
+        let isFirstLoad = true;
+        let initialTrackSet = false;
+        
         async function loadSchedule() {
             try {
                 const response = await fetch(SCHEDULE_URL + '?v=' + new Date().getTime());
@@ -2096,6 +2135,8 @@
             if (currentTrackIndex !== foundIndex) {
                 currentTrackIndex = foundIndex;
                 const track = currentSchedule.tracks[currentTrackIndex];
+                
+                // ИСПРАВЛЕНИЕ 5: Обновляем сразу, без задержки
                 updateNowPlaying(track, currentTrackIndex);
             }
         }
@@ -2219,19 +2260,28 @@
                 `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
         }
         
-        // ========== ИСПРАВЛЕНИЕ 6: Статистика работает ==========
+        // ========== ИСПРАВЛЕНИЕ 6: Статистика работает корректно ==========
         let statsUpdateInterval;
         let lastStatsUpdate = 0;
 
         async function updateUserStats(force = false) {
             try {
-                const response = await fetch(STATS_API_URL + '?t=' + Date.now(), {
+                // Генерируем уникальный ID пользователя для отслеживания
+                let userId = localStorage.getItem('lapfm_user_id');
+                if (!userId) {
+                    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('lapfm_user_id', userId);
+                }
+                
+                const response = await fetch(STATS_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         action: 'ping',
                         force: force,
-                        timestamp: Date.now()
+                        timestamp: Date.now(),
+                        userId: userId,
+                        path: window.location.pathname
                     })
                 });
                 
@@ -2242,10 +2292,10 @@
                 if (data.success && data.stats) {
                     const stats = data.stats;
                     
-                    // ИСПРАВЛЕНИЕ 6: Правильные значения
-                    document.getElementById('online-users').textContent = stats.online || 1;
-                    document.getElementById('today-users').textContent = stats.today || 1;
-                    document.getElementById('total-users').textContent = stats.total || 1;
+                    // ИСПРАВЛЕНИЕ 6: Правильные значения (не менее 1)
+                    document.getElementById('online-users').textContent = Math.max(1, stats.online || 1);
+                    document.getElementById('today-users').textContent = Math.max(1, stats.today || 1);
+                    document.getElementById('total-users').textContent = Math.max(1, stats.total || 1);
                     
                     lastStatsUpdate = Date.now();
                 }
@@ -2356,7 +2406,7 @@
             
             loadTheme();
             
-            // ИСПРАВЛЕНИЕ 3: Сразу загружаем отзывы
+            // ИСПРАВЛЕНИЕ 3: Сразу загружаем отзывы (из кэша)
             await loadReviews(true);
             
             loadSchedule();
