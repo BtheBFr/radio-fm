@@ -18,8 +18,8 @@
             --bg-secondary: #ffffff;
             --bg-card: #f7fafc;
             --text-primary: #2d3748;
-            --text-secondary: #718096;
-            --text-light: #a0aec0;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
             --border-color: #e2e8f0;
             --shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
             --progress-bg: #edf2f7;
@@ -38,6 +38,7 @@
             --error-color: #ef4444;
             --like-color: #ff4757;
             --like-active: #ff6b81;
+            --border-strong: #e2e8f0;
         }
         
         [data-theme="dark"] {
@@ -65,6 +66,7 @@
             --error-color: #f87171;
             --like-color: #ff6b81;
             --like-active: #ff4757;
+            --border-strong: #4a5568;
         }
         
         body {
@@ -83,6 +85,7 @@
             border-radius: 24px;
             box-shadow: var(--shadow);
             overflow: hidden;
+            border: 2px solid var(--border-strong);
         }
         
         /* HEADER */
@@ -92,6 +95,7 @@
             padding: 30px;
             text-align: center;
             position: relative;
+            border-bottom: 2px solid var(--border-strong);
         }
         
         .logo {
@@ -126,6 +130,7 @@
             display: inline-block;
             margin-top: 10px;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .live-badge {
@@ -137,6 +142,7 @@
             border-radius: 20px;
             font-size: 0.85rem;
             margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .live-dot {
@@ -162,7 +168,7 @@
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 25px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid var(--border-strong);
         }
         
         .track-info {
@@ -191,6 +197,7 @@
             padding: 6px 12px;
             border-radius: 12px;
             display: inline-block;
+            border: 1px solid var(--border-color);
         }
         
         .quality-indicator {
@@ -202,6 +209,8 @@
             border-radius: 12px;
             margin-left: 10px;
             font-size: 0.8rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
         }
         
         .quality-dot {
@@ -232,7 +241,7 @@
             height: 70px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
+            border: 2px solid white;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -279,6 +288,7 @@
             border-radius: 3px;
             margin: 20px 0 12px;
             overflow: hidden;
+            border: 1px solid var(--border-color);
         }
         
         .progress-bar {
@@ -295,6 +305,7 @@
             padding: 18px;
             margin: 20px 0;
             border-left: 4px solid #667eea;
+            border: 2px solid var(--border-color);
         }
         
         .next-label {
@@ -406,6 +417,7 @@
             font-weight: 500;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .now-button:hover {
@@ -429,7 +441,7 @@
         
         .schedule-item {
             background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border-strong);
             border-radius: 12px;
             padding: 16px;
             transition: all 0.2s ease;
@@ -438,7 +450,7 @@
         }
         
         .schedule-item:hover {
-            border-color: var(--border-color);
+            border-color: #667eea;
             background: var(--schedule-hover);
             transform: translateY(-1px);
         }
@@ -469,6 +481,7 @@
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-secondary);
+            border: 1px solid var(--border-color);
         }
         
         .duration-badge {
@@ -478,11 +491,13 @@
             border-radius: 10px;
             font-size: 0.75rem;
             font-weight: 500;
+            border: 1px solid #b2f5ea;
         }
         
         [data-theme="dark"] .duration-badge {
             background: #234e52;
             color: #e6fffa;
+            border: 1px solid #285e61;
         }
         
         .track-title {
@@ -508,6 +523,7 @@
             font-size: 0.75rem;
             font-weight: 600;
             margin-left: 8px;
+            border: 1px solid #00cc6a;
         }
         
         /* CONTROLS */
@@ -524,7 +540,7 @@
             align-items: center;
             gap: 6px;
             background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border-strong);
             color: var(--text-secondary);
             padding: 10px 20px;
             border-radius: 12px;
@@ -548,7 +564,7 @@
             padding: 20px;
             background: var(--bg-card);
             border-radius: 16px;
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border-strong);
         }
         
         .stat-item {
@@ -573,7 +589,7 @@
             gap: 15px;
             margin-top: 30px;
             padding-top: 25px;
-            border-top: 1px solid var(--border-color);
+            border-top: 2px solid var(--border-strong);
         }
         
         .status-card {
@@ -581,6 +597,7 @@
             padding: 16px;
             border-radius: 14px;
             text-align: center;
+            border: 2px solid var(--border-color);
         }
         
         .status-card h3 {
@@ -604,7 +621,7 @@
             background: var(--bg-card);
             color: var(--text-secondary);
             font-size: 0.85rem;
-            border-top: 1px solid var(--border-color);
+            border-top: 2px solid var(--border-strong);
         }
         
         .footer-rating {
@@ -653,6 +670,7 @@
             font-size: 0.85rem;
             margin-left: 15px;
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .rate-button:hover {
@@ -670,7 +688,7 @@
         
         .theme-btn {
             background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border-strong);
             color: var(--text-secondary);
             padding: 10px 25px;
             border-radius: 25px;
@@ -737,10 +755,12 @@
             z-index: 1000;
             max-width: 280px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid #4a5568;
         }
         
         [data-theme="dark"] .notification {
             background: #4a5568;
+            border: 1px solid #718096;
         }
         
         .notification.show {
@@ -784,6 +804,7 @@
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
+            border: 2px solid var(--border-strong);
         }
         
         .modal-overlay.show .modal {
@@ -830,7 +851,7 @@
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 25px;
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-strong);
             text-align: center;
         }
         
@@ -863,7 +884,7 @@
             padding: 15px;
             background: var(--bg-card);
             border-radius: 10px;
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-strong);
             text-align: center;
         }
         
@@ -882,7 +903,7 @@
         
         .user-rating-info .edit-btn {
             background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border-strong);
             color: var(--text-secondary);
             padding: 8px 20px;
             border-radius: 12px;
@@ -903,6 +924,12 @@
         
         .rating-category {
             margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .rating-category:last-child {
+            border-bottom: none;
         }
         
         .category-title {
@@ -932,7 +959,7 @@
         .comment-input {
             width: 100%;
             padding: 15px;
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border-strong);
             border-radius: 12px;
             background: var(--bg-secondary);
             color: var(--text-primary);
@@ -976,6 +1003,7 @@
             max-height: 250px;
             overflow-y: auto;
             padding-right: 5px;
+            margin-top: 15px;
         }
         
         .review-item-modal {
@@ -1024,6 +1052,7 @@
             color: var(--text-secondary);
             line-height: 1.5;
             font-style: italic;
+            border: 1px solid var(--border-color);
         }
         
         .no-reviews-in-modal {
@@ -1031,6 +1060,9 @@
             padding: 30px 20px;
             color: var(--text-secondary);
             font-size: 0.9rem;
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            margin-top: 15px;
         }
         
         .modal-actions {
@@ -1054,7 +1086,7 @@
         .modal-btn.cancel {
             background: var(--bg-card);
             color: var(--text-secondary);
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border-strong);
         }
         
         .modal-btn.cancel:hover {
@@ -1064,6 +1096,7 @@
         .modal-btn.submit {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .modal-btn.submit:hover {
@@ -1270,7 +1303,7 @@
                 </div>
 
                 <!-- Отзывы других слушателей (ПРОСТО ПОД ФОРМОЙ, БЕЗ ОТДЕЛЬНОГО БЛОКА) -->
-                <h3 class="reviews-title" style="margin: 30px 0 15px; padding-top: 20px; border-top: 1px solid var(--border-color);">💬 Отзывы других слушателей</h3>
+                <h3 style="margin: 30px 0 15px; padding-top: 20px; border-top: 2px solid var(--border-strong); color: var(--text-primary);">💬 Отзывы других слушателей</h3>
                 <div class="modal-reviews-list" id="modal-reviews-list"></div>
                 <div id="no-reviews-in-modal" class="no-reviews-in-modal" style="display: none;">
                     <div style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;">💭</div>
@@ -1474,15 +1507,16 @@
         let currentSchedule = null;
         let currentTrackIndex = -1;
         let isPlaying = false;
-        let autoScrollEnabled = false; // ИЗМЕНЕНО: отключена автоскроллка
+        let autoScrollEnabled = false; // ИСПРАВЛЕНО: отключен автоскролл
         let userHasInteracted = false;
         let currentTheme = 'auto';
         let allReviews = [];
-        let isLikeProcessing = false; // Защита от повторных нажатий на лайк
+        let isLikeProcessing = false;
         
-        // Лайки
+        // Лайки - ИСПРАВЛЕНО: теперь работаем с серверными данными
         let userLikes = new Set();
         let trackLikes = {};
+        let userId = null;
         
         // Рейтинг пользователя
         let userRatings = {
@@ -1518,67 +1552,70 @@
         const commentInput = document.getElementById('comment-input');
         const trackLikeBtn = document.getElementById('track-like-btn');
         const trackLikeCount = document.getElementById('track-like-count');
+        const qualityText = document.getElementById('quality-text');
         
-        // ========== ИСПРАВЛЕНИЕ ЛАЙКОВ ==========
-        // Загружаем лайки из localStorage при запуске
-        function loadLikesFromLocalStorage() {
+        // ========== ИСПРАВЛЕНИЕ: ИНИЦИАЛИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ ==========
+        function initializeUser() {
+            // Генерируем уникальный ID пользователя
+            if (!userId) {
+                userId = localStorage.getItem('lapfm_user_id');
+                if (!userId) {
+                    userId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+                    localStorage.setItem('lapfm_user_id', userId);
+                }
+            }
+            
+            // Загружаем лайки пользователя из localStorage
+            loadUserLikes();
+        }
+        
+        function loadUserLikes() {
             try {
-                const savedLikes = localStorage.getItem('lapfm_likes');
+                const savedLikes = localStorage.getItem('lapfm_user_likes');
                 if (savedLikes) {
-                    const data = JSON.parse(savedLikes);
-                    trackLikes = data.trackLikes || {};
-                    userLikes = new Set(data.userLikes || []);
-                    console.log('❤️ Лайки загружены из localStorage:', trackLikes);
-                    return true;
+                    userLikes = new Set(JSON.parse(savedLikes));
                 }
             } catch (error) {
-                console.warn('Ошибка загрузки лайков из localStorage:', error);
+                console.warn('Ошибка загрузки лайков пользователя:', error);
             }
-            return false;
         }
         
-        // Сохраняем лайки в localStorage
-        function saveLikesToLocalStorage() {
+        function saveUserLikes() {
             try {
-                const likesData = {
-                    trackLikes: { ...trackLikes },
-                    userLikes: Array.from(userLikes),
-                    savedAt: Date.now()
-                };
-                localStorage.setItem('lapfm_likes', JSON.stringify(likesData));
-                console.log('❤️ Лайки сохранены в localStorage');
+                localStorage.setItem('lapfm_user_likes', JSON.stringify(Array.from(userLikes)));
             } catch (error) {
-                console.warn('Ошибка сохранения лайков в localStorage:', error);
+                console.warn('Ошибка сохранения лайков пользователя:', error);
             }
         }
         
-        // Загружаем лайки с сервера (фоновое обновление)
+        // ========== ИСПРАВЛЕНИЕ ЛАЙКОВ ==========
         async function loadLikesFromServer() {
             try {
-                const response = await fetch(LIKES_API_URL);
+                const response = await fetch(LIKES_API_URL + '?userId=' + userId);
                 if (response.ok) {
-                    const serverData = await response.json();
+                    const data = await response.json();
                     
-                    // Обновляем данные с сервера
-                    if (serverData.tracks) {
-                        Object.keys(serverData.tracks).forEach(trackId => {
-                            trackLikes[trackId] = serverData.tracks[trackId];
-                        });
-                    }
-                    
-                    if (serverData.userLikes) {
-                        serverData.userLikes.forEach(trackId => {
+                    if (data.success) {
+                        // Загружаем ОБЩИЕ счетчики лайков с сервера
+                        trackLikes = data.tracks || {};
+                        
+                        // Загружаем лайки пользователя
+                        const userLikesFromServer = data.userLikes || [];
+                        userLikesFromServer.forEach(trackId => {
                             userLikes.add(trackId);
                         });
+                        
+                        // Сохраняем лайки пользователя
+                        saveUserLikes();
+                        
+                        console.log('❤️ Лайки загружены с сервера:', trackLikes);
+                        return true;
                     }
-                    
-                    // Сохраняем объединенные данные
-                    saveLikesToLocalStorage();
-                    console.log('❤️ Лайки обновлены с сервера');
                 }
             } catch (error) {
                 console.warn('Ошибка загрузки лайков с сервера:', error);
             }
+            return false;
         }
         
         // Обновляем кнопку лайка
@@ -1619,43 +1656,22 @@
             
             try {
                 if (isLiked) {
-                    // Убираем лайк - ИСПРАВЛЕНО: вычитаем только 1
+                    // Убираем лайк
+                    await removeLikeFromServer(trackId);
                     userLikes.delete(trackId);
-                    trackLikes[trackId] = Math.max(0, (trackLikes[trackId] || 0) - 1);
+                    saveUserLikes();
                     trackLikeBtn.classList.remove('active');
                     showNotification('❤️ Лайк убран');
-                    
-                    // Отправляем на сервер
-                    try {
-                        await fetch(LIKES_API_URL, {
-                            method: 'DELETE',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ trackId: trackId })
-                        });
-                    } catch (error) {
-                        console.warn('Ошибка отправки лайка на сервер:', error);
-                    }
                 } else {
                     // Ставим лайк
+                    await addLikeToServer(trackId);
                     userLikes.add(trackId);
-                    trackLikes[trackId] = (trackLikes[trackId] || 0) + 1;
+                    saveUserLikes();
                     trackLikeBtn.classList.add('active');
                     showNotification('❤️ Трек понравился');
-                    
-                    // Отправляем на сервер
-                    try {
-                        await fetch(LIKES_API_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ trackId: trackId })
-                        });
-                    } catch (error) {
-                        console.warn('Ошибка отправки лайка на сервер:', error);
-                    }
                 }
                 
-                // Сохраняем в localStorage
-                saveLikesToLocalStorage();
+                // Обновляем кнопку
                 updateLikeButton(track);
                 
             } catch (error) {
@@ -1671,21 +1687,60 @@
             }
         }
         
-        // ========== АВТОМАТИЧЕСКАЯ ПРОКРУТКА - ОТКЛЮЧЕНА ==========
-        function autoScrollToCurrentTrack() {
-            if (!autoScrollEnabled || currentTrackIndex === -1) return;
-            
-            const scheduleList = document.getElementById('schedule-list');
-            const activeItems = scheduleList.querySelectorAll('.schedule-item.active');
-            
-            if (activeItems.length > 0) {
-                const lastActiveItem = activeItems[activeItems.length - 1];
-                lastActiveItem.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center',
-                    inline: 'nearest'
+        async function addLikeToServer(trackId) {
+            try {
+                const response = await fetch(LIKES_API_URL, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-User-Id': userId 
+                    },
+                    body: JSON.stringify({ 
+                        trackId: trackId,
+                        userId: userId 
+                    })
                 });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        // Обновляем локальный счетчик с сервера
+                        trackLikes[trackId] = data.count || 0;
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.warn('Ошибка добавления лайка на сервер:', error);
             }
+            return false;
+        }
+        
+        async function removeLikeFromServer(trackId) {
+            try {
+                const response = await fetch(LIKES_API_URL, {
+                    method: 'DELETE',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-User-Id': userId 
+                    },
+                    body: JSON.stringify({ 
+                        trackId: trackId,
+                        userId: userId 
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        // Обновляем локальный счетчик с сервера
+                        trackLikes[trackId] = data.count || 0;
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.warn('Ошибка удаления лайка на сервер:', error);
+            }
+            return false;
         }
         
         // ========== ОСНОВНЫЕ ФУНКЦИИ ПЛЕЕРА ==========
@@ -1716,9 +1771,6 @@
                 playText.textContent = 'Слушаете в реальном времени';
                 statusText.textContent = 'В эфире';
                 
-                currentTrackEl.textContent = track.title || 'Без названия';
-                currentArtistEl.textContent = track.artist || 'Неизвестен';
-                
                 playAudioFile(track.file).then(success => {
                     if (success) {
                         showNotification(`Играет: ${track.title}`);
@@ -1736,6 +1788,7 @@
             }
         }
         
+        // ========== ИСПРАВЛЕНИЕ: ПОКАЗ ТРЕКА ПРИ ЗАГРУЗКЕ ==========
         function updateNowPlaying(track, index) {
             if (!track) return;
             
@@ -1761,6 +1814,10 @@
             // Обновляем кнопку лайка
             updateLikeButton(track);
             
+            // ВСЕГДА обновляем информацию о треке, даже если плеер не играет
+            currentTrackEl.textContent = track.title || 'Без названия';
+            currentArtistEl.textContent = track.artist || 'Неизвестен';
+            
             if (currentSchedule && index < currentSchedule.tracks.length - 1) {
                 const nextTrack = currentSchedule.tracks[index + 1];
                 const nextTimeParts = nextTrack.start.split(':');
@@ -1778,9 +1835,6 @@
             }
             
             updateScheduleDisplay();
-            
-            // Автоматическая прокрутка - ОТКЛЮЧЕНА
-            // setTimeout(() => autoScrollToCurrentTrack(), 300);
             
             // Таймер переключения трека
             const timeUntilEnd = (duration - elapsed) * 1000;
@@ -1825,11 +1879,16 @@
             }
             
             if (foundIndex === -1) {
+                // Если текущего трека нет, показываем первый
                 foundIndex = 0;
             }
             
             if (currentTrackIndex !== foundIndex) {
                 currentTrackIndex = foundIndex;
+                const track = currentSchedule.tracks[currentTrackIndex];
+                updateNowPlaying(track, currentTrackIndex);
+            } else {
+                // Если тот же трек, все равно обновляем время
                 const track = currentSchedule.tracks[currentTrackIndex];
                 updateNowPlaying(track, currentTrackIndex);
             }
@@ -1994,59 +2053,57 @@
                     }
                 });
             });
-            
-            // Автоматическая прокрутка - ОТКЛЮЧЕНА
-            // setTimeout(() => autoScrollToCurrentTrack(), 300);
         }
         
         async function loadSchedule() {
-    try {
-        const response = await fetch(SCHEDULE_URL + '?v=' + Date.now());
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
-        const data = await response.json();
-        
-        // Обработка нового формата (недельное расписание)
-        if (data.days && Array.isArray(data.days)) {
-            // Находим расписание на сегодня
-            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-            const todaySchedule = data.days.find(day => day.date === today);
-            
-            if (todaySchedule) {
-                currentSchedule = {
-                    date: todaySchedule.date,
-                    updated_at: data.updated_at || data.week_start,
-                    tracks: todaySchedule.tracks
-                };
-                console.log(`📅 Загружено расписание на ${todaySchedule.date}`);
-            } else {
-                // Если на сегодня нет, берем первый день
-                currentSchedule = {
-                    date: data.days[0].date,
-                    updated_at: data.updated_at || data.week_start,
-                    tracks: data.days[0].tracks
-                };
-                console.log(`📅 Загружено расписание на ${data.days[0].date} (сегодняшнее не найдено)`);
+            try {
+                const response = await fetch(SCHEDULE_URL + '?v=' + Date.now());
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                
+                // Обработка нового формата (недельное расписание)
+                if (data.days && Array.isArray(data.days)) {
+                    // Находим расписание на сегодня
+                    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+                    const todaySchedule = data.days.find(day => day.date === today);
+                    
+                    if (todaySchedule) {
+                        currentSchedule = {
+                            date: todaySchedule.date,
+                            updated_at: data.updated_at || data.week_start,
+                            tracks: todaySchedule.tracks
+                        };
+                        console.log(`📅 Загружено расписание на ${todaySchedule.date}`);
+                    } else {
+                        // Если на сегодня нет, берем первый день
+                        currentSchedule = {
+                            date: data.days[0].date,
+                            updated_at: data.updated_at || data.week_start,
+                            tracks: data.days[0].tracks
+                        };
+                        console.log(`📅 Загружено расписание на ${data.days[0].date} (сегодняшнее не найдено)`);
+                    }
+                } else {
+                    // Старый формат (для обратной совместимости)
+                    currentSchedule = data;
+                    console.log('📅 Загружено расписание (старый формат)');
+                }
+                
+                const updateDate = new Date(currentSchedule.updated_at);
+                const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
+                document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
+                document.getElementById('track-count').textContent = currentSchedule.tracks.length;
+                
+                // ИСПРАВЛЕНО: сразу обновляем отображение
+                updateScheduleDisplay();
+                findCurrentTrack();
+                
+            } catch (error) {
+                console.error('Ошибка загрузки расписания:', error);
+                showNotification('Ошибка загрузки расписания', 5000);
             }
-        } else {
-            // Старый формат (для обратной совместимости)
-            currentSchedule = data;
-            console.log('📅 Загружено расписание (старый формат)');
         }
-        
-        const updateDate = new Date(currentSchedule.updated_at);
-        const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
-        document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
-        document.getElementById('track-count').textContent = currentSchedule.tracks.length;
-        
-        updateScheduleDisplay();
-        findCurrentTrack();
-        
-    } catch (error) {
-        console.error('Ошибка загрузки расписания:', error);
-        showNotification('Ошибка загрузки расписания', 5000);
-    }
-}
         
         function showNotification(message, duration = 3000) {
             const notification = document.getElementById('notification');
@@ -2080,7 +2137,19 @@
         }
         
         function scrollToCurrentTrack() {
-            autoScrollToCurrentTrack();
+            if (currentTrackIndex === -1) return;
+            
+            const scheduleList = document.getElementById('schedule-list');
+            const activeItems = scheduleList.querySelectorAll('.schedule-item.active');
+            
+            if (activeItems.length > 0) {
+                const lastActiveItem = activeItems[activeItems.length - 1];
+                lastActiveItem.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center',
+                    inline: 'nearest'
+                });
+            }
         }
         
         function getEkbTime() {
@@ -2103,9 +2172,13 @@
             document.getElementById('current-ekb-time').textContent = `ЕКБ: ${timeString}`;
         }
         
+        // ========== ИСПРАВЛЕНИЕ: ТЕМЫ И ЦВЕТОВ ==========
         function loadTheme() {
             const savedTheme = localStorage.getItem('radio-theme') || 'auto';
             setTheme(savedTheme);
+            
+            // ИСПРАВЛЕНО: Обновляем цвет текста качества
+            updateQualityTextColor();
         }
         
         function setTheme(theme) {
@@ -2123,6 +2196,14 @@
                 btn.classList.remove('active');
             });
             document.getElementById('theme-' + theme).classList.add('active');
+            
+            // ИСПРАВЛЕНО: Обновляем цвет текста качества при смене темы
+            updateQualityTextColor();
+        }
+        
+        function updateQualityTextColor() {
+            // Устанавливаем правильный цвет для текста "Качество: Хорошее"
+            qualityText.style.color = 'var(--text-secondary)';
         }
         
         // ========== ФУНКЦИИ РЕЙТИНГА ==========
@@ -2587,10 +2668,10 @@
         // ========== СТАТИСТИКА ==========
         async function updateUserStats(force = false) {
             try {
-                let userId = localStorage.getItem('lapfm_stats_id');
-                if (!userId) {
-                    userId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
-                    localStorage.setItem('lapfm_stats_id', userId);
+                let statsId = localStorage.getItem('lapfm_stats_id');
+                if (!statsId) {
+                    statsId = 'stats_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+                    localStorage.setItem('lapfm_stats_id', statsId);
                 }
                 
                 const response = await fetch(STATS_API_URL, {
@@ -2599,6 +2680,7 @@
                     body: JSON.stringify({ 
                         action: 'ping',
                         userId: userId,
+                        statsId: statsId,
                         page: 'lapfm',
                         timestamp: Date.now(),
                         forceUpdate: force
@@ -2626,17 +2708,29 @@
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('🚀 LAP.FM загружается...');
             
+            // Инициализируем пользователя
+            initializeUser();
+            
+            // Загружаем тему
             loadTheme();
+            
+            // ИСПРАВЛЕНО: Сразу обновляем цвет текста качества
+            updateQualityTextColor();
+            
             loadRatingCache();
             
-            // ЗАГРУЖАЕМ ЛАЙКИ СРАЗУ ИЗ LOCALSTORAGE
-            loadLikesFromLocalStorage();
+            // Загружаем расписание
+            await loadSchedule();
             
-            setTimeout(() => loadReviews(true), 500);
-            loadSchedule();
-            
-            // Фоновое обновление лайков с сервера
-            setTimeout(() => loadLikesFromServer(), 2000);
+            // Загружаем лайки с сервера
+            setTimeout(async () => {
+                await loadLikesFromServer();
+                
+                // Обновляем кнопку лайка после загрузки лайков
+                if (currentSchedule?.tracks[currentTrackIndex]) {
+                    updateLikeButton(currentSchedule.tracks[currentTrackIndex]);
+                }
+            }, 1000);
             
             // Настройка звёзд
             setupStarRating('sound-stars', 'sound');
@@ -2661,8 +2755,18 @@
             updateUserStats(true);
             setInterval(() => updateUserStats(), 30000);
             
-            // Обновление лайков с сервера каждые 5 минут
-            setInterval(() => loadLikesFromServer(), 5 * 60 * 1000);
+            // Обновление лайков с сервера каждые 2 минуты
+            setInterval(async () => {
+                await loadLikesFromServer();
+                
+                // Обновляем кнопку лайка
+                if (currentSchedule?.tracks[currentTrackIndex]) {
+                    updateLikeButton(currentSchedule.tracks[currentTrackIndex]);
+                }
+                
+                // Обновляем отображение расписания
+                updateScheduleDisplay();
+            }, 2 * 60 * 1000);
             
             setInterval(() => loadReviews(true), 300000);
             setInterval(updateEditTimer, 60000);
