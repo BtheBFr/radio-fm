@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
             if (!likes.users) likes.users = {};
             if (!likes.users[userId]) likes.users[userId] = [];
             
-            // Добавляем лайк только если его еще нет
+            // Добавляем лайк
             if (!likes.users[userId].includes(trackId)) {
                 likes.users[userId].push(trackId);
                 likes.tracks[trackId] = (likes.tracks[trackId] || 0) + 1;
@@ -95,7 +95,7 @@ module.exports = async (req, res) => {
             });
             
         } else if (req.method === 'DELETE') {
-            // Убираем лайк
+            // Убираем лайк - ИСПРАВЛЕНО: правильное вычитание
             const { trackId } = req.body;
             
             if (!trackId) {
@@ -105,13 +105,17 @@ module.exports = async (req, res) => {
                 });
             }
             
-            // Убираем лайк только если он есть
+            // Убираем лайк
             if (likes.users[userId] && likes.users[userId].includes(trackId)) {
                 likes.users[userId] = likes.users[userId].filter(id => id !== trackId);
                 
-                // ИСПРАВЛЕНИЕ: Правильное вычитание лайков
+                // ИСПРАВЛЕНИЕ: правильно вычитаем 1, а не 2
                 const currentCount = likes.tracks[trackId] || 0;
-                likes.tracks[trackId] = Math.max(0, currentCount - 1);
+                if (currentCount > 0) {
+                    likes.tracks[trackId] = currentCount - 1;
+                } else {
+                    likes.tracks[trackId] = 0;
+                }
                 
                 saveLikes(likes);
             }
