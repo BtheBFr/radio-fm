@@ -21,7 +21,11 @@ function loadLikes() {
     } catch (error) {
         console.error('Ошибка загрузки лайков:', error);
     }
-    return { tracks: {}, users: {} };
+    // Инициализируем структуру если файла нет
+    return { 
+        tracks: {},     // Глобальные счетчики лайков: { "trackId": count }
+        users: {}       // Лайки пользователей: { "userId": ["trackId1", "trackId2"] }
+    };
 }
 
 // Сохраняем лайки
@@ -35,34 +39,32 @@ function saveLikes(likes) {
     }
 }
 
-// Генерация ID пользователя
-function generateUserId(req) {
-    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
-    const userAgent = req.headers['user-agent'] || 'unknown';
-    return `${ip}-${userAgent}`.replace(/[^\w-]/g, '').substring(0, 50);
-}
-
 // Основной обработчик
 module.exports = async (req, res) => {
     // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-User-Id');
     
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
     
     try {
-        const userId = generateUserId(req);
+        const userId = req.headers['x-user-id'] || req.body?.userId || 'anonymous';
         let likes = loadLikes();
         
+        // Инициализируем структуры если нет
+        if (!likes.tracks) likes.tracks = {};
+        if (!likes.users) likes.users = {};
+        if (!likes.users[userId]) likes.users[userId] = [];
+        
         if (req.method === 'GET') {
-            // Получаем все лайки
+            // Получаем все лайки для пользователя
             return res.status(200).json({
                 success: true,
-                tracks: likes.tracks || {},
-                userLikes: likes.users[userId] || []
+                tracks: likes.tracks,          // ВСЕ лайки всех пользователей
+                userLikes: likes.users[userId] || [] // Лайки текущего пользователя
             });
             
         } else if (req.method === 'POST') {
@@ -76,12 +78,7 @@ module.exports = async (req, res) => {
                 });
             }
             
-            // Инициализируем структуры если нет
-            if (!likes.tracks) likes.tracks = {};
-            if (!likes.users) likes.users = {};
-            if (!likes.users[userId]) likes.users[userId] = [];
-            
-            // Добавляем лайк
+            // Добавляем лайк если его еще нет
             if (!likes.users[userId].includes(trackId)) {
                 likes.users[userId].push(trackId);
                 likes.tracks[trackId] = (likes.tracks[trackId] || 0) + 1;
@@ -95,7 +92,7 @@ module.exports = async (req, res) => {
             });
             
         } else if (req.method === 'DELETE') {
-            // Убираем лайк - ИСПРАВЛЕНО: правильное вычитание
+            // Убираем лайк
             const { trackId } = req.body;
             
             if (!trackId) {
@@ -105,14 +102,14 @@ module.exports = async (req, res) => {
                 });
             }
             
-            // Убираем лайк
-            if (likes.users[userId] && likes.users[userId].includes(trackId)) {
-                likes.users[userId] = likes.users[userId].filter(id => id !== trackId);
+            // Убираем лайк если он есть
+            const userIndex = likes.users[userId].indexOf(trackId);
+            if (userIndex > -1) {
+                likes.users[userId].splice(userIndex, 1);
                 
-                // ИСПРАВЛЕНИЕ: правильно вычитаем 1, а не 2
-                const currentCount = likes.tracks[trackId] || 0;
-                if (currentCount > 0) {
-                    likes.tracks[trackId] = currentCount - 1;
+                // Уменьшаем счетчик, но не ниже 0
+                if (likes.tracks[trackId] && likes.tracks[trackId] > 0) {
+                    likes.tracks[trackId] -= 1;
                 } else {
                     likes.tracks[trackId] = 0;
                 }
