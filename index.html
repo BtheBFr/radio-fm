@@ -2000,25 +2000,53 @@
         }
         
         async function loadSchedule() {
-            try {
-                const response = await fetch(SCHEDULE_URL + '?v=' + Date.now());
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
-                currentSchedule = await response.json();
-                
-                const updateDate = new Date(currentSchedule.updated_at);
-                const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
-                document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
-                document.getElementById('track-count').textContent = currentSchedule.tracks.length;
-                
-                updateScheduleDisplay();
-                findCurrentTrack();
-                
-            } catch (error) {
-                console.error('Ошибка загрузки расписания:', error);
-                showNotification('Ошибка загрузки расписания', 5000);
+    try {
+        const response = await fetch(SCHEDULE_URL + '?v=' + Date.now());
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        
+        // Обработка нового формата (недельное расписание)
+        if (data.days && Array.isArray(data.days)) {
+            // Находим расписание на сегодня
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            const todaySchedule = data.days.find(day => day.date === today);
+            
+            if (todaySchedule) {
+                currentSchedule = {
+                    date: todaySchedule.date,
+                    updated_at: data.updated_at || data.week_start,
+                    tracks: todaySchedule.tracks
+                };
+                console.log(`📅 Загружено расписание на ${todaySchedule.date}`);
+            } else {
+                // Если на сегодня нет, берем первый день
+                currentSchedule = {
+                    date: data.days[0].date,
+                    updated_at: data.updated_at || data.week_start,
+                    tracks: data.days[0].tracks
+                };
+                console.log(`📅 Загружено расписание на ${data.days[0].date} (сегодняшнее не найдено)`);
             }
+        } else {
+            // Старый формат (для обратной совместимости)
+            currentSchedule = data;
+            console.log('📅 Загружено расписание (старый формат)');
         }
+        
+        const updateDate = new Date(currentSchedule.updated_at);
+        const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
+        document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
+        document.getElementById('track-count').textContent = currentSchedule.tracks.length;
+        
+        updateScheduleDisplay();
+        findCurrentTrack();
+        
+    } catch (error) {
+        console.error('Ошибка загрузки расписания:', error);
+        showNotification('Ошибка загрузки расписания', 5000);
+    }
+}
         
         function showNotification(message, duration = 3000) {
             const notification = document.getElementById('notification');
