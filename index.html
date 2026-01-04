@@ -976,7 +976,6 @@
             max-height: 250px;
             overflow-y: auto;
             padding-right: 5px;
-            margin-bottom: 20px;
         }
         
         .review-item-modal {
@@ -1270,7 +1269,7 @@
                     </button>
                 </div>
 
-                <!-- Отзывы других слушателей - ПРОСТО ЗАГОЛОВОК -->
+                <!-- Отзывы других слушателей (ПРОСТО ПОД ФОРМОЙ, БЕЗ ОТДЕЛЬНОГО БЛОКА) -->
                 <h3 class="reviews-title" style="margin: 30px 0 15px; padding-top: 20px; border-top: 1px solid var(--border-color);">💬 Отзывы других слушателей</h3>
                 <div class="modal-reviews-list" id="modal-reviews-list"></div>
                 <div id="no-reviews-in-modal" class="no-reviews-in-modal" style="display: none;">
@@ -1280,7 +1279,7 @@
             </div>
             
             <div class="modal-actions">
-                <!-- УБРАЛИ КНОПКУ "ОТМЕНА" ИЗ УГЛА ЭКРАНА -->
+                <button class="modal-btn cancel" onclick="closeRatingModal()">Отмена</button>
                 <button class="modal-btn submit" id="submit-rating" onclick="submitRating()" disabled>Отправить оценку</button>
             </div>
         </div>
@@ -1311,7 +1310,10 @@
             <!-- Плеер -->
             <section class="player-section">
                 <div class="track-info">
-                    <!-- УБРАЛИ КНОПКУ "ПОСТАВИТЬ ЛАЙК" ИЗ УГЛА ЭКРАНА -->
+                    <button class="like-button" id="track-like-btn" onclick="toggleLike()">
+                        <span>♡</span>
+                        <span class="like-count" id="track-like-count">0</span>
+                    </button>
                     <div class="current-track" id="current-track">Загрузка...</div>
                     <div class="current-artist" id="current-artist">LAP.FM</div>
                     <div class="current-time">
@@ -1472,11 +1474,11 @@
         let currentSchedule = null;
         let currentTrackIndex = -1;
         let isPlaying = false;
-        let autoScrollEnabled = true;
+        let autoScrollEnabled = false; // ИЗМЕНЕНО: отключена автоскроллка
         let userHasInteracted = false;
         let currentTheme = 'auto';
         let allReviews = [];
-        let isLikeProcessing = false;
+        let isLikeProcessing = false; // Защита от повторных нажатий на лайк
         
         // Лайки
         let userLikes = new Set();
@@ -1514,6 +1516,8 @@
         const nextTrackTime = document.getElementById('next-track-time');
         const statusText = document.getElementById('status-text');
         const commentInput = document.getElementById('comment-input');
+        const trackLikeBtn = document.getElementById('track-like-btn');
+        const trackLikeCount = document.getElementById('track-like-count');
         
         // ========== ИСПРАВЛЕНИЕ ЛАЙКОВ ==========
         // Загружаем лайки из localStorage при запуске
@@ -1577,21 +1581,97 @@
             }
         }
         
-        // ИСПРАВЛЕНИЕ: Функция для правильного подсчета лайков
-        function getTrackLikes(track) {
-            if (!track) return 0;
+        // Обновляем кнопку лайка
+        function updateLikeButton(track) {
+            if (!track) return;
+            
             const trackId = `${track.title}_${track.artist}`;
-            return trackLikes[trackId] || 0;
+            const isLiked = userLikes.has(trackId);
+            const likesCount = trackLikes[trackId] || 0;
+            
+            trackLikeCount.textContent = likesCount;
+            
+            if (isLiked) {
+                trackLikeBtn.innerHTML = '<span style="color: var(--like-active)">❤️</span><span class="like-count">' + likesCount + '</span>';
+                trackLikeBtn.classList.add('active');
+            } else {
+                trackLikeBtn.innerHTML = '<span>♡</span><span class="like-count">' + likesCount + '</span>';
+                trackLikeBtn.classList.remove('active');
+            }
         }
         
-        // ИСПРАВЛЕНИЕ: Функция для проверки лайка пользователя
-        function hasUserLiked(track) {
-            if (!track) return false;
+        // Функция лайка с защитой от повторных нажатий
+        async function toggleLike() {
+            if (isLikeProcessing) {
+                console.log('⏳ Лайк уже обрабатывается...');
+                return;
+            }
+            
+            const track = currentSchedule?.tracks[currentTrackIndex];
+            if (!track) return;
+            
             const trackId = `${track.title}_${track.artist}`;
-            return userLikes.has(trackId);
+            const isLiked = userLikes.has(trackId);
+            
+            isLikeProcessing = true;
+            trackLikeBtn.style.opacity = '0.5';
+            trackLikeBtn.style.pointerEvents = 'none';
+            
+            try {
+                if (isLiked) {
+                    // Убираем лайк - ИСПРАВЛЕНО: вычитаем только 1
+                    userLikes.delete(trackId);
+                    trackLikes[trackId] = Math.max(0, (trackLikes[trackId] || 0) - 1);
+                    trackLikeBtn.classList.remove('active');
+                    showNotification('❤️ Лайк убран');
+                    
+                    // Отправляем на сервер
+                    try {
+                        await fetch(LIKES_API_URL, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ trackId: trackId })
+                        });
+                    } catch (error) {
+                        console.warn('Ошибка отправки лайка на сервер:', error);
+                    }
+                } else {
+                    // Ставим лайк
+                    userLikes.add(trackId);
+                    trackLikes[trackId] = (trackLikes[trackId] || 0) + 1;
+                    trackLikeBtn.classList.add('active');
+                    showNotification('❤️ Трек понравился');
+                    
+                    // Отправляем на сервер
+                    try {
+                        await fetch(LIKES_API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ trackId: trackId })
+                        });
+                    } catch (error) {
+                        console.warn('Ошибка отправки лайка на сервер:', error);
+                    }
+                }
+                
+                // Сохраняем в localStorage
+                saveLikesToLocalStorage();
+                updateLikeButton(track);
+                
+            } catch (error) {
+                console.error('Ошибка изменения лайка:', error);
+                showNotification('Ошибка, попробуйте снова', 3000);
+            } finally {
+                // Разблокируем кнопку
+                setTimeout(() => {
+                    isLikeProcessing = false;
+                    trackLikeBtn.style.opacity = '1';
+                    trackLikeBtn.style.pointerEvents = 'auto';
+                }, 500);
+            }
         }
         
-        // ========== АВТОМАТИЧЕСКАЯ ПРОКРУТКА ==========
+        // ========== АВТОМАТИЧЕСКАЯ ПРОКРУТКА - ОТКЛЮЧЕНА ==========
         function autoScrollToCurrentTrack() {
             if (!autoScrollEnabled || currentTrackIndex === -1) return;
             
@@ -1678,6 +1758,9 @@
                 `${elapsedMins}:${elapsedSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
             progressBar.style.width = `${progressPercent}%`;
             
+            // Обновляем кнопку лайка
+            updateLikeButton(track);
+            
             if (currentSchedule && index < currentSchedule.tracks.length - 1) {
                 const nextTrack = currentSchedule.tracks[index + 1];
                 const nextTimeParts = nextTrack.start.split(':');
@@ -1696,8 +1779,8 @@
             
             updateScheduleDisplay();
             
-            // Автоматическая прокрутка
-            setTimeout(() => autoScrollToCurrentTrack(), 300);
+            // Автоматическая прокрутка - ОТКЛЮЧЕНА
+            // setTimeout(() => autoScrollToCurrentTrack(), 300);
             
             // Таймер переключения трека
             const timeUntilEnd = (duration - elapsed) * 1000;
@@ -1878,7 +1961,6 @@
                 const startTimeStr = `${Math.floor(startSeconds / 3600) % 24}:${Math.floor((startSeconds % 3600) / 60).toString().padStart(2, '0')}`;
                 const endTimeStr = `${Math.floor(endSeconds / 3600) % 24}:${Math.floor((endSeconds % 3600) / 60).toString().padStart(2, '0')}`;
                 
-                // ИСПРАВЛЕНИЕ: Правильный подсчет лайков
                 const trackId = `${track.title}_${track.artist}`;
                 const likesCount = trackLikes[trackId] || 0;
                 
@@ -1912,6 +1994,9 @@
                     }
                 });
             });
+            
+            // Автоматическая прокрутка - ОТКЛЮЧЕНА
+            // setTimeout(() => autoScrollToCurrentTrack(), 300);
         }
         
         async function loadSchedule() {
@@ -1919,36 +2004,15 @@
                 const response = await fetch(SCHEDULE_URL + '?v=' + Date.now());
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
-                const data = await response.json();
+                currentSchedule = await response.json();
                 
-                // ИСПРАВЛЕНИЕ: Поддержка нового формата schedule.json с недельным расписанием
-                let todaySchedule;
-                
-                if (data.week_start && data.days) {
-                    // Новый формат: недельное расписание
-                    const today = new Date().toISOString().split('T')[0];
-                    todaySchedule = data.days.find(day => day.date === today);
-                    
-                    if (!todaySchedule && data.days.length > 0) {
-                        todaySchedule = data.days[0]; // Берем первый день, если сегодняшний не найден
-                    }
-                    
-                    currentSchedule = todaySchedule || { tracks: [] };
-                } else {
-                    // Старый формат: один день
-                    currentSchedule = data;
-                }
-                
-                const updateDate = new Date(data.updated_at || data.week_start || Date.now());
+                const updateDate = new Date(currentSchedule.updated_at);
                 const ekbUpdateTime = new Date(updateDate.getTime() + (TIMEZONE_OFFSET * 3600000));
                 document.getElementById('update-time').textContent = formatTime(ekbUpdateTime);
                 document.getElementById('track-count').textContent = currentSchedule.tracks.length;
                 
                 updateScheduleDisplay();
                 findCurrentTrack();
-                
-                // Автопрокрутка к текущему треку при загрузке
-                setTimeout(() => autoScrollToCurrentTrack(), 500);
                 
             } catch (error) {
                 console.error('Ошибка загрузки расписания:', error);
@@ -2586,6 +2650,7 @@
         window.openRatingModal = openRatingModal;
         window.closeRatingModal = closeRatingModal;
         window.submitRating = submitRating;
+        window.toggleLike = toggleLike;
     </script>
 </body>
 </html>
